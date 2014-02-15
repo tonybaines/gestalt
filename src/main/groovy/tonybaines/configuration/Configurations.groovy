@@ -28,6 +28,7 @@ abstract class Configurations<T> {
     }
   }
 
+  // TODO: Could ConfigSlurper also do the job for XML files?>
   static class PropertiesConfigurations<T> extends Configurations {
     private Class configInterface
     private InputStream source
