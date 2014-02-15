@@ -1,4 +1,4 @@
-apply plugin: 'java'
+apply plugin: 'groovy'
 apply plugin: 'jacoco'
 apply plugin: 'findbugs'
 apply plugin: 'jdepend'
@@ -6,62 +6,30 @@ apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'project-report'
 
-dependencies{
+dependencies {
   compile([
+    'org.codehaus.groovy:groovy-all:2.2.1',
     'joda-time:joda-time:2.2',
     'com.google.guava:guava:14.0.1',
   ])
-  
-  testCompile([ 
-    'junit:junit:4.11',
-    'org.jmock:jmock-junit4:2.6.0',
+
+  testCompile([
+    'org.spockframework:spock-core:0.7-groovy-2.0',
   ])
 
   runtime([])
 }
 
 
-tasks.withType(FindBugs) { 
-  reports { 
-    xml.enabled = false 
-    html.enabled = true 
-  } 
+tasks.withType(FindBugs) {
+  reports {
+    xml.enabled = false
+    html.enabled = true
+  }
 }
-tasks.withType(JDepend) { 
-  reports { 
-    xml.enabled = false 
-    text.enabled = true 
-  } 
+tasks.withType(JDepend) {
+  reports {
+    xml.enabled = false
+    text.enabled = true
+  }
 }
-
-/*These are useful one-off tasks, remove after use*/
-task initProject () << {
-    if (hasProperty(initPlugins)) {
-        initPlugins.split(',').each { plug -> 
-            project.apply { 
-                plugin(plug.trim()) 
-            } 
-        }
-    }
-
-    project.sourceSets*.allSource.srcDirTrees.flatten().dir.each { dir ->
-        dir.mkdirs()
-    }
-} 
-
-task wrapper(type: Wrapper) { }
-
-/* Next Steps
-gradle initProject -PinitPlugins=java
-gradle wrapper
-
-cat > .gitignore <<EOF
-build/
-.gradle
-EOF
-
-git add .
-
-gradle clean test jacocoTestReport check projectReport buildDashboard
-
-*/

@@ -1,0 +1,8 @@
+<config>
+    <intValue>5</intValue>
+    <stringValue>Five</stringValue>
+    <doubleValue>5.0</doubleValue>
+    <subConfig>
+        <intValue>6</intValue>
+    </subConfig>
+</config>
