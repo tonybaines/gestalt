@@ -7,9 +7,6 @@ import spock.lang.Specification
 class AcceptanceSpec extends Specification {
 
   def "Configurations can be queried"() {
-    given:
-    def configuration = Configurations.definedBy(TestConfig).fromXmlFile('common.xml')
-
     when:
     TestConfig config = configuration.load()
 
@@ -23,11 +20,15 @@ class AcceptanceSpec extends Specification {
     config.strings()[1] == 'B'
     config.strings()[2] == 'C'
     config.handedness() == TestConfig.Handed.left
+
+    where:
+    configuration << [
+      Configurations.definedBy(TestConfig).fromXmlFile('common.xml'),
+      Configurations.definedBy(TestConfig).fromPropertiesFile('common.properties'),
+    ]
   }
 
   def "Configurations are strongly typed"() {
-    given:
-    def configuration = Configurations.definedBy(TestConfig).fromXmlFile('common.xml')
 
     when:
     TestConfig config = configuration.load()
@@ -41,6 +42,12 @@ class AcceptanceSpec extends Specification {
     config.subConfig() instanceof TestConfig.SubConfigLevel1
     config.subConfig().intValue() instanceof Integer
     config.strings() instanceof List<String>
+
+    where:
+    configuration << [
+      Configurations.definedBy(TestConfig).fromXmlFile('common.xml'),
+      Configurations.definedBy(TestConfig).fromPropertiesFile('common.properties'),
+    ]
   }
 
   @Ignore
