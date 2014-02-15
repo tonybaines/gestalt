@@ -12,7 +12,7 @@ class Configurations<T> {
     new Configurations<T>(configInterface)
   }
 
-  def from(String filePath) {
+  def fromXmlFile(String filePath) {
     source = Configurations.class.classLoader.getResourceAsStream(filePath)
     this
   }
@@ -40,16 +40,58 @@ class Configurations<T> {
 
     @Override
     Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-      def nodes = xml."${method.name}"
-      def node = nodes[0]
-      switch (method.returnType) {
+      try {
+        def nodes = xml."${method.name}"
+        def node = nodes[0]
+        if (method.returnType.isAssignableFrom(List)) {
+          return node.children().collect { child ->
+            decoded(child, method.genericReturnType.actualTypeArguments[0])
+          }
+        }
+        return decoded(node, method.returnType)
+      } catch (Throwable e) {
+        e.printStackTrace()
+        throw e
+      }
+    }
+
+    private def decoded(node, returnType) {
+      switch (returnType) {
         case String: return node.text()
         case Integer: return node.text().toInteger()
         case Double: return node.text().toDouble()
+        case Boolean: return node.text().toBoolean()
 
-        default: return ConfigProxy.around(method.returnType, xml."${method.name}")
+        default: return ConfigProxy.around(returnType, node)
       }
     }
   }
+
+/*  THIS MIGHT WORK AS AN ALTERNATIVE, HARD TO DEBUG THOUGH
+    Binding binding = new Binding()
+    binding.setVariable("xml", xml)
+    GroovyShell shell = new GroovyShell(binding)
+    return shell.evaluate("""
+class MyTestConfig implements tonybaines.configuration.TestConfig {
+  def xml
+  MyTestConfig(xml) {
+   this.xml = xml
+  }
+
+  public Integer intValue(){ xml.intValue.text().toInteger() }
+
+  public String stringValue(){xml.stringValue.text()}
+
+  public Double doubleValue(){xml.doubleValue.text().toDouble()}
+
+  public tonybaines.configuration.TestConfig.SubConfigLevel1 subConfig() {
+    new tonybaines.configuration.TestConfig.SubConfigLevel1() {
+      public Integer intValue(){ xml.subConfig.intValue.text().toInteger() }
+    } as tonybaines.configuration.TestConfig.SubConfigLevel1
+  }
+}
+
+return new MyTestConfig(xml)
+""") as T*/
 
 }

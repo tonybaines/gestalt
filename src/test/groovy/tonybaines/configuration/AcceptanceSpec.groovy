@@ -8,7 +8,7 @@ class AcceptanceSpec extends Specification {
 
   def "Configurations can be queried"() {
     given:
-    def configuration = Configurations.definedBy(TestConfig).from('common.xml')
+    def configuration = Configurations.definedBy(TestConfig).fromXmlFile('common.xml')
 
     when:
     TestConfig config = configuration.load()
@@ -17,12 +17,16 @@ class AcceptanceSpec extends Specification {
     config.intValue() == 5
     config.stringValue() == "Five"
     config.doubleValue() == 5.0
+    config.booleanValue() == true
     config.subConfig().intValue() == 6
+    config.strings()[0] == 'A'
+    config.strings()[1] == 'B'
+    config.strings()[2] == 'C'
   }
 
   def "Configurations are strongly typed"() {
     given:
-    def configuration = Configurations.definedBy(TestConfig).from('common.xml')
+    def configuration = Configurations.definedBy(TestConfig).fromXmlFile('common.xml')
 
     when:
     TestConfig config = configuration.load()
@@ -31,8 +35,10 @@ class AcceptanceSpec extends Specification {
     config.intValue() instanceof Integer
     config.stringValue() instanceof String
     config.doubleValue() instanceof Double
+    config.booleanValue() instanceof Boolean
     config.subConfig() instanceof TestConfig.SubConfigLevel1
     config.subConfig().intValue() instanceof Integer
+    config.strings() instanceof List<String>
   }
 
   @Ignore

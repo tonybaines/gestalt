@@ -2,7 +2,13 @@
     <intValue>5</intValue>
     <stringValue>Five</stringValue>
     <doubleValue>5.0</doubleValue>
+    <booleanValue>true</booleanValue>
     <subConfig>
         <intValue>6</intValue>
     </subConfig>
+    <strings>
+        <value>A</value>
+        <value>B</value>
+        <value>C</value>
+    </strings>
 </config>
