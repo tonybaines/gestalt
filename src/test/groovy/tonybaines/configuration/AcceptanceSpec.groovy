@@ -22,6 +22,7 @@ class AcceptanceSpec extends Specification {
     config.strings()[0] == 'A'
     config.strings()[1] == 'B'
     config.strings()[2] == 'C'
+    config.handedness() == TestConfig.Handed.left
   }
 
   def "Configurations are strongly typed"() {
@@ -36,6 +37,7 @@ class AcceptanceSpec extends Specification {
     config.stringValue() instanceof String
     config.doubleValue() instanceof Double
     config.booleanValue() instanceof Boolean
+    config.handedness() instanceof TestConfig.Handed
     config.subConfig() instanceof TestConfig.SubConfigLevel1
     config.subConfig().intValue() instanceof Integer
     config.strings() instanceof List<String>
@@ -45,10 +47,16 @@ class AcceptanceSpec extends Specification {
   def "Missing config elements use the supplied defaults"() {}
 
   @Ignore
+  def "Constants can be defined and reused"() {}
+
+  @Ignore
+  def "Identifiers can be declared and referenced"() {}
+
+  @Ignore
   def "Multiple config elements are an error"() {}
 
   @Ignore
-  def "Unexpected formats are an error"() {}
+  def "Unexpected formats or values are an error"() {}
 
   @Ignore
   def "Configurations can be saved"() {}

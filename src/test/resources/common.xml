@@ -1,12 +1,15 @@
+<!-- The root element name isn't significant -->
 <config>
     <intValue>5</intValue>
     <stringValue>Five</stringValue>
     <doubleValue>5.0</doubleValue>
     <booleanValue>true</booleanValue>
+    <handedness>left</handedness>
     <subConfig>
         <intValue>6</intValue>
     </subConfig>
     <strings>
+        <!-- The enclosing element names are ignored here -->
         <value>A</value>
         <value>B</value>
         <value>C</value>

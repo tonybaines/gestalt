@@ -2,6 +2,7 @@ package tonybaines.configuration
 
 import java.lang.reflect.InvocationHandler
 import java.lang.reflect.Method
+import java.lang.reflect.ParameterizedType
 
 class Configurations<T> {
   private Class configInterface
@@ -43,17 +44,24 @@ class Configurations<T> {
       try {
         def nodes = xml."${method.name}"
         def node = nodes[0]
-        if (method.returnType.isAssignableFrom(List)) {
+
+        if (isAList(method.genericReturnType)) {
           return node.children().collect { child ->
             decoded(child, method.genericReturnType.actualTypeArguments[0])
           }
+        } else if (method.returnType.enum) {
+          return method.returnType.valueOf(node.text())
+        } else {
+          return decoded(node, method.returnType)
         }
-        return decoded(node, method.returnType)
+
       } catch (Throwable e) {
         e.printStackTrace()
         throw e
       }
     }
+
+    private static isAList(type) { type instanceof ParameterizedType && type.rawType.isAssignableFrom(List) }
 
     private def decoded(node, returnType) {
       switch (returnType) {
