@@ -15,13 +15,16 @@
         <value>C</value>
     </strings>
     <things>
-        <thing id="alpha">
+        <thing>
+            <id>alpha</id>
             <stringValue>A</stringValue>
         </thing>
-        <thing id="bravo">
+        <thing>
+            <id>bravo</id>
             <stringValue>B</stringValue>
         </thing>
-        <thing id="charlie">
+        <thing>
+            <id>charlie</id>
             <stringValue>C</stringValue>
         </thing>
     </things>

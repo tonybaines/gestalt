@@ -6,7 +6,7 @@ import java.lang.reflect.ParameterizedType
 
 /*
  TODO: try building up paths e.g. ['config', 'strings'] and evaluating against the underlying store
- TODO: Filtering is the responsibility of client code, not config with 'id' as a special case
+ TODO: Filtering is the responsibility of client code, not config. 'id' is NOT a special case
   */
 
 abstract class Configurations<T> {

@@ -13,6 +13,7 @@ config {
     "B",
     "C"
   ]
+
   things = [
     thing {
       id = "alpha"
