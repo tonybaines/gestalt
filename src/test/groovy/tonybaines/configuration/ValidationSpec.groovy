@@ -37,6 +37,8 @@ class ValidationSpec extends Specification {
     List<String> getStrings() { return null }
 
     List<TestConfig.Thing> getThings() { return null }
+
+    void getNonExistent() {}
   }
 
 }

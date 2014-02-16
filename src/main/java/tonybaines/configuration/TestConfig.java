@@ -5,29 +5,30 @@ import java.util.List;
 
 public interface TestConfig {
   @NotNull()
-  public abstract Integer getIntValue();
+  Integer getIntValue();
 
-  public abstract String getStringValue();
+  String getStringValue();
 
-  public abstract Double getDoubleValue();
+  Double getDoubleValue();
 
-  public abstract Boolean getBooleanValue();
+  Boolean getBooleanValue();
 
-  public abstract Handed getHandedness();
+  Handed getHandedness();
 
-  public abstract SubConfigLevel1 getSubConfig();
+  SubConfigLevel1 getSubConfig();
 
-  public abstract List<String> getStrings();
+  List<String> getStrings();
 
-  public abstract List<Thing> getThings();
+  List<Thing> getThings();
+
+  void getNonExistent();
 
   public static interface SubConfigLevel1 {
-    public abstract Integer getIntValue();
+    Integer getIntValue();
   }
 
   public static interface Thing {
     String getId();
-
     String getStringValue();
   }
 }

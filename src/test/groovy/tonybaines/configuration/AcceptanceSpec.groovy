@@ -6,6 +6,7 @@ import spock.lang.Specification
 
 class AcceptanceSpec extends Specification {
 
+
   def "Configurations can be queried"() {
     when:
     TestConfig config = configuration.load()
@@ -34,7 +35,6 @@ class AcceptanceSpec extends Specification {
   }
 
   def "Configurations are strongly typed"() {
-
     when:
     TestConfig config = configuration.load()
 
@@ -47,6 +47,22 @@ class AcceptanceSpec extends Specification {
     config.getSubConfig() instanceof TestConfig.SubConfigLevel1
     config.getSubConfig().getIntValue() instanceof Integer
     config.getStrings() instanceof List<String>
+
+    where:
+    configuration << [
+      Configuration.definedBy(TestConfig).fromXmlFile('common.xml'),
+      Configuration.definedBy(TestConfig).fromPropertiesFile('common.properties'),
+      Configuration.definedBy(TestConfig).fromGroovyConfigFile('common.groovy'),
+    ]
+  }
+
+  def "Unexpected formats or values are an error"() {
+    when:
+    TestConfig config = configuration.load()
+    config.getNonExistent()
+
+    then:
+    thrown(ConfigurationException)
 
     where:
     configuration << [
@@ -69,9 +85,6 @@ class AcceptanceSpec extends Specification {
 
   @Ignore
   def "Multiple config elements are an error"() {}
-
-  @Ignore
-  def "Unexpected formats or values are an error"() {}
 
   @Ignore
   def "Configurations can be saved"() {}
