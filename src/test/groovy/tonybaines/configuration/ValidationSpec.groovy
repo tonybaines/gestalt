@@ -35,6 +35,8 @@ class ValidationSpec extends Specification {
     TestConfig.SubConfigLevel1 getSubConfig() { return null }
 
     List<String> getStrings() { return null }
+
+    List<TestConfig.Thing> getThings() { return null }
   }
 
 }

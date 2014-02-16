@@ -10,13 +10,13 @@ import java.lang.reflect.ParameterizedType
  TODO: Filtering is the responsibility of client code, not config. 'id' is NOT a special case
   */
 
-abstract class Configurations<T> {
+abstract class Configuration<T> {
   protected Class configInterface
   protected InputStream source
 
-  public Configurations(Class configInterface, String filePath) {
+  public Configuration(Class configInterface, String filePath) {
     this.configInterface = configInterface
-    source = Configurations.class.classLoader.getResourceAsStream(filePath)
+    source = Configuration.class.classLoader.getResourceAsStream(filePath)
   }
 
   static Factory<T> definedBy(Class configInterface) {
@@ -32,12 +32,16 @@ abstract class Configurations<T> {
       this.configInterface = configInterface
     }
 
-    public <T> Configurations<T> fromXmlFile(String filePath) {
-      new XmlConfigurations(configInterface, filePath)
+    public <T> Configuration<T> fromXmlFile(String filePath) {
+      new XmlConfiguration(configInterface, filePath)
     }
 
-    public <T> Configurations<T> fromPropertiesFile(String filePath) {
-      new PropertiesConfigurations(configInterface, filePath)
+    public <T> Configuration<T> fromPropertiesFile(String filePath) {
+      new PropertiesConfiguration(configInterface, filePath)
+    }
+
+    public <T> Configuration<T> fromGroovyConfigFile(String filePath) {
+      new GroovyConfigConfiguration(configInterface, filePath)
     }
   }
 
@@ -59,12 +63,13 @@ abstract class Configurations<T> {
         }
 
       } catch (Throwable e) {
-        e.printStackTrace()
-        throw e
+        throw new ConfigurationException(method, e)
       }
     }
 
-    static String fromBeanSpec(String methodName) { Introspector.decapitalize(methodName.replace('get', '')) }
+    static String fromBeanSpec(String methodName) {
+      Introspector.decapitalize(methodName.replace('get', ''))
+    }
 
     protected def decoded(node, returnType) {
       switch (returnType) {

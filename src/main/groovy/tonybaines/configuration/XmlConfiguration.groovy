@@ -1,8 +1,8 @@
 package tonybaines.configuration
 
-class XmlConfigurations<T> extends Configurations<T> {
+class XmlConfiguration<T> extends Configuration<T> {
 
-  public XmlConfigurations(Class configInterface, String filePath) {
+  public XmlConfiguration(Class configInterface, String filePath) {
     super(configInterface, filePath)
   }
 
@@ -11,7 +11,7 @@ class XmlConfigurations<T> extends Configurations<T> {
     return XmlConfigProxy.from(configInterface, xml) as T
   }
 
-  static class XmlConfigProxy extends Configurations.ConfigurationInvocationHandler {
+  static class XmlConfigProxy extends Configuration.ConfigurationInvocationHandler {
     def xml
 
     static def from(Class configInterface, xml) {
@@ -24,7 +24,7 @@ class XmlConfigurations<T> extends Configurations<T> {
 
     @Override
     public def around(Class configInterface, xml) {
-      java.lang.reflect.Proxy.newProxyInstance(Configurations.class.classLoader, (Class[]) [configInterface], new XmlConfigProxy(xml))
+      java.lang.reflect.Proxy.newProxyInstance(Configuration.class.classLoader, (Class[]) [configInterface], new XmlConfigProxy(xml))
     }
 
     @Override

@@ -1,8 +1,8 @@
 package tonybaines.configuration
 
-class PropertiesConfigurations<T> extends Configurations<T> {
+class PropertiesConfiguration<T> extends Configuration<T> {
 
-  public PropertiesConfigurations(Class configInterface, String filePath) {
+  public PropertiesConfiguration(Class configInterface, String filePath) {
     super(configInterface, filePath)
   }
 
@@ -13,7 +13,7 @@ class PropertiesConfigurations<T> extends Configurations<T> {
     return PropertiesConfigProxy.from(configInterface, props) as T
   }
 
-  static class PropertiesConfigProxy extends Configurations.ConfigurationInvocationHandler {
+  static class PropertiesConfigProxy extends Configuration.ConfigurationInvocationHandler {
     def props
 
     static def from(Class configInterface, props) {
@@ -26,7 +26,7 @@ class PropertiesConfigurations<T> extends Configurations<T> {
 
     @Override
     public def around(Class configInterface, props) {
-      java.lang.reflect.Proxy.newProxyInstance(Configurations.class.classLoader, (Class[]) [configInterface], new PropertiesConfigProxy(props))
+      java.lang.reflect.Proxy.newProxyInstance(Configuration.class.classLoader, (Class[]) [configInterface], new PropertiesConfigProxy(props))
     }
 
     @Override

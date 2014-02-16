@@ -5,7 +5,7 @@ config {
   doubleValue = 5.0
   booleanValue = true
   handedness = 'left' // Don't want to import the enum definition into the config file
-  getSubConfig {
+  subConfig {
     intValue = 6
   }
   strings = [
@@ -14,18 +14,20 @@ config {
     "C"
   ]
 
+  // Not an ideal syntax here, GroovyConfig is all about Maps
+  // under the covers though, so it works
   things = [
-    thing {
-      id = "alpha"
-      stringValue = "A"
-    },
-    thing {
-      id = "bravo"
-      stringValue = "B"
-    },
-    thing {
-      id = "charlie"
-      stringValue = "C"
-    }
+    [
+      id: "alpha",
+      stringValue: "A"
+    ],
+    [
+      id: "bravo",
+      stringValue: "B"
+    ],
+    [
+      id: "charlie",
+      stringValue: "C"
+    ],
   ]
 }

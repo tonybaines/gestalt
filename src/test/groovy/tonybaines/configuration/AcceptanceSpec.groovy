@@ -20,11 +20,16 @@ class AcceptanceSpec extends Specification {
     config.getStrings()[1] == 'B'
     config.getStrings()[2] == 'C'
     config.getHandedness() == Handed.left
+    config.getThings().size() == 3
+    config.getThings()[0].getId() == 'alpha'
+    config.getThings()[1].getId() == 'bravo'
+    config.getThings()[2].getId() == 'charlie'
 
     where:
     configuration << [
-      Configurations.definedBy(TestConfig).fromXmlFile('common.xml'),
-      Configurations.definedBy(TestConfig).fromPropertiesFile('common.properties'),
+      Configuration.definedBy(TestConfig).fromXmlFile('common.xml'),
+      Configuration.definedBy(TestConfig).fromPropertiesFile('common.properties'),
+      Configuration.definedBy(TestConfig).fromGroovyConfigFile('common.groovy'),
     ]
   }
 
@@ -45,8 +50,9 @@ class AcceptanceSpec extends Specification {
 
     where:
     configuration << [
-      Configurations.definedBy(TestConfig).fromXmlFile('common.xml'),
-      Configurations.definedBy(TestConfig).fromPropertiesFile('common.properties'),
+      Configuration.definedBy(TestConfig).fromXmlFile('common.xml'),
+      Configuration.definedBy(TestConfig).fromPropertiesFile('common.properties'),
+      Configuration.definedBy(TestConfig).fromGroovyConfigFile('common.groovy'),
     ]
   }
 

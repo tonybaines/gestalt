@@ -19,7 +19,15 @@ public interface TestConfig {
 
   public abstract List<String> getStrings();
 
+  public abstract List<Thing> getThings();
+
   public static interface SubConfigLevel1 {
     public abstract Integer getIntValue();
+  }
+
+  public static interface Thing {
+    String getId();
+
+    String getStringValue();
   }
 }
