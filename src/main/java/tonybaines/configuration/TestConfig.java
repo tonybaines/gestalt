@@ -1,23 +1,25 @@
 package tonybaines.configuration;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 public interface TestConfig {
-  public abstract Integer intValue();
+  @NotNull()
+  public abstract Integer getIntValue();
 
-  public abstract String stringValue();
+  public abstract String getStringValue();
 
-  public abstract Double doubleValue();
+  public abstract Double getDoubleValue();
 
-  public abstract Boolean booleanValue();
+  public abstract Boolean getBooleanValue();
 
-  public abstract Handed handedness();
+  public abstract Handed getHandedness();
 
-  public abstract SubConfigLevel1 subConfig();
+  public abstract SubConfigLevel1 getSubConfig();
 
-  public abstract List<String> strings();
+  public abstract List<String> getStrings();
 
   public static interface SubConfigLevel1 {
-    public abstract Integer intValue();
+    public abstract Integer getIntValue();
   }
 }

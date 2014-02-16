@@ -5,7 +5,7 @@ config {
   doubleValue = 5.0
   booleanValue = true
   handedness = 'left' // Don't want to import the enum definition into the config file
-  subConfig {
+  getSubConfig {
     intValue = 6
   }
   strings = [

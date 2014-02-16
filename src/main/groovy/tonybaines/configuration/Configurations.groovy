@@ -1,5 +1,6 @@
 package tonybaines.configuration
 
+import java.beans.Introspector
 import java.lang.reflect.InvocationHandler
 import java.lang.reflect.Method
 import java.lang.reflect.ParameterizedType
@@ -47,7 +48,7 @@ abstract class Configurations<T> {
     @Override
     Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
       try {
-        def node = lookUp(method.name)
+        def node = lookUp(fromBeanSpec(method.name))
 
         if (isAList(method.genericReturnType)) {
           return handleList(node, method)
@@ -62,6 +63,8 @@ abstract class Configurations<T> {
         throw e
       }
     }
+
+    static String fromBeanSpec(String methodName) { Introspector.decapitalize(methodName.replace('get', '')) }
 
     protected def decoded(node, returnType) {
       switch (returnType) {

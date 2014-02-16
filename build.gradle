@@ -11,6 +11,8 @@ dependencies {
     'org.codehaus.groovy:groovy-all:2.2.1',
     'joda-time:joda-time:2.2',
     'com.google.guava:guava:14.0.1',
+    'javax.validation:validation-api:1.0.0.GA',
+    'org.apache.bval:org.apache.bval.bundle:0.5',
   ])
 
   testCompile([

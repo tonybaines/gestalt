@@ -11,15 +11,15 @@ class AcceptanceSpec extends Specification {
     TestConfig config = configuration.load()
 
     then:
-    config.intValue() == 5
-    config.stringValue() == "Five"
-    config.doubleValue() == 5.0
-    config.booleanValue() == true
-    config.subConfig().intValue() == 6
-    config.strings()[0] == 'A'
-    config.strings()[1] == 'B'
-    config.strings()[2] == 'C'
-    config.handedness() == Handed.left
+    config.getIntValue() == 5
+    config.getStringValue() == "Five"
+    config.getDoubleValue() == 5.0
+    config.getBooleanValue() == true
+    config.getSubConfig().getIntValue() == 6
+    config.getStrings()[0] == 'A'
+    config.getStrings()[1] == 'B'
+    config.getStrings()[2] == 'C'
+    config.getHandedness() == Handed.left
 
     where:
     configuration << [
@@ -34,14 +34,14 @@ class AcceptanceSpec extends Specification {
     TestConfig config = configuration.load()
 
     then:
-    config.intValue() instanceof Integer
-    config.stringValue() instanceof String
-    config.doubleValue() instanceof Double
-    config.booleanValue() instanceof Boolean
-    config.handedness() instanceof Handed
-    config.subConfig() instanceof TestConfig.SubConfigLevel1
-    config.subConfig().intValue() instanceof Integer
-    config.strings() instanceof List<String>
+    config.getIntValue() instanceof Integer
+    config.getStringValue() instanceof String
+    config.getDoubleValue() instanceof Double
+    config.getBooleanValue() instanceof Boolean
+    config.getHandedness() instanceof Handed
+    config.getSubConfig() instanceof TestConfig.SubConfigLevel1
+    config.getSubConfig().getIntValue() instanceof Integer
+    config.getStrings() instanceof List<String>
 
     where:
     configuration << [
