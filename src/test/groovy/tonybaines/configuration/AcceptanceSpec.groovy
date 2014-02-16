@@ -56,13 +56,14 @@ class AcceptanceSpec extends Specification {
     ]
   }
 
-  def "Unexpected formats or values are an error"() {
+  def "Undefined values (with no default) are an error"() {
     when:
     TestConfig config = configuration.load()
     config.getNonExistent()
 
     then:
-    thrown(ConfigurationException)
+    def e = thrown(ConfigurationException)
+    e.message.contains('getNonExistent')
 
     where:
     configuration << [
@@ -72,8 +73,24 @@ class AcceptanceSpec extends Specification {
     ]
   }
 
-  @Ignore
-  def "Missing config elements use the supplied defaults"() {}
+  def "Missing config elements use the supplied defaults"() {
+    when:
+    TestConfig config = configuration.load()
+
+    then:
+    config.getNonExistentStringWithDefault() == "default-value"
+    config.getNonExistentBooleanWithDefault() == false
+    config.getNonExistentIntegerWithDefault() == 42
+    config.getNonExistentDoubleWithDefault() == 42.5
+    // TODO: enum
+
+    where:
+    configuration << [
+      Configuration.definedBy(TestConfig).fromXmlFile('common.xml'),
+//      Configuration.definedBy(TestConfig).fromPropertiesFile('common.properties'),
+//      Configuration.definedBy(TestConfig).fromGroovyConfigFile('common.groovy'),
+    ]
+  }
 
   @Ignore
   def "Constants can be defined and reused"() {}

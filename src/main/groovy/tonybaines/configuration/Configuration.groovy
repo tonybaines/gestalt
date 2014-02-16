@@ -1,6 +1,7 @@
 package tonybaines.configuration
 
 import java.beans.Introspector
+import java.lang.annotation.Annotation
 import java.lang.reflect.InvocationHandler
 import java.lang.reflect.Method
 import java.lang.reflect.ParameterizedType
@@ -63,6 +64,12 @@ abstract class Configuration<T> {
         }
 
       } catch (Throwable e) {
+        Annotation defaultAnnotation = method.declaredAnnotations.find {
+          it.annotationType().name.contains(Default.class.name)
+        }
+        if (defaultAnnotation != null) {
+          return method.getAnnotation(defaultAnnotation.annotationType()).value()
+        }
         throw new ConfigurationException(method, e)
       }
     }
