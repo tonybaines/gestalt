@@ -19,7 +19,7 @@ class AcceptanceSpec extends Specification {
     config.strings()[0] == 'A'
     config.strings()[1] == 'B'
     config.strings()[2] == 'C'
-    config.handedness() == TestConfig.Handed.left
+    config.handedness() == Handed.left
 
     where:
     configuration << [
@@ -38,7 +38,7 @@ class AcceptanceSpec extends Specification {
     config.stringValue() instanceof String
     config.doubleValue() instanceof Double
     config.booleanValue() instanceof Boolean
-    config.handedness() instanceof TestConfig.Handed
+    config.handedness() instanceof Handed
     config.subConfig() instanceof TestConfig.SubConfigLevel1
     config.subConfig().intValue() instanceof Integer
     config.strings() instanceof List<String>

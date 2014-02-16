@@ -19,8 +19,4 @@ public interface TestConfig {
   public interface SubConfigLevel1 {
     Integer intValue();
   }
-
-  public enum Handed {
-    left, right
-  }
 }

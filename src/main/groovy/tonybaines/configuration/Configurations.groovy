@@ -11,11 +11,11 @@ import java.lang.reflect.ParameterizedType
 
 abstract class Configurations<T> {
 
-  static Factory definedBy(Class configInterface) {
+  static Factory<T> definedBy(Class configInterface) {
     new Factory(configInterface)
   }
 
-  abstract T load()
+  abstract <T> T load()
 
   static class Factory<T> {
     Class configInterface
@@ -24,16 +24,16 @@ abstract class Configurations<T> {
       this.configInterface = configInterface
     }
 
-    Configurations fromXmlFile(String filePath) {
+    public <T> Configurations<T> fromXmlFile(String filePath) {
       new XmlConfigurations(configInterface, filePath)
     }
 
-    Configurations fromPropertiesFile(String filePath) {
+    public <T> Configurations<T> fromPropertiesFile(String filePath) {
       new PropertiesConfigurations(configInterface, filePath)
     }
   }
 
-  static class PropertiesConfigurations<T> extends Configurations {
+  static class PropertiesConfigurations<T> extends Configurations<T> {
     private Class configInterface
     private InputStream source
 
@@ -42,7 +42,7 @@ abstract class Configurations<T> {
       source = Configurations.class.classLoader.getResourceAsStream(filePath)
     }
 
-    public T load() {
+    public <T> T load() {
       def propsFile = new Properties()
       propsFile.load(source)
       def props = new ConfigSlurper().parse(propsFile)
@@ -96,7 +96,7 @@ abstract class Configurations<T> {
     }
   }
 
-  static class XmlConfigurations<T> extends Configurations {
+  static class XmlConfigurations<T> extends Configurations<T> {
     private Class configInterface
     private InputStream source
 
@@ -105,7 +105,7 @@ abstract class Configurations<T> {
       source = Configurations.class.classLoader.getResourceAsStream(filePath)
     }
 
-    public T load() {
+    public <T> T load() {
       def xml = new XmlParser().parse(source)
       return XmlConfigProxy.around(configInterface, xml) as T
     }
@@ -113,7 +113,7 @@ abstract class Configurations<T> {
     static class XmlConfigProxy implements InvocationHandler {
       def xml
 
-      static around(Class configInterface, xml) {
+      static <T> T around(Class configInterface, xml) {
         java.lang.reflect.Proxy.newProxyInstance(Configurations.class.classLoader, (Class[]) [configInterface], new XmlConfigProxy(xml))
       }
 
