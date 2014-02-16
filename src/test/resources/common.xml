@@ -14,4 +14,15 @@
         <value>B</value>
         <value>C</value>
     </strings>
+    <things>
+        <thing id="alpha">
+            <stringValue>A</stringValue>
+        </thing>
+        <thing id="bravo">
+            <stringValue>B</stringValue>
+        </thing>
+        <thing id="charlie">
+            <stringValue>C</stringValue>
+        </thing>
+    </things>
 </config>

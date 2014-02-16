@@ -4,6 +4,11 @@ import java.lang.reflect.InvocationHandler
 import java.lang.reflect.Method
 import java.lang.reflect.ParameterizedType
 
+/*
+ TODO: try building up paths e.g. ['config', 'strings'] and evaluating against the underlying store
+ TODO: Filtering is the responsibility of client code, not config with 'id' as a special case
+  */
+
 abstract class Configurations<T> {
 
   static Factory definedBy(Class configInterface) {
@@ -28,7 +33,6 @@ abstract class Configurations<T> {
     }
   }
 
-  // TODO: Could ConfigSlurper also do the job for XML files?>
   static class PropertiesConfigurations<T> extends Configurations {
     private Class configInterface
     private InputStream source

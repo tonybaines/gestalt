@@ -57,7 +57,9 @@ class AcceptanceSpec extends Specification {
   def "Constants can be defined and reused"() {}
 
   @Ignore
-  def "Identifiers can be declared and referenced"() {}
+  def "Identifiers can be declared and referenced"() {
+    // Properties, XML and GroovyConfig treated differently
+  }
 
   @Ignore
   def "Multiple config elements are an error"() {}
