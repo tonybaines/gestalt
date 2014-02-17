@@ -39,8 +39,8 @@ class GroovyConfigConfiguration<T> extends Configuration<T> {
 
     @Override
     protected lookUp(String methodName) {
-      ConfigObject node = groovyConfig."${methodName}"
-      if (node.isEmpty()) {
+      def node = groovyConfig."${methodName}"
+      if (node instanceof ConfigObject && node.isEmpty()) {
         throw new ConfigurationException(methodName, "not defined")
       }
       else {

@@ -43,8 +43,8 @@ class PropertiesConfiguration<T> extends Configuration<T> {
 
     @Override
     protected lookUp(String methodName) {
-      ConfigObject node = props."${methodName}"
-      if (node.isEmpty()) {
+      def node = props."${methodName}"
+      if (node instanceof ConfigObject && node.isEmpty()) {
         throw new ConfigurationException(methodName, "not defined")
       }
       else {
