@@ -87,8 +87,8 @@ class AcceptanceSpec extends Specification {
     where:
     configuration << [
       Configuration.definedBy(TestConfig).fromXmlFile('common.xml'),
-//      Configuration.definedBy(TestConfig).fromPropertiesFile('common.properties'),
-//      Configuration.definedBy(TestConfig).fromGroovyConfigFile('common.groovy'),
+      Configuration.definedBy(TestConfig).fromPropertiesFile('common.properties'),
+      Configuration.definedBy(TestConfig).fromGroovyConfigFile('common.groovy'),
     ]
   }
 
