@@ -30,4 +30,6 @@ config {
       stringValue: "C"
     ],
   ]
+
+  propertyDefinedOnlyInGroovyConfig = 'some-value'
 }

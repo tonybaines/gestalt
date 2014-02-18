@@ -44,6 +44,70 @@ abstract class Configuration<T> {
     public <T> Configuration<T> fromGroovyConfigFile(String filePath) {
       new GroovyConfigConfiguration(configInterface, filePath)
     }
+
+    public CompositeConfigurationBuilder composedOf(List<Configuration<T>> strategies) {
+      new CompositeConfigurationBuilder()
+    }
+
+    class CompositeConfigurationBuilder {
+      List<Configuration<T>> strategies = new ArrayList<>()
+
+      public CompositeConfigurationBuilder thenFallbackToDefaults() {
+        strategies << new Configuration<T>(null, null) {
+
+          @Override
+          def <T1> T1 load() {
+            return new Configuration.ConfigurationInvocationHandler() {
+
+              @Override
+              protected String valueOf(Object x) {
+                return null
+              }
+
+              @Override
+              protected lookUp(String methodName) {
+                return null
+              }
+
+              @Override
+              protected handleList(Object node, Object method) {
+                return null
+              }
+
+              @Override
+              def around(Class configInterface, Object configSource) {
+                return null
+              }
+            }
+          }
+        }
+        this
+      }
+
+      public CompositeConfigurationBuilder fromXmlFile(String filePath) {
+        strategies << Factory.this.fromXmlFile(filePath)
+        this
+      }
+
+      public CompositeConfigurationBuilder first() { this }
+
+      public CompositeConfigurationBuilder thenFallbackTo() { this }
+
+      public CompositeConfigurationBuilder fromPropertiesFile(String filePath) {
+        strategies << Factory.this.fromPropertiesFile(filePath)
+        this
+      }
+
+      public CompositeConfigurationBuilder fromGroovyConfigFile(String filePath) {
+        strategies << Factory.this.fromGroovyConfigFile(filePath)
+        this
+      }
+
+      public <T> Configuration<T> done() {
+        new CompositeConfiguration<T>(strategies)
+      }
+    }
+
   }
 
   static isAList(type) { type instanceof ParameterizedType && type.rawType.isAssignableFrom(List) }

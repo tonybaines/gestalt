@@ -3,7 +3,6 @@ package tonybaines.configuration
 import spock.lang.Ignore
 import spock.lang.Specification
 
-
 class AcceptanceSpec extends Specification {
 
 
@@ -93,6 +92,23 @@ class AcceptanceSpec extends Specification {
   }
 
   @Ignore
+  def "Configurations can be overridden"() {
+    given:
+    def configuration = Configuration.definedBy(TestConfig).composedOf().
+      first().fromPropertiesFile('common.properties').
+      thenFallbackTo().fromXmlFile('common.xml').
+      thenFallbackTo().fromGroovyConfigFile('common.groovy').
+      thenFallbackToDefaults().
+      done()
+
+    when:
+    TestConfig config = configuration.load()
+
+    then:
+    config.getPropertyDefinedOnlyInGroovyConfig() == 'some value'
+  }
+
+  @Ignore
   def "Constants can be defined and reused"() {}
 
   @Ignore
@@ -105,9 +121,6 @@ class AcceptanceSpec extends Specification {
 
   @Ignore
   def "Configurations can be saved"() {}
-
-  @Ignore
-  def "Configurations can be overridden"() {}
 
   @Ignore
   def "Changes to persisted stores are reflected without a restart"() {}

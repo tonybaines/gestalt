@@ -36,6 +36,8 @@ public interface TestConfig {
   @Default.Double(42.5)
   Double getNonExistentDoubleWithDefault();
 
+  String getPropertyDefinedOnlyInGroovyConfig();
+
   public static interface SubConfigLevel1 {
     Integer getIntValue();
   }
