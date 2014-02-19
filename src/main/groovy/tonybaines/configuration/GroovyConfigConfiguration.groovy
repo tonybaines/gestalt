@@ -8,7 +8,7 @@ class GroovyConfigConfiguration<T> extends DefaultConfiguration<T> {
     this.filePath = filePath
   }
 
-  public <T> T load() {
+  public T load() {
     def groovyConfig = new ConfigSlurper().parse(this.class.classLoader.getResourceAsStream(filePath).text).values().first()
     return GroovyConfigConfigProxy.from(configInterface, groovyConfig) as T
   }
@@ -26,7 +26,7 @@ class GroovyConfigConfiguration<T> extends DefaultConfiguration<T> {
 
     @Override
     public def around(Class configInterface, groovyConfig) {
-      java.lang.reflect.Proxy.newProxyInstance(DefaultConfiguration.class.classLoader, (Class[]) [configInterface], new GroovyConfigConfigProxy(groovyConfig))
+      java.lang.reflect.Proxy.newProxyInstance(this.class.classLoader, (Class[]) [configInterface], new GroovyConfigConfigProxy(groovyConfig))
     }
 
     @Override

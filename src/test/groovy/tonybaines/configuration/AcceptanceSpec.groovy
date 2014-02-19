@@ -91,7 +91,6 @@ class AcceptanceSpec extends Specification {
     ]
   }
 
-  @Ignore
   def "Configurations can be overridden"() {
     given:
     def configuration = DefaultConfiguration.definedBy(TestConfig).composedOf().
@@ -105,7 +104,7 @@ class AcceptanceSpec extends Specification {
     TestConfig config = configuration.load()
 
     then:
-    config.getPropertyDefinedOnlyInGroovyConfig() == 'some value'
+    config.getPropertyDefinedOnlyInGroovyConfig() == 'some-value'
   }
 
   @Ignore

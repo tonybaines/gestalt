@@ -11,27 +11,27 @@ public interface Configuration<T> {
       this.configInterface = configInterface
     }
 
-    public <T> DefaultConfiguration<T> fromXmlFile(String filePath) {
+    public <T> Configuration<T> fromXmlFile(String filePath) {
       new XmlConfiguration(configInterface, filePath)
     }
 
-    public <T> DefaultConfiguration<T> fromPropertiesFile(String filePath) {
+    public <T> Configuration<T> fromPropertiesFile(String filePath) {
       new PropertiesConfiguration(configInterface, filePath)
     }
 
-    public <T> DefaultConfiguration<T> fromGroovyConfigFile(String filePath) {
+    public <T> Configuration<T> fromGroovyConfigFile(String filePath) {
       new GroovyConfigConfiguration(configInterface, filePath)
     }
 
-    public Configuration.Factory.CompositeConfigurationBuilder composedOf(List<DefaultConfiguration<T>> strategies) {
-      new Configuration.Factory.CompositeConfigurationBuilder()
+    public CompositeConfigurationBuilder composedOf() {
+      new CompositeConfigurationBuilder()
     }
 
     class CompositeConfigurationBuilder {
-      List<DefaultConfiguration<T>> strategies = new ArrayList<>()
+      List<Configuration<T>> strategies = new ArrayList<>()
 
       public Configuration.Factory.CompositeConfigurationBuilder thenFallbackToDefaults() {
-        strategies << new DefaultConfiguration<T>(null) {
+        strategies << new Configuration<T>() {
 
           @Override
           T load() {
@@ -62,27 +62,27 @@ public interface Configuration<T> {
         this
       }
 
-      public Configuration.Factory.CompositeConfigurationBuilder fromXmlFile(String filePath) {
+      public CompositeConfigurationBuilder fromXmlFile(String filePath) {
         strategies << Configuration.Factory.this.fromXmlFile(filePath)
         this
       }
 
-      public Configuration.Factory.CompositeConfigurationBuilder first() { this }
-
-      public Configuration.Factory.CompositeConfigurationBuilder thenFallbackTo() { this }
-
-      public Configuration.Factory.CompositeConfigurationBuilder fromPropertiesFile(String filePath) {
+      public CompositeConfigurationBuilder fromPropertiesFile(String filePath) {
         strategies << Configuration.Factory.this.fromPropertiesFile(filePath)
         this
       }
 
-      public Configuration.Factory.CompositeConfigurationBuilder fromGroovyConfigFile(String filePath) {
+      public CompositeConfigurationBuilder fromGroovyConfigFile(String filePath) {
         strategies << Configuration.Factory.this.fromGroovyConfigFile(filePath)
         this
       }
 
-      public <T> DefaultConfiguration<T> done() {
-        new CompositeConfiguration<T>(strategies)
+      public CompositeConfigurationBuilder first() { this }
+
+      public CompositeConfigurationBuilder thenFallbackTo() { this }
+
+      public <T> Configuration<T> done() {
+        new CompositeConfiguration<T>(configInterface, strategies)
       }
     }
 

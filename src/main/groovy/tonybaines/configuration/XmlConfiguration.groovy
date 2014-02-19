@@ -8,7 +8,7 @@ class XmlConfiguration<T> extends DefaultConfiguration<T> {
     this.filePath = filePath
   }
 
-  public <T> T load() {
+  public T load() {
     def xml = new XmlParser().parse(this.class.classLoader.getResourceAsStream(filePath))
     return XmlConfigProxy.from(configInterface, xml) as T
   }
@@ -26,7 +26,7 @@ class XmlConfiguration<T> extends DefaultConfiguration<T> {
 
     @Override
     public def around(Class configInterface, xml) {
-      java.lang.reflect.Proxy.newProxyInstance(DefaultConfiguration.class.classLoader, (Class[]) [configInterface], new XmlConfigProxy(xml))
+      java.lang.reflect.Proxy.newProxyInstance(this.class.classLoader, (Class[]) [configInterface], new XmlConfigProxy(xml))
     }
 
     @Override
