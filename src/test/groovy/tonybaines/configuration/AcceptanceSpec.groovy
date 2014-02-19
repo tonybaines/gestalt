@@ -27,9 +27,9 @@ class AcceptanceSpec extends Specification {
 
     where:
     configuration << [
-      Configuration.definedBy(TestConfig).fromXmlFile('common.xml'),
-      Configuration.definedBy(TestConfig).fromPropertiesFile('common.properties'),
-      Configuration.definedBy(TestConfig).fromGroovyConfigFile('common.groovy'),
+      DefaultConfiguration.definedBy(TestConfig).fromXmlFile('common.xml'),
+      DefaultConfiguration.definedBy(TestConfig).fromPropertiesFile('common.properties'),
+      DefaultConfiguration.definedBy(TestConfig).fromGroovyConfigFile('common.groovy'),
     ]
   }
 
@@ -49,9 +49,9 @@ class AcceptanceSpec extends Specification {
 
     where:
     configuration << [
-      Configuration.definedBy(TestConfig).fromXmlFile('common.xml'),
-      Configuration.definedBy(TestConfig).fromPropertiesFile('common.properties'),
-      Configuration.definedBy(TestConfig).fromGroovyConfigFile('common.groovy'),
+      DefaultConfiguration.definedBy(TestConfig).fromXmlFile('common.xml'),
+      DefaultConfiguration.definedBy(TestConfig).fromPropertiesFile('common.properties'),
+      DefaultConfiguration.definedBy(TestConfig).fromGroovyConfigFile('common.groovy'),
     ]
   }
 
@@ -66,9 +66,9 @@ class AcceptanceSpec extends Specification {
 
     where:
     configuration << [
-      Configuration.definedBy(TestConfig).fromXmlFile('common.xml'),
-      Configuration.definedBy(TestConfig).fromPropertiesFile('common.properties'),
-      Configuration.definedBy(TestConfig).fromGroovyConfigFile('common.groovy'),
+      DefaultConfiguration.definedBy(TestConfig).fromXmlFile('common.xml'),
+      DefaultConfiguration.definedBy(TestConfig).fromPropertiesFile('common.properties'),
+      DefaultConfiguration.definedBy(TestConfig).fromGroovyConfigFile('common.groovy'),
     ]
   }
 
@@ -85,16 +85,16 @@ class AcceptanceSpec extends Specification {
 
     where:
     configuration << [
-      Configuration.definedBy(TestConfig).fromXmlFile('common.xml'),
-      Configuration.definedBy(TestConfig).fromPropertiesFile('common.properties'),
-      Configuration.definedBy(TestConfig).fromGroovyConfigFile('common.groovy'),
+      DefaultConfiguration.definedBy(TestConfig).fromXmlFile('common.xml'),
+      DefaultConfiguration.definedBy(TestConfig).fromPropertiesFile('common.properties'),
+      DefaultConfiguration.definedBy(TestConfig).fromGroovyConfigFile('common.groovy'),
     ]
   }
 
   @Ignore
   def "Configurations can be overridden"() {
     given:
-    def configuration = Configuration.definedBy(TestConfig).composedOf().
+    def configuration = DefaultConfiguration.definedBy(TestConfig).composedOf().
       first().fromPropertiesFile('common.properties').
       thenFallbackTo().fromXmlFile('common.xml').
       thenFallbackTo().fromGroovyConfigFile('common.groovy').

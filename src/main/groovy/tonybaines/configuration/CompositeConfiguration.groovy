@@ -1,12 +1,14 @@
 package tonybaines.configuration
 
-class CompositeConfiguration<T> extends Configuration<T> {
-  CompositeConfiguration(Class configInterface, String filePath) {
-    super(configInterface, filePath)
+class CompositeConfiguration<T> implements Configuration<T> {
+  private final List<Configuration<T>> configurations
+
+  CompositeConfiguration(List<Configuration<T>> configurations) {
+    this.configurations = configurations
   }
 
   @Override
-  def <T> T load() {
+  T load() {
     return null
   }
 }
