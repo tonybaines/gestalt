@@ -113,6 +113,9 @@ class AcceptanceSpec extends Specification {
     config.getPropertyDefinedAllConfigSources() == 'from-properties'
   }
 
+  @Ignore
+  def "Configurations eventually fall back to a default value (if declared)"() {}
+
   protected newCompositeConfiguration() {
     DefaultConfiguration.definedBy(TestConfig).composedOf().
       first().fromPropertiesFile('common.properties').
