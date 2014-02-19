@@ -91,20 +91,35 @@ class AcceptanceSpec extends Specification {
     ]
   }
 
-  def "Configurations can be overridden"() {
+  def "Configurations will fall-back until a value is found"() {
     given:
-    def configuration = DefaultConfiguration.definedBy(TestConfig).composedOf().
-      first().fromPropertiesFile('common.properties').
-      thenFallbackTo().fromXmlFile('common.xml').
-      thenFallbackTo().fromGroovyConfigFile('common.groovy').
-      thenFallbackToDefaults().
-      done()
+    def configuration = newCompositeConfiguration()
 
     when:
     TestConfig config = configuration.load()
 
     then:
     config.getPropertyDefinedOnlyInGroovyConfig() == 'some-value'
+  }
+
+  def "Configurations can be overridden"() {
+    given:
+    def configuration = newCompositeConfiguration()
+
+    when:
+    TestConfig config = configuration.load()
+
+    then:
+    config.getPropertyDefinedAllConfigSources() == 'from-properties'
+  }
+
+  protected newCompositeConfiguration() {
+    DefaultConfiguration.definedBy(TestConfig).composedOf().
+      first().fromPropertiesFile('common.properties').
+      thenFallbackTo().fromXmlFile('common.xml').
+      thenFallbackTo().fromGroovyConfigFile('common.groovy').
+      thenFallbackToDefaults().
+      done()
   }
 
   @Ignore

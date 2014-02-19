@@ -28,4 +28,5 @@
             <stringValue>C</stringValue>
         </thing>
     </things>
+    <propertyDefinedAllConfigSources>from-xml</propertyDefinedAllConfigSources>
 </config>

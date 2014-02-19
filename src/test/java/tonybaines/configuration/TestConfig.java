@@ -38,12 +38,15 @@ public interface TestConfig {
 
   String getPropertyDefinedOnlyInGroovyConfig();
 
+  String getPropertyDefinedAllConfigSources();
+
   public static interface SubConfigLevel1 {
     Integer getIntValue();
   }
 
   public static interface Thing {
     String getId();
+
     String getStringValue();
   }
 }
