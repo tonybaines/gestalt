@@ -24,6 +24,8 @@ public interface TestConfig {
 
   Integer getNonExistent();
 
+  Integer getDeclaredAsAnIntegerButIsAString();
+
   @Default.String("default-value")
   String getNonExistentStringWithDefault();
 
@@ -44,6 +46,9 @@ public interface TestConfig {
    */
   @Default.Enum("right")
   Handed getNonExistentEnumWithDefault();
+
+  @Default.Enum("sideways")
+  Handed getDefaultedValueWithBadDefinition();
 
   String getPropertyDefinedOnlyInGroovyConfig();
 

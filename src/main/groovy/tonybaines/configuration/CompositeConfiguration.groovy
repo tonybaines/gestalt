@@ -42,7 +42,8 @@ class CompositeConfiguration<T> implements Configurations.Configuration<T> {
         return config."${Configurations.fromBeanSpec(method.name)}"
       }
       catch (Exception e) {
-        return tryAll(method, configs.tail())
+        if (configs.tail().empty) throw e
+        else return tryAll(method, configs.tail())
       }
     }
   }

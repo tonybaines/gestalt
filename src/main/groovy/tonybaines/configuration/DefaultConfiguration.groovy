@@ -15,8 +15,6 @@ class DefaultConfiguration<T> extends BaseConfiguration<T> {
   }
 
   static class DefaultConfigProxy extends BaseConfiguration.ConfigurationInvocationHandler {
-
-
     @Override
     def around(Class configInterface, Object configSource = null) {
       java.lang.reflect.Proxy.newProxyInstance(this.class.classLoader, (Class[]) [configInterface], this)
@@ -42,22 +40,15 @@ class DefaultConfiguration<T> extends BaseConfiguration<T> {
         throw new ConfigurationException(method, e)
       }
       throw new ConfigurationException(method.name, "no default value defined")
-
     }
 
     @Override
-    protected String valueOf(node) {
-      throw new UnsupportedOperationException()
-    }
+    protected String valueOf(node) { throw new UnsupportedOperationException() }
 
     @Override
-    protected lookUp(String methodName) {
-      throw new UnsupportedOperationException()
-    }
+    protected lookUp(String methodName) { throw new UnsupportedOperationException() }
 
     @Override
-    protected handleList(node, method) {
-      throw new UnsupportedOperationException()
-    }
+    protected handleList(node, method) { throw new UnsupportedOperationException() }
   }
 }

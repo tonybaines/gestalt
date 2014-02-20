@@ -5,8 +5,6 @@ import spock.lang.Specification
 import spock.lang.Unroll
 
 class AcceptanceSpec extends Specification {
-
-
   @Unroll
   def "Configurations can be queried (#name)"() {
     when:
@@ -26,6 +24,25 @@ class AcceptanceSpec extends Specification {
     config.getThings()[0].getId() == 'alpha'
     config.getThings()[1].getId() == 'bravo'
     config.getThings()[2].getId() == 'charlie'
+
+    where:
+    name     | configuration
+    'XML'    | Configurations.definedBy(TestConfig).fromXmlFile('common.xml')
+    'Props'  | Configurations.definedBy(TestConfig).fromPropertiesFile('common.properties')
+    'Groovy' | Configurations.definedBy(TestConfig).fromGroovyConfigFile('common.groovy')
+  }
+
+  @Unroll
+  def "Definitions which don't match their type are an error (#name)"() {
+    when:
+    TestConfig config = configuration.load()
+    config.getDeclaredAsAnIntegerButIsAString()
+
+    then:
+    def e = thrown(ConfigurationException)
+    e.message.contains('Failed to handle getDeclaredAsAnIntegerButIsAString')
+    e.cause instanceof NumberFormatException
+    e.cause.message.contains('For input string: "Whoops!"')
 
     where:
     name     | configuration
@@ -65,12 +82,13 @@ class AcceptanceSpec extends Specification {
     then:
     def e = thrown(ConfigurationException)
     e.message.contains('getNonExistent')
+    e.message.contains('no default value defined')
 
     where:
     name     | configuration
-    'XML'    | Configurations.definedBy(TestConfig).fromXmlFile('common.xml')
-    'Props'  | Configurations.definedBy(TestConfig).fromPropertiesFile('common.properties')
-    'Groovy' | Configurations.definedBy(TestConfig).fromGroovyConfigFile('common.groovy')
+    'XML'    | Configurations.definedBy(TestConfig).composedOf().fromXmlFile('common.xml').thenFallbackToDefaults().done()
+    'Props'  | Configurations.definedBy(TestConfig).composedOf().fromPropertiesFile('common.properties').thenFallbackToDefaults().done()
+    'Groovy' | Configurations.definedBy(TestConfig).composedOf().fromGroovyConfigFile('common.groovy').thenFallbackToDefaults().done()
   }
 
   @Unroll
@@ -103,6 +121,17 @@ class AcceptanceSpec extends Specification {
     config.getPropertyDefinedOnlyInGroovyConfig() == 'some-value'
   }
 
+  def "Bad default definitions are an error (when accessed)"() {
+    when:
+    TestConfig config = newCompositeConfiguration().load()
+    config.getDefaultedValueWithBadDefinition()
+
+    then:
+    def e = thrown(ConfigurationException)
+    e.message.contains('Failed to handle getDefaultedValueWithBadDefinition')
+    e.cause.message.contains('No enum constant tonybaines.configuration.Handed.sideways')
+  }
+
   def "Configurations can be overridden"() {
     given:
     def configuration = newCompositeConfiguration()
@@ -114,10 +143,7 @@ class AcceptanceSpec extends Specification {
     config.getPropertyDefinedAllConfigSources() == 'from-properties'
   }
 
-  @Ignore
-  def "Configurations eventually fall back to a default value (if declared)"() {}
-
-  protected newCompositeConfiguration() {
+  protected static newCompositeConfiguration() {
     Configurations.definedBy(TestConfig).composedOf().
       fromPropertiesFile('common.properties').
       fromXmlFile('common.xml').
@@ -128,11 +154,6 @@ class AcceptanceSpec extends Specification {
 
   @Ignore
   def "Constants can be defined and reused"() {}
-
-  @Ignore
-  def "Identifiers can be declared and referenced"() {
-    // Properties, XML and GroovyConfig treated differently
-  }
 
   @Ignore
   def "Multiple config elements are an error"() {}

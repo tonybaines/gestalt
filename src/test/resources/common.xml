@@ -29,4 +29,5 @@
         </thing>
     </things>
     <propertyDefinedAllConfigSources>from-xml</propertyDefinedAllConfigSources>
+    <declaredAsAnIntegerButIsAString>Whoops!</declaredAsAnIntegerButIsAString>
 </config>

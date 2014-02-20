@@ -33,4 +33,5 @@ config {
 
   propertyDefinedOnlyInGroovyConfig = 'some-value'
   propertyDefinedAllConfigSources = 'from-groovy-config'
+  declaredAsAnIntegerButIsAString = 'Whoops!'
 }
