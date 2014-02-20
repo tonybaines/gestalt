@@ -24,20 +24,25 @@ class DefaultConfiguration<T> extends BaseConfiguration<T> {
 
     @Override
     Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-      Annotation defaultAnnotation = method.declaredAnnotations.find {
-        it.annotationType().name.contains(Default.class.name)
-      }
-      if (defaultAnnotation != null) {
-        Class<? extends Annotation> defaultsType = defaultAnnotation.annotationType()
-        def annotationValue = method.getAnnotation(defaultsType).value()
-
-        if (Default.Enum.class.name.equals(defaultsType.name)) {
-          return method.returnType.valueOf(annotationValue)
-        } else {
-          return annotationValue
+      try {
+        Annotation defaultAnnotation = method.declaredAnnotations.find {
+          it.annotationType().name.contains(Default.class.name)
         }
+        if (defaultAnnotation != null) {
+          Class<? extends Annotation> defaultsType = defaultAnnotation.annotationType()
+          def annotationValue = method.getAnnotation(defaultsType).value()
+
+          if (Default.Enum.class.name.equals(defaultsType.name)) {
+            return method.returnType.valueOf(annotationValue)
+          } else {
+            return annotationValue
+          }
+        }
+      } catch (Exception e) {
+        throw new ConfigurationException(method, e)
       }
       throw new ConfigurationException(method.name, "no default value defined")
+
     }
 
     @Override
