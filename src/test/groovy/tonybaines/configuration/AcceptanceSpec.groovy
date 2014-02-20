@@ -85,9 +85,9 @@ class AcceptanceSpec extends Specification {
 
     where:
     configuration << [
-      BaseConfiguration.definedBy(TestConfig).composedOf().first().fromXmlFile('common.xml').thenFallbackToDefaults().done(),
-      BaseConfiguration.definedBy(TestConfig).composedOf().first().fromPropertiesFile('common.properties').thenFallbackToDefaults().done(),
-      BaseConfiguration.definedBy(TestConfig).composedOf().first().fromGroovyConfigFile('common.groovy').thenFallbackToDefaults().done(),
+      BaseConfiguration.definedBy(TestConfig).composedOf().fromXmlFile('common.xml').thenFallbackToDefaults().done(),
+      BaseConfiguration.definedBy(TestConfig).composedOf().fromPropertiesFile('common.properties').thenFallbackToDefaults().done(),
+      BaseConfiguration.definedBy(TestConfig).composedOf().fromGroovyConfigFile('common.groovy').thenFallbackToDefaults().done(),
     ]
   }
 
@@ -118,9 +118,9 @@ class AcceptanceSpec extends Specification {
 
   protected newCompositeConfiguration() {
     BaseConfiguration.definedBy(TestConfig).composedOf().
-      first().fromPropertiesFile('common.properties').
-      thenFallbackTo().fromXmlFile('common.xml').
-      thenFallbackTo().fromGroovyConfigFile('common.groovy').
+      fromPropertiesFile('common.properties').
+      fromXmlFile('common.xml').
+      fromGroovyConfigFile('common.groovy').
       thenFallbackToDefaults().
       done()
   }

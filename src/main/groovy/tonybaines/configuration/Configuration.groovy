@@ -54,9 +54,6 @@ public interface Configuration<T> {
         this
       }
 
-      public CompositeConfigurationBuilder first() { this }
-
-      public CompositeConfigurationBuilder thenFallbackTo() { this }
 
       public <T> Configuration<T> done() {
         new CompositeConfiguration<T>(configInterface, strategies)
