@@ -19,7 +19,7 @@ class DefaultConfiguration<T> extends BaseConfiguration<T> {
 
     @Override
     def around(Class configInterface, Object configSource = null) {
-      java.lang.reflect.Proxy.newProxyInstance(this.class.classLoader, (Class[]) [configInterface], new DefaultConfigProxy())
+      java.lang.reflect.Proxy.newProxyInstance(this.class.classLoader, (Class[]) [configInterface], this)
     }
 
     @Override

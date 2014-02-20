@@ -4,11 +4,11 @@ import java.lang.reflect.InvocationHandler
 import java.lang.reflect.Method
 
 
-class CompositeConfiguration<T> implements Configuration<T> {
-  private final List<Configuration<T>> configurations
+class CompositeConfiguration<T> implements Configurations.Configuration<T> {
+  private final List<Configurations.Configuration<T>> configurations
   private final Class configInterface
 
-  CompositeConfiguration(Class configInterface, List<Configuration<T>> configurations) {
+  CompositeConfiguration(Class configInterface, List<Configurations.Configuration<T>> configurations) {
     this.configInterface = configInterface
     this.configurations = configurations
   }
@@ -22,7 +22,7 @@ class CompositeConfiguration<T> implements Configuration<T> {
     private final List<T> configs
 
     static def from(Class configInterface, List<T> configs) {
-      return new CompositeConfigurationProxy(configs).around(configInterface, configs)
+      return new CompositeConfigurationProxy(configs).around(configInterface)
     }
 
     CompositeConfigurationProxy(configs) {
@@ -30,8 +30,8 @@ class CompositeConfiguration<T> implements Configuration<T> {
     }
 
 
-    public def around(Class configInterface, configs) {
-      java.lang.reflect.Proxy.newProxyInstance(this.class.classLoader, (Class[]) [configInterface], new CompositeConfigurationProxy(configs))
+    public def around(Class configInterface) {
+      java.lang.reflect.Proxy.newProxyInstance(this.class.classLoader, (Class[]) [configInterface], this)
     }
 
     @Override
@@ -43,7 +43,7 @@ class CompositeConfiguration<T> implements Configuration<T> {
       if (configs.empty) throw new ConfigurationException(method.name, "not found in any source")
       try {
         def config = configs.head()
-        return config."${BaseConfiguration.ConfigurationInvocationHandler.fromBeanSpec(method.name)}"
+        return config."${Configurations.fromBeanSpec(method.name)}"
       }
       catch (Exception e) {
         return tryAll(method, configs.tail())

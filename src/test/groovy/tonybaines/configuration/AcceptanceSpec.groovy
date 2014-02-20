@@ -2,11 +2,13 @@ package tonybaines.configuration
 
 import spock.lang.Ignore
 import spock.lang.Specification
+import spock.lang.Unroll
 
 class AcceptanceSpec extends Specification {
 
 
-  def "Configurations can be queried"() {
+  @Unroll
+  def "Configurations can be queried (#name)"() {
     when:
     TestConfig config = configuration.load()
 
@@ -26,14 +28,14 @@ class AcceptanceSpec extends Specification {
     config.getThings()[2].getId() == 'charlie'
 
     where:
-    configuration << [
-      BaseConfiguration.definedBy(TestConfig).fromXmlFile('common.xml'),
-      BaseConfiguration.definedBy(TestConfig).fromPropertiesFile('common.properties'),
-      BaseConfiguration.definedBy(TestConfig).fromGroovyConfigFile('common.groovy'),
-    ]
+    name     | configuration
+    'XML'    | Configurations.definedBy(TestConfig).fromXmlFile('common.xml')
+    'Props'  | Configurations.definedBy(TestConfig).fromPropertiesFile('common.properties')
+    'Groovy' | Configurations.definedBy(TestConfig).fromGroovyConfigFile('common.groovy')
   }
 
-  def "Configurations are strongly typed"() {
+  @Unroll
+  def "Configurations are strongly typed (#name)"() {
     when:
     TestConfig config = configuration.load()
 
@@ -48,14 +50,14 @@ class AcceptanceSpec extends Specification {
     config.getStrings() instanceof List<String>
 
     where:
-    configuration << [
-      BaseConfiguration.definedBy(TestConfig).fromXmlFile('common.xml'),
-      BaseConfiguration.definedBy(TestConfig).fromPropertiesFile('common.properties'),
-      BaseConfiguration.definedBy(TestConfig).fromGroovyConfigFile('common.groovy'),
-    ]
+    name     | configuration
+    'XML'    | Configurations.definedBy(TestConfig).fromXmlFile('common.xml')
+    'Props'  | Configurations.definedBy(TestConfig).fromPropertiesFile('common.properties')
+    'Groovy' | Configurations.definedBy(TestConfig).fromGroovyConfigFile('common.groovy')
   }
 
-  def "Undefined values (with no default configured) are an error"() {
+  @Unroll
+  def "Undefined values (with no default configured) are an error (#name)"() {
     when:
     TestConfig config = configuration.load()
     config.getNonExistent()
@@ -65,11 +67,10 @@ class AcceptanceSpec extends Specification {
     e.message.contains('getNonExistent')
 
     where:
-    configuration << [
-      BaseConfiguration.definedBy(TestConfig).fromXmlFile('common.xml'),
-      BaseConfiguration.definedBy(TestConfig).fromPropertiesFile('common.properties'),
-      BaseConfiguration.definedBy(TestConfig).fromGroovyConfigFile('common.groovy'),
-    ]
+    name     | configuration
+    'XML'    | Configurations.definedBy(TestConfig).fromXmlFile('common.xml')
+    'Props'  | Configurations.definedBy(TestConfig).fromPropertiesFile('common.properties')
+    'Groovy' | Configurations.definedBy(TestConfig).fromGroovyConfigFile('common.groovy')
   }
 
   def "Missing config elements use the supplied defaults"() {
@@ -84,11 +85,10 @@ class AcceptanceSpec extends Specification {
     // TODO: enum
 
     where:
-    configuration << [
-      BaseConfiguration.definedBy(TestConfig).composedOf().fromXmlFile('common.xml').thenFallbackToDefaults().done(),
-      BaseConfiguration.definedBy(TestConfig).composedOf().fromPropertiesFile('common.properties').thenFallbackToDefaults().done(),
-      BaseConfiguration.definedBy(TestConfig).composedOf().fromGroovyConfigFile('common.groovy').thenFallbackToDefaults().done(),
-    ]
+    name     | configuration
+    'XML'    | Configurations.definedBy(TestConfig).composedOf().fromXmlFile('common.xml').thenFallbackToDefaults().done()
+    'Props'  | Configurations.definedBy(TestConfig).composedOf().fromPropertiesFile('common.properties').thenFallbackToDefaults().done()
+    'Groovy' | Configurations.definedBy(TestConfig).composedOf().fromGroovyConfigFile('common.groovy').thenFallbackToDefaults().done()
   }
 
   def "Configurations will fall-back until a value is found"() {
@@ -117,7 +117,7 @@ class AcceptanceSpec extends Specification {
   def "Configurations eventually fall back to a default value (if declared)"() {}
 
   protected newCompositeConfiguration() {
-    BaseConfiguration.definedBy(TestConfig).composedOf().
+    Configurations.definedBy(TestConfig).composedOf().
       fromPropertiesFile('common.properties').
       fromXmlFile('common.xml').
       fromGroovyConfigFile('common.groovy').

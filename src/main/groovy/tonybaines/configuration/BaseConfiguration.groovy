@@ -1,6 +1,5 @@
 package tonybaines.configuration
 
-import java.beans.Introspector
 import java.lang.reflect.InvocationHandler
 import java.lang.reflect.Method
 import java.lang.reflect.ParameterizedType
@@ -10,19 +9,14 @@ import java.lang.reflect.ParameterizedType
  TODO: Filtering is the responsibility of client code, not config. 'id' is NOT a special case
   */
 
-abstract class BaseConfiguration<T> implements Configuration<T> {
+abstract class BaseConfiguration<T> implements Configurations.Configuration<T> {
   protected Class configInterface
 
   public BaseConfiguration(Class configInterface) {
     this.configInterface = configInterface
   }
 
-  static Configuration.Factory<T> definedBy(Class configInterface) {
-    new Configuration.Factory(configInterface)
-  }
-
-  abstract <T> T load()
-
+  abstract T load()
 
   static isAList(type) { type instanceof ParameterizedType && type.rawType.isAssignableFrom(List) }
 
@@ -31,7 +25,7 @@ abstract class BaseConfiguration<T> implements Configuration<T> {
     @Override
     Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
       try {
-        def node = lookUp(fromBeanSpec(method.name))
+        def node = lookUp(Configurations.fromBeanSpec(method.name))
 
         if (isAList(method.genericReturnType)) {
           return handleList(node, method)
@@ -43,10 +37,6 @@ abstract class BaseConfiguration<T> implements Configuration<T> {
       } catch (Throwable e) {
         throw new ConfigurationException(method, e)
       }
-    }
-
-    static String fromBeanSpec(String methodName) {
-      Introspector.decapitalize(methodName.replace('get', ''))
     }
 
     protected def decoded(node, returnType) {
