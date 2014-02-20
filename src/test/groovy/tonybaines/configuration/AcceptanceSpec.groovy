@@ -55,7 +55,7 @@ class AcceptanceSpec extends Specification {
     ]
   }
 
-  def "Undefined values (with no default) are an error"() {
+  def "Undefined values (with no default configured) are an error"() {
     when:
     TestConfig config = configuration.load()
     config.getNonExistent()
@@ -85,9 +85,9 @@ class AcceptanceSpec extends Specification {
 
     where:
     configuration << [
-      BaseConfiguration.definedBy(TestConfig).fromXmlFile('common.xml'),
-      BaseConfiguration.definedBy(TestConfig).fromPropertiesFile('common.properties'),
-      BaseConfiguration.definedBy(TestConfig).fromGroovyConfigFile('common.groovy'),
+      BaseConfiguration.definedBy(TestConfig).composedOf().first().fromXmlFile('common.xml').thenFallbackToDefaults().done(),
+      BaseConfiguration.definedBy(TestConfig).composedOf().first().fromPropertiesFile('common.properties').thenFallbackToDefaults().done(),
+      BaseConfiguration.definedBy(TestConfig).composedOf().first().fromGroovyConfigFile('common.groovy').thenFallbackToDefaults().done(),
     ]
   }
 

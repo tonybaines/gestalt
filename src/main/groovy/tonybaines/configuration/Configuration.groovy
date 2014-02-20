@@ -23,6 +23,10 @@ public interface Configuration<T> {
       new GroovyConfigConfiguration(configInterface, filePath)
     }
 
+    public <T> Configuration<T> fromDefaults() {
+      new DefaultConfiguration(configInterface)
+    }
+
     public CompositeConfigurationBuilder composedOf() {
       new CompositeConfigurationBuilder()
     }
@@ -31,34 +35,7 @@ public interface Configuration<T> {
       List<Configuration<T>> strategies = new ArrayList<>()
 
       public Configuration.Factory.CompositeConfigurationBuilder thenFallbackToDefaults() {
-        strategies << new Configuration<T>() {
-
-          @Override
-          T load() {
-            return new BaseConfiguration.ConfigurationInvocationHandler() {
-
-              @Override
-              protected String valueOf(Object x) {
-                return null
-              }
-
-              @Override
-              protected lookUp(String methodName) {
-                return null
-              }
-
-              @Override
-              protected handleList(Object node, Object method) {
-                return null
-              }
-
-              @Override
-              def around(Class configInterface, Object configSource) {
-                return null
-              }
-            }
-          }
-        }
+        strategies << Configuration.Factory.this.fromDefaults()
         this
       }
 
