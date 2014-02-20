@@ -8,7 +8,7 @@ import static org.junit.Assert.assertThat;
 public class XmlConfigTest {
   @Test
   public void readsAnXmlConfigFileAndMakesThePropertiesAvailable() {
-    Configuration<TestConfig> config = BaseConfiguration.definedBy(TestConfig.class).fromXmlFile("common.xml");
+    Configuration<TestConfig> config = BaseConfiguration.definedBy(TestConfig.class).composedOf().first().fromXmlFile("common.xml").thenFallbackToDefaults().done();
     TestConfig testConfig = config.load();
 
     assertThat(testConfig.getIntValue(), is(5));
@@ -20,5 +20,6 @@ public class XmlConfigTest {
     assertThat(testConfig.getStrings().get(1), is("B"));
     assertThat(testConfig.getStrings().get(2), is("C"));
     assertThat(testConfig.getHandedness(), is(Handed.left));
+    assertThat(testConfig.getNonExistentDoubleWithDefault(), is(42.5));
   }
 }
