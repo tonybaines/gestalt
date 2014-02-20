@@ -15,7 +15,7 @@ class CompositeConfiguration<T> implements Configurations.Configuration<T> {
 
   @Override
   T load() {
-    return new CompositeConfigurationProxy(configurations.collect { it.load() }).around(configInterface)
+    return new CompositeConfigurationProxy(configurations.collect { it.load() }).around(configInterface) as T
   }
 
   static class CompositeConfigurationProxy<T> implements InvocationHandler {

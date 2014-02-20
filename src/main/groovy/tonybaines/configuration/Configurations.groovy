@@ -3,8 +3,8 @@ package tonybaines.configuration
 import java.beans.Introspector
 
 class Configurations<T> {
-  static Configurations.Configuration.Factory<T> definedBy(Class configInterface) {
-    new Configurations.Configuration.Factory(configInterface)
+  static <T> Configuration.Factory<T> definedBy(Class configInterface) {
+    new Configuration.Factory(configInterface)
   }
 
   static String fromBeanSpec(String methodName) {
@@ -38,33 +38,32 @@ class Configurations<T> {
         new DefaultConfiguration(configInterface)
       }
 
-      public CompositeConfigurationBuilder composedOf() {
+      public CompositeConfigurationBuilder<T> composedOf() {
         new CompositeConfigurationBuilder()
       }
 
-      class CompositeConfigurationBuilder {
+      class CompositeConfigurationBuilder<T> {
         List<Configuration<T>> strategies = new ArrayList<>()
 
-        public CompositeConfigurationBuilder thenFallbackToDefaults() {
+        public CompositeConfigurationBuilder<T> thenFallbackToDefaults() {
           strategies << Factory.this.fromDefaults()
           this
         }
 
-        public CompositeConfigurationBuilder fromXmlFile(String filePath) {
+        public CompositeConfigurationBuilder<T> fromXmlFile(String filePath) {
           strategies << Factory.this.fromXmlFile(filePath)
           this
         }
 
-        public CompositeConfigurationBuilder fromPropertiesFile(String filePath) {
+        public CompositeConfigurationBuilder<T> fromPropertiesFile(String filePath) {
           strategies << Factory.this.fromPropertiesFile(filePath)
           this
         }
 
-        public CompositeConfigurationBuilder fromGroovyConfigFile(String filePath) {
+        public CompositeConfigurationBuilder<T> fromGroovyConfigFile(String filePath) {
           strategies << Factory.this.fromGroovyConfigFile(filePath)
           this
         }
-
 
         public <T> Configuration<T> done() {
           new CompositeConfiguration<T>(configInterface, strategies)
