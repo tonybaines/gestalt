@@ -1,8 +1,11 @@
 package tonybaines.configuration
 
+import groovy.util.logging.Slf4j
+
 import java.lang.annotation.Annotation
 import java.lang.reflect.Method
 
+@Slf4j
 class DefaultConfiguration<T> extends BaseConfiguration<T> {
 
   DefaultConfiguration(Class configInterface) {
@@ -11,6 +14,7 @@ class DefaultConfiguration<T> extends BaseConfiguration<T> {
 
   @Override
   T load() {
+    log.info "Adding support for Default configuration"
     return new DefaultConfigProxy().around(configInterface) as T
   }
 
@@ -27,6 +31,7 @@ class DefaultConfiguration<T> extends BaseConfiguration<T> {
           it.annotationType().name.contains(Default.class.name)
         }
         if (defaultAnnotation != null) {
+          log.info "Falling back to default definition for ${method.name}"
           Class<? extends Annotation> defaultsType = defaultAnnotation.annotationType()
           def annotationValue = method.getAnnotation(defaultsType).value()
 
@@ -35,7 +40,7 @@ class DefaultConfiguration<T> extends BaseConfiguration<T> {
           } else {
             return annotationValue
           }
-        }
+        } else log.info "Failed to find a default definition for ${method.name}"
       } catch (Exception e) {
         throw new ConfigurationException(method, e)
       }

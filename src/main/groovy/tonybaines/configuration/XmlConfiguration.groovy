@@ -1,5 +1,8 @@
 package tonybaines.configuration
 
+import groovy.util.logging.Slf4j
+
+@Slf4j
 class XmlConfiguration<T> extends BaseConfiguration<T> {
   String filePath
 
@@ -9,6 +12,7 @@ class XmlConfiguration<T> extends BaseConfiguration<T> {
   }
 
   public T load() {
+    log.info "Loading XML configuration from $filePath"
     def xml = new XmlParser().parse(this.class.classLoader.getResourceAsStream(filePath))
     return new XmlConfigProxy(xml).around(configInterface, xml) as T
   }

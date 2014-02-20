@@ -1,9 +1,12 @@
 package tonybaines.configuration
 
+import groovy.util.logging.Slf4j
+
 import java.lang.reflect.InvocationHandler
 import java.lang.reflect.Method
 import java.lang.reflect.ParameterizedType
 
+@Slf4j
 abstract class BaseConfiguration<T> implements Configurations.Configuration<T> {
   protected Class configInterface
 
@@ -28,6 +31,7 @@ abstract class BaseConfiguration<T> implements Configurations.Configuration<T> {
           return decoded(node, method.returnType)
         }
       } catch (Throwable e) {
+        log.warn "Failed to find a definition for ${method.name} in ${this.class.simpleName.replace('ConfigProxy', '')}"
         throw new ConfigurationException(method, e)
       }
     }

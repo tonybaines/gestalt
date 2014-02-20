@@ -1,9 +1,11 @@
 package tonybaines.configuration
 
+import groovy.util.logging.Slf4j
+
 import java.lang.reflect.InvocationHandler
 import java.lang.reflect.Method
 
-
+@Slf4j
 class CompositeConfiguration<T> implements Configurations.Configuration<T> {
   private final List<Configurations.Configuration<T>> configurations
   private final Class configInterface
@@ -37,13 +39,16 @@ class CompositeConfiguration<T> implements Configurations.Configuration<T> {
 
     private Object tryAll(Method method, List<T> configs) {
       if (configs.empty) throw new ConfigurationException(method.name, "not found in any source")
+      def config = configs.head()
       try {
-        def config = configs.head()
         return config."${Configurations.fromBeanSpec(method.name)}"
       }
       catch (Exception e) {
         if (configs.tail().empty) throw e
-        else return tryAll(method, configs.tail())
+        else {
+          log.info "No definition found for ${method.name}. Falling back"
+          return tryAll(method, configs.tail())
+        }
       }
     }
   }
