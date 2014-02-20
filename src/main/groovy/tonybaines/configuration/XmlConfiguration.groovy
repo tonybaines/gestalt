@@ -39,7 +39,9 @@ class XmlConfiguration<T> extends BaseConfiguration<T> {
 
     @Override
     protected lookUp(String methodName) {
-      xml."${methodName}"[0]
+      def matches = xml."${methodName}"
+      if (matches.size() > 1) throw new ConfigurationException(methodName, "more than one definition")
+      matches[0]
     }
 
   }

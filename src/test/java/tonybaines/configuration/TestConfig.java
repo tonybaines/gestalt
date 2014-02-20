@@ -26,6 +26,8 @@ public interface TestConfig {
 
   Integer getDeclaredAsAnIntegerButIsAString();
 
+  String getSomethingDefinedTwice();
+
   @Default.String("default-value")
   String getNonExistentStringWithDefault();
 

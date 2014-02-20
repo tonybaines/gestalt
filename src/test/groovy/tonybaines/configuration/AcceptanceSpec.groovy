@@ -74,6 +74,31 @@ class AcceptanceSpec extends Specification {
   }
 
   @Unroll
+  def "Last-one-wins for multiple config definitions for the same property (#name)"() {
+    when:
+    TestConfig config = configuration.load()
+
+    then:
+    config.getSomethingDefinedTwice() == 'Bar'
+
+    where:
+    name     | configuration
+    'Props'  | Configurations.definedBy(TestConfig).fromPropertiesFile('common.properties')
+    'Groovy' | Configurations.definedBy(TestConfig).fromGroovyConfigFile('common.groovy')
+  }
+
+  def "Multiple config definitions for the same property are an error (XML)"() {
+    when:
+    TestConfig config = Configurations.definedBy(TestConfig).fromXmlFile('common.xml').load()
+    config.getSomethingDefinedTwice()
+
+    then:
+    def e = thrown(ConfigurationException)
+    e.message.contains('Failed to handle getSomethingDefinedTwice')
+    e.cause.message.contains('somethingDefinedTwice: more than one definition')
+  }
+
+  @Unroll
   def "Undefined values (with no default configured) are an error (#name)"() {
     when:
     TestConfig config = configuration.load()
@@ -154,9 +179,6 @@ class AcceptanceSpec extends Specification {
 
   @Ignore
   def "Constants can be defined and reused"() {}
-
-  @Ignore
-  def "Multiple config elements are an error"() {}
 
   @Ignore
   def "Configurations can be saved"() {}

@@ -34,4 +34,8 @@ config {
   propertyDefinedOnlyInGroovyConfig = 'some-value'
   propertyDefinedAllConfigSources = 'from-groovy-config'
   declaredAsAnIntegerButIsAString = 'Whoops!'
+
+  // GroovyConfig is really a Map syntax, so last one wins
+  somethingDefinedTwice = 'Foo'
+  somethingDefinedTwice = 'Bar'
 }

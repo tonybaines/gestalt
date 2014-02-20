@@ -30,4 +30,6 @@
     </things>
     <propertyDefinedAllConfigSources>from-xml</propertyDefinedAllConfigSources>
     <declaredAsAnIntegerButIsAString>Whoops!</declaredAsAnIntegerButIsAString>
+    <somethingDefinedTwice>Foo</somethingDefinedTwice>
+    <somethingDefinedTwice>Bar</somethingDefinedTwice>
 </config>
