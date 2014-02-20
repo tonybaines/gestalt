@@ -36,6 +36,15 @@ public interface TestConfig {
   @Default.Double(42.5)
   Double getNonExistentDoubleWithDefault();
 
+  /**
+   * Enums need to have defaults defined
+   * as String constants such that they
+   * evaluate successfully from
+   * <pre>MyEnum.valueOf(string)</pre>
+   */
+  @Default.Enum("right")
+  Handed getNonExistentEnumWithDefault();
+
   String getPropertyDefinedOnlyInGroovyConfig();
 
   String getPropertyDefinedAllConfigSources();

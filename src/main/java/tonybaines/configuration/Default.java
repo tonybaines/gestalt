@@ -30,4 +30,10 @@ public interface Default {
   public @interface Double {
     double value();
   }
+
+  @Target({METHOD})
+  @Retention(RUNTIME)
+  public @interface Enum {
+    java.lang.String value();
+  }
 }

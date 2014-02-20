@@ -73,7 +73,8 @@ class AcceptanceSpec extends Specification {
     'Groovy' | Configurations.definedBy(TestConfig).fromGroovyConfigFile('common.groovy')
   }
 
-  def "Missing config elements use the supplied defaults"() {
+  @Unroll
+  def "Missing config elements use the supplied defaults (#name)"() {
     when:
     TestConfig config = configuration.load()
 
@@ -82,7 +83,7 @@ class AcceptanceSpec extends Specification {
     config.getNonExistentBooleanWithDefault() == false
     config.getNonExistentIntegerWithDefault() == 42
     config.getNonExistentDoubleWithDefault() == 42.5
-    // TODO: enum
+    config.getNonExistentEnumWithDefault() == Handed.right
 
     where:
     name     | configuration

@@ -28,7 +28,14 @@ class DefaultConfiguration<T> extends BaseConfiguration<T> {
         it.annotationType().name.contains(Default.class.name)
       }
       if (defaultAnnotation != null) {
-        return method.getAnnotation(defaultAnnotation.annotationType()).value()
+        Class<? extends Annotation> defaultsType = defaultAnnotation.annotationType()
+        def annotationValue = method.getAnnotation(defaultsType).value()
+
+        if (Default.Enum.class.name.equals(defaultsType.name)) {
+          return method.returnType.valueOf(annotationValue)
+        } else {
+          return annotationValue
+        }
       }
       throw new ConfigurationException(method.name, "no default value defined")
     }
