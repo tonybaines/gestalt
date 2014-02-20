@@ -1,6 +1,6 @@
 package tonybaines.configuration
 
-class GroovyConfigConfiguration<T> extends DefaultConfiguration<T> {
+class GroovyConfigConfiguration<T> extends BaseConfiguration<T> {
   String filePath
 
   public GroovyConfigConfiguration(Class configInterface, String filePath) {
@@ -13,7 +13,7 @@ class GroovyConfigConfiguration<T> extends DefaultConfiguration<T> {
     return GroovyConfigConfigProxy.from(configInterface, groovyConfig) as T
   }
 
-  static class GroovyConfigConfigProxy extends DefaultConfiguration.ConfigurationInvocationHandler {
+  static class GroovyConfigConfigProxy extends BaseConfiguration.ConfigurationInvocationHandler {
     def groovyConfig
 
     static def from(Class configInterface, props) {

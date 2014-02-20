@@ -11,10 +11,10 @@ import java.lang.reflect.ParameterizedType
  TODO: Filtering is the responsibility of client code, not config. 'id' is NOT a special case
   */
 
-abstract class DefaultConfiguration<T> implements Configuration<T> {
+abstract class BaseConfiguration<T> implements Configuration<T> {
   protected Class configInterface
 
-  public DefaultConfiguration(Class configInterface) {
+  public BaseConfiguration(Class configInterface) {
     this.configInterface = configInterface
   }
 

@@ -1,6 +1,6 @@
 package tonybaines.configuration
 
-class XmlConfiguration<T> extends DefaultConfiguration<T> {
+class XmlConfiguration<T> extends BaseConfiguration<T> {
   String filePath
 
   public XmlConfiguration(Class configInterface, String filePath) {
@@ -13,7 +13,7 @@ class XmlConfiguration<T> extends DefaultConfiguration<T> {
     return XmlConfigProxy.from(configInterface, xml) as T
   }
 
-  static class XmlConfigProxy extends DefaultConfiguration.ConfigurationInvocationHandler {
+  static class XmlConfigProxy extends BaseConfiguration.ConfigurationInvocationHandler {
     def xml
 
     static def from(Class configInterface, xml) {

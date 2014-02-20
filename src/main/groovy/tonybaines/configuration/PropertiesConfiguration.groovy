@@ -1,6 +1,6 @@
 package tonybaines.configuration
 
-class PropertiesConfiguration<T> extends DefaultConfiguration<T> {
+class PropertiesConfiguration<T> extends BaseConfiguration<T> {
   String filePath
 
   public PropertiesConfiguration(Class configInterface, String filePath) {
@@ -15,7 +15,7 @@ class PropertiesConfiguration<T> extends DefaultConfiguration<T> {
     return PropertiesConfigProxy.from(configInterface, props) as T
   }
 
-  static class PropertiesConfigProxy extends DefaultConfiguration.ConfigurationInvocationHandler {
+  static class PropertiesConfigProxy extends BaseConfiguration.ConfigurationInvocationHandler {
     def props
 
     static def from(Class configInterface, props) {

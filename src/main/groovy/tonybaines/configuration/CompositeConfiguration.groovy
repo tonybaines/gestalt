@@ -43,7 +43,7 @@ class CompositeConfiguration<T> implements Configuration<T> {
       if (configs.empty) throw new ConfigurationException(method.name, "not found in any source")
       try {
         def config = configs.head()
-        return config."${DefaultConfiguration.ConfigurationInvocationHandler.fromBeanSpec(method.name)}"
+        return config."${BaseConfiguration.ConfigurationInvocationHandler.fromBeanSpec(method.name)}"
       }
       catch (Exception e) {
         return tryAll(method, configs.tail())

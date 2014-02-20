@@ -27,9 +27,9 @@ class AcceptanceSpec extends Specification {
 
     where:
     configuration << [
-      DefaultConfiguration.definedBy(TestConfig).fromXmlFile('common.xml'),
-      DefaultConfiguration.definedBy(TestConfig).fromPropertiesFile('common.properties'),
-      DefaultConfiguration.definedBy(TestConfig).fromGroovyConfigFile('common.groovy'),
+      BaseConfiguration.definedBy(TestConfig).fromXmlFile('common.xml'),
+      BaseConfiguration.definedBy(TestConfig).fromPropertiesFile('common.properties'),
+      BaseConfiguration.definedBy(TestConfig).fromGroovyConfigFile('common.groovy'),
     ]
   }
 
@@ -49,9 +49,9 @@ class AcceptanceSpec extends Specification {
 
     where:
     configuration << [
-      DefaultConfiguration.definedBy(TestConfig).fromXmlFile('common.xml'),
-      DefaultConfiguration.definedBy(TestConfig).fromPropertiesFile('common.properties'),
-      DefaultConfiguration.definedBy(TestConfig).fromGroovyConfigFile('common.groovy'),
+      BaseConfiguration.definedBy(TestConfig).fromXmlFile('common.xml'),
+      BaseConfiguration.definedBy(TestConfig).fromPropertiesFile('common.properties'),
+      BaseConfiguration.definedBy(TestConfig).fromGroovyConfigFile('common.groovy'),
     ]
   }
 
@@ -66,9 +66,9 @@ class AcceptanceSpec extends Specification {
 
     where:
     configuration << [
-      DefaultConfiguration.definedBy(TestConfig).fromXmlFile('common.xml'),
-      DefaultConfiguration.definedBy(TestConfig).fromPropertiesFile('common.properties'),
-      DefaultConfiguration.definedBy(TestConfig).fromGroovyConfigFile('common.groovy'),
+      BaseConfiguration.definedBy(TestConfig).fromXmlFile('common.xml'),
+      BaseConfiguration.definedBy(TestConfig).fromPropertiesFile('common.properties'),
+      BaseConfiguration.definedBy(TestConfig).fromGroovyConfigFile('common.groovy'),
     ]
   }
 
@@ -85,9 +85,9 @@ class AcceptanceSpec extends Specification {
 
     where:
     configuration << [
-      DefaultConfiguration.definedBy(TestConfig).fromXmlFile('common.xml'),
-      DefaultConfiguration.definedBy(TestConfig).fromPropertiesFile('common.properties'),
-      DefaultConfiguration.definedBy(TestConfig).fromGroovyConfigFile('common.groovy'),
+      BaseConfiguration.definedBy(TestConfig).fromXmlFile('common.xml'),
+      BaseConfiguration.definedBy(TestConfig).fromPropertiesFile('common.properties'),
+      BaseConfiguration.definedBy(TestConfig).fromGroovyConfigFile('common.groovy'),
     ]
   }
 
@@ -117,7 +117,7 @@ class AcceptanceSpec extends Specification {
   def "Configurations eventually fall back to a default value (if declared)"() {}
 
   protected newCompositeConfiguration() {
-    DefaultConfiguration.definedBy(TestConfig).composedOf().
+    BaseConfiguration.definedBy(TestConfig).composedOf().
       first().fromPropertiesFile('common.properties').
       thenFallbackTo().fromXmlFile('common.xml').
       thenFallbackTo().fromGroovyConfigFile('common.groovy').

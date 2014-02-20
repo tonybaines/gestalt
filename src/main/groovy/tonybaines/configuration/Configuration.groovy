@@ -35,7 +35,7 @@ public interface Configuration<T> {
 
           @Override
           T load() {
-            return new DefaultConfiguration.ConfigurationInvocationHandler() {
+            return new BaseConfiguration.ConfigurationInvocationHandler() {
 
               @Override
               protected String valueOf(Object x) {
