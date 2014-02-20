@@ -178,6 +178,15 @@ class AcceptanceSpec extends Specification {
   }
 
   @Ignore
+  def "Where validation constraints are broken, fall back to the next available source (including defaults)"() {}
+
+  @Ignore
+  def "If the default value is used and it breaks validation constraints, it is an error"() {}
+
+  @Ignore
+  def "Configuration can be loaded from a JDBC DataSource"() {}
+
+  @Ignore
   def "Constants can be defined and reused"() {}
 
   @Ignore
