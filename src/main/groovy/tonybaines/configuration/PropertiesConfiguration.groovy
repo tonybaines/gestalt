@@ -12,18 +12,13 @@ class PropertiesConfiguration<T> extends BaseConfiguration<T> {
     def propsFile = new Properties()
     propsFile.load(this.class.classLoader.getResourceAsStream(filePath))
     def props = new ConfigSlurper().parse(propsFile)
-    return PropertiesConfigProxy.from(configInterface, props) as T
+    return new PropertiesConfigProxy(props).around(configInterface, props) as T
   }
 
-  static class PropertiesConfigProxy extends BaseConfiguration.ConfigurationInvocationHandler {
-    def props
-
-    static def from(Class configInterface, props) {
-      return new PropertiesConfigProxy(props).around(configInterface, props)
-    }
+  static class PropertiesConfigProxy extends ConfigSlurperConfigProxy {
 
     PropertiesConfigProxy(props) {
-      this.props = props
+      super(props)
     }
 
     @Override
@@ -32,27 +27,10 @@ class PropertiesConfiguration<T> extends BaseConfiguration<T> {
     }
 
     @Override
-    protected String valueOf(node) {
-      node
-    }
-
-    @Override
     protected handleList(node, method) {
       return node.entrySet().sort { it.key }.collect { entry ->
         decoded(entry.value, method.genericReturnType.actualTypeArguments[0])
       }
     }
-
-    @Override
-    protected lookUp(String methodName) {
-      def node = props."${methodName}"
-      if (node instanceof ConfigObject && node.isEmpty()) {
-        throw new ConfigurationException(methodName, "not defined")
-      }
-      else {
-        return node
-      }
-    }
-
   }
 }

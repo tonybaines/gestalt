@@ -10,15 +10,11 @@ class XmlConfiguration<T> extends BaseConfiguration<T> {
 
   public T load() {
     def xml = new XmlParser().parse(this.class.classLoader.getResourceAsStream(filePath))
-    return XmlConfigProxy.from(configInterface, xml) as T
+    return new XmlConfigProxy(xml).around(configInterface, xml) as T
   }
 
   static class XmlConfigProxy extends BaseConfiguration.ConfigurationInvocationHandler {
     def xml
-
-    static def from(Class configInterface, xml) {
-      return new XmlConfigProxy(xml).around(configInterface, xml)
-    }
 
     XmlConfigProxy(xml) {
       this.xml = xml

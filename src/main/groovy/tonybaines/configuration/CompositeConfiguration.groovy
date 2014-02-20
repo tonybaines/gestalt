@@ -15,21 +15,17 @@ class CompositeConfiguration<T> implements Configurations.Configuration<T> {
 
   @Override
   T load() {
-    return CompositeConfigurationProxy.from(configInterface, configurations.collect { it.load() })
+    return new CompositeConfigurationProxy(configurations.collect { it.load() }).around(configInterface)
   }
 
   static class CompositeConfigurationProxy<T> implements InvocationHandler {
     private final List<T> configs
 
-    static def from(Class configInterface, List<T> configs) {
-      return new CompositeConfigurationProxy(configs).around(configInterface)
-    }
-
     CompositeConfigurationProxy(configs) {
       this.configs = configs
     }
 
-
+    @Override
     public def around(Class configInterface) {
       java.lang.reflect.Proxy.newProxyInstance(this.class.classLoader, (Class[]) [configInterface], this)
     }

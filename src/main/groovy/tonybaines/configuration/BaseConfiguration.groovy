@@ -4,11 +4,6 @@ import java.lang.reflect.InvocationHandler
 import java.lang.reflect.Method
 import java.lang.reflect.ParameterizedType
 
-/*
- TODO: try building up paths e.g. ['config', 'strings'] and evaluating against the underlying store
- TODO: Filtering is the responsibility of client code, not config. 'id' is NOT a special case
-  */
-
 abstract class BaseConfiguration<T> implements Configurations.Configuration<T> {
   protected Class configInterface
 
@@ -17,8 +12,6 @@ abstract class BaseConfiguration<T> implements Configurations.Configuration<T> {
   }
 
   abstract T load()
-
-  static isAList(type) { type instanceof ParameterizedType && type.rawType.isAssignableFrom(List) }
 
   static abstract class ConfigurationInvocationHandler implements InvocationHandler {
 
@@ -39,6 +32,8 @@ abstract class BaseConfiguration<T> implements Configurations.Configuration<T> {
       }
     }
 
+    static isAList(type) { type instanceof ParameterizedType && type.rawType.isAssignableFrom(List) }
+
     protected def decoded(node, returnType) {
       switch (returnType) {
         case String: return valueOf(node)
@@ -56,6 +51,11 @@ abstract class BaseConfiguration<T> implements Configurations.Configuration<T> {
 
     protected abstract handleList(node, method);
 
+    /**
+     * Warning - this method is called recursively with a sub-tree of
+     * the current configuration.  This usually means a new instance
+     * of the specific InvocationHandler (not reused)
+     */
     public abstract def around(Class configInterface, configSource);
   }
 
