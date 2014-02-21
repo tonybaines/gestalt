@@ -168,20 +168,35 @@ class AcceptanceSpec extends Specification {
     config.getPropertyDefinedAllConfigSources() == 'from-properties'
   }
 
-  protected static newCompositeConfiguration() {
-    Configurations.definedBy(TestConfig).composedOf().
+  @Unroll
+  def "Throw an exception validation if constraints are broken, and validation is required (#name)"() {
+    when:
+    configuration.load()
+
+    then:
+    def e = thrown(ConfigurationException)
+    e.message.contains('integerThatIsTooLarge must be less than or equal to 10')
+
+    where:
+    name     | configuration
+    'XML'    | Configurations.definedBy(TestConfig).validateOnLoad().composedOf().fromXmlFile('common.xml').thenFallbackToDefaults().done()
+    'Props'  | Configurations.definedBy(TestConfig).validateOnLoad().composedOf().fromPropertiesFile('common.properties').thenFallbackToDefaults().done()
+    'Groovy' | Configurations.definedBy(TestConfig).validateOnLoad().composedOf().fromGroovyConfigFile('common.groovy').thenFallbackToDefaults().done()
+  }
+
+  def "If the default value is used and it breaks validation constraints, it is an error"() {
+    when:
+    Configurations.definedBy(TestConfig).validateOnLoad().composedOf().
       fromPropertiesFile('common.properties').
       fromXmlFile('common.xml').
       fromGroovyConfigFile('common.groovy').
       thenFallbackToDefaults().
-      done()
+      done().load()
+
+    then:
+    def e = thrown(ConfigurationException)
+    e.message.contains('stringValueWhoseDefaultBreaksValidation size must be between 1 and 2')
   }
-
-  @Ignore
-  def "Where validation constraints are broken, fall back to the next available source (including defaults)"() {}
-
-  @Ignore
-  def "If the default value is used and it breaks validation constraints, it is an error"() {}
 
   @Ignore
   def "Configuration can be loaded from a JDBC DataSource"() {}
@@ -195,4 +210,13 @@ class AcceptanceSpec extends Specification {
   @Ignore
   def "Changes to persisted stores are reflected without a restart"() {}
 
+
+  protected static newCompositeConfiguration() {
+    Configurations.definedBy(TestConfig).composedOf().
+      fromPropertiesFile('common.properties').
+      fromXmlFile('common.xml').
+      fromGroovyConfigFile('common.groovy').
+      thenFallbackToDefaults().
+      done()
+  }
 }

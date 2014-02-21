@@ -6,8 +6,8 @@ import groovy.util.logging.Slf4j
 class PropertiesConfiguration<T> extends BaseConfiguration<T> {
   String filePath
 
-  public PropertiesConfiguration(Class configInterface, String filePath) {
-    super(configInterface)
+  public PropertiesConfiguration(Class configInterface, String filePath, boolean validateOnLoad) {
+    super(configInterface, validateOnLoad)
     this.filePath = filePath
   }
 
@@ -16,7 +16,9 @@ class PropertiesConfiguration<T> extends BaseConfiguration<T> {
     log.info "Loading Properties configuration from $filePath"
     propsFile.load(this.class.classLoader.getResourceAsStream(filePath))
     def props = new ConfigSlurper().parse(propsFile)
-    return new PropertiesConfigProxy(props).around(configInterface, props) as T
+    T config = new PropertiesConfigProxy(props).around(configInterface, props) as T
+    if (validateOnLoad) Configurations.validate(config)
+    config
   }
 
   static class PropertiesConfigProxy extends ConfigSlurperConfigProxy {

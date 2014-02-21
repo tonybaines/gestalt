@@ -10,4 +10,8 @@ class ConfigurationException extends RuntimeException {
   ConfigurationException(String methodName, String reason) {
     super("Failed to handle $methodName: ${reason}")
   }
+
+  ConfigurationException(List messages) {
+    super(messages.join('\n'))
+  }
 }

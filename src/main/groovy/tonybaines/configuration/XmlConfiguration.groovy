@@ -6,15 +6,17 @@ import groovy.util.logging.Slf4j
 class XmlConfiguration<T> extends BaseConfiguration<T> {
   String filePath
 
-  public XmlConfiguration(Class configInterface, String filePath) {
-    super(configInterface)
+  public XmlConfiguration(Class configInterface, String filePath, boolean validateOnLoad) {
+    super(configInterface, validateOnLoad)
     this.filePath = filePath
   }
 
   public T load() {
     log.info "Loading XML configuration from $filePath"
     def xml = new XmlParser().parse(this.class.classLoader.getResourceAsStream(filePath))
-    return new XmlConfigProxy(xml).around(configInterface, xml) as T
+    T config = new XmlConfigProxy(xml).around(configInterface, xml) as T
+    if (validateOnLoad) Configurations.validate(config)
+    config
   }
 
   static class XmlConfigProxy extends BaseConfiguration.ConfigurationInvocationHandler {

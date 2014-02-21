@@ -38,4 +38,6 @@ config {
   // GroovyConfig is really a Map syntax, so last one wins
   somethingDefinedTwice = 'Foo'
   somethingDefinedTwice = 'Bar'
+
+  integerThatIsTooLarge = 11
 }

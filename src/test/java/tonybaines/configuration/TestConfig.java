@@ -1,7 +1,10 @@
 package tonybaines.configuration;
 
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 public interface TestConfig {
@@ -56,13 +59,19 @@ public interface TestConfig {
 
   String getPropertyDefinedAllConfigSources();
 
+  @Size(min = 1, max = 2)
+  @Default.String("foo")
+  String getStringValueWhoseDefaultBreaksValidation();
+
+  @Max(10)
+  @Min(1)
+  Integer getIntegerThatIsTooLarge();
+
   public static interface SubConfigLevel1 {
     Integer getIntValue();
   }
 
   public static interface Thing {
     String getId();
-
-    String getStringValue();
   }
 }

@@ -32,4 +32,5 @@
     <declaredAsAnIntegerButIsAString>Whoops!</declaredAsAnIntegerButIsAString>
     <somethingDefinedTwice>Foo</somethingDefinedTwice>
     <somethingDefinedTwice>Bar</somethingDefinedTwice>
+    <integerThatIsTooLarge>11</integerThatIsTooLarge>
 </config>

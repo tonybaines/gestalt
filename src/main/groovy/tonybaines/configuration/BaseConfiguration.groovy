@@ -9,9 +9,11 @@ import java.lang.reflect.ParameterizedType
 @Slf4j
 abstract class BaseConfiguration<T> implements Configurations.Configuration<T> {
   protected Class configInterface
+  protected final boolean validateOnLoad
 
-  public BaseConfiguration(Class configInterface) {
+  public BaseConfiguration(Class configInterface, boolean validateOnLoad) {
     this.configInterface = configInterface
+    this.validateOnLoad = validateOnLoad
   }
 
   abstract T load()
@@ -20,6 +22,8 @@ abstract class BaseConfiguration<T> implements Configurations.Configuration<T> {
 
     @Override
     Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+      if (method.name.equals("hashCode")) return 1
+      if (method.name.equals("equals")) return false
       try {
         def node = lookUp(Configurations.fromBeanSpec(method.name))
 

@@ -9,7 +9,7 @@ import java.lang.reflect.Method
 class DefaultConfiguration<T> extends BaseConfiguration<T> {
 
   DefaultConfiguration(Class configInterface) {
-    super(configInterface)
+    super(configInterface, false)
   }
 
   @Override

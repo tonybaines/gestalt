@@ -1,5 +1,7 @@
 package tonybaines.configuration
 
+import javax.validation.Validation
+import javax.validation.Validator
 import java.beans.Introspector
 
 class Configurations<T> {
@@ -11,27 +13,41 @@ class Configurations<T> {
     Introspector.decapitalize(methodName.replace('get', ''))
   }
 
+  static void validate(T config) {
+    Validator validator = Validation.buildDefaultValidatorFactory().validator
+    def validationResults = validator.validate(config)
+    if (!validationResults.empty) {
+      throw new ConfigurationException(validationResults.collect { "${it.propertyPath} ${it.interpolatedMessage}" })
+    }
+  }
+
   public static interface Configuration<T> {
 
     T load()
 
     static class Factory<T> {
       Class configInterface
+      boolean validateOnLoad
 
       Factory(configInterface) {
         this.configInterface = configInterface
       }
 
-      public <T> Configuration<T> fromXmlFile(String filePath) {
-        new XmlConfiguration(configInterface, filePath)
+      public <T> Factory<T> validateOnLoad() {
+        validateOnLoad = true
+        this
       }
 
-      public <T> Configuration<T> fromPropertiesFile(String filePath) {
-        new PropertiesConfiguration(configInterface, filePath)
+      public <T> Configuration<T> fromXmlFile(String filePath, boolean shouldValidateIfAsked = true) {
+        new XmlConfiguration(configInterface, filePath, validateOnLoad && shouldValidateIfAsked)
       }
 
-      public <T> Configuration<T> fromGroovyConfigFile(String filePath) {
-        new GroovyConfigConfiguration(configInterface, filePath)
+      public <T> Configuration<T> fromPropertiesFile(String filePath, boolean shouldValidateIfAsked = true) {
+        new PropertiesConfiguration(configInterface, filePath, validateOnLoad && shouldValidateIfAsked)
+      }
+
+      public <T> Configuration<T> fromGroovyConfigFile(String filePath, boolean shouldValidateIfAsked = true) {
+        new GroovyConfigConfiguration(configInterface, filePath, validateOnLoad && shouldValidateIfAsked)
       }
 
       public <T> Configuration<T> fromDefaults() {
@@ -51,22 +67,22 @@ class Configurations<T> {
         }
 
         public CompositeConfigurationBuilder<T> fromXmlFile(String filePath) {
-          strategies << Factory.this.fromXmlFile(filePath)
+          strategies << Factory.this.fromXmlFile(filePath, !validateOnLoad)
           this
         }
 
         public CompositeConfigurationBuilder<T> fromPropertiesFile(String filePath) {
-          strategies << Factory.this.fromPropertiesFile(filePath)
+          strategies << Factory.this.fromPropertiesFile(filePath, !validateOnLoad)
           this
         }
 
         public CompositeConfigurationBuilder<T> fromGroovyConfigFile(String filePath) {
-          strategies << Factory.this.fromGroovyConfigFile(filePath)
+          strategies << Factory.this.fromGroovyConfigFile(filePath, !validateOnLoad)
           this
         }
 
         public <T> Configuration<T> done() {
-          new CompositeConfiguration<T>(configInterface, strategies)
+          new CompositeConfiguration<T>(configInterface, strategies, validateOnLoad)
         }
       }
 

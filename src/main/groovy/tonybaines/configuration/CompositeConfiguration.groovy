@@ -9,15 +9,19 @@ import java.lang.reflect.Method
 class CompositeConfiguration<T> implements Configurations.Configuration<T> {
   private final List<Configurations.Configuration<T>> configurations
   private final Class configInterface
+  private final boolean validateOnLoad
 
-  CompositeConfiguration(Class configInterface, List<Configurations.Configuration<T>> configurations) {
+  CompositeConfiguration(Class configInterface, List<Configurations.Configuration<T>> configurations, boolean validateOnLoad) {
     this.configInterface = configInterface
     this.configurations = configurations
+    this.validateOnLoad = validateOnLoad
   }
 
   @Override
   T load() {
-    return new CompositeConfigurationProxy(configurations.collect { it.load() }).around(configInterface) as T
+    def config = new CompositeConfigurationProxy(configurations.collect { it.load() }).around(configInterface) as T
+    if (validateOnLoad) Configurations.validate(config)
+    config
   }
 
   static class CompositeConfigurationProxy<T> implements InvocationHandler {
@@ -38,6 +42,9 @@ class CompositeConfiguration<T> implements Configurations.Configuration<T> {
     }
 
     private Object tryAll(Method method, List<T> configs) {
+      if (method.name.equals("hashCode")) return 1
+      if (method.name.equals("equals")) return false
+
       if (configs.empty) throw new ConfigurationException(method.name, "not found in any source")
       def config = configs.head()
       try {

@@ -11,8 +11,10 @@ dependencies {
     'org.codehaus.groovy:groovy-all:2.2.1',
     'joda-time:joda-time:2.2',
     'com.google.guava:guava:14.0.1',
-    'javax.validation:validation-api:1.0.0.GA',
     'org.slf4j:slf4j-simple:1.6.1',
+    'org.hibernate:hibernate-validator:5.1.0.CR1',
+    'javax.el:javax.el-api:2.2.4',
+    'org.glassfish.web:javax.el:2.2.4',
   ])
 
   testCompile([
