@@ -199,13 +199,19 @@ class AcceptanceSpec extends Specification {
   }
 
   @Ignore
+  def "Configurations can be saved"() {}
+
+  @Ignore
   def "Configuration can be loaded from a JDBC DataSource"() {}
 
   @Ignore
-  def "Constants can be defined and reused"() {}
+  def "Configuration can be loaded from a https://github.com/typesafehub/config source"() {}
 
   @Ignore
-  def "Configurations can be saved"() {}
+  def "Configuration can be loaded from an Apache Commons Configuration source"() {}
+
+  @Ignore
+  def "Constants can be defined and reused"() {}
 
   @Ignore
   def "Changes to persisted stores are reflected without a restart"() {}
