@@ -44,15 +44,15 @@ class Configurations<T> {
       }
 
       public T fromXmlFile(String filePath) {
-        new DynoClass<T>(new ValidatingDecorator<T>(configInterface, new XmlConfigSource(filePath))).getMapAsInterface(configInterface)
+        new DynoClass<T>(new XmlConfigSource(filePath)).getMapAsInterface(configInterface)
       }
 
       public T fromPropertiesFile(String filePath) {
-        new DynoClass<T>(new ValidatingDecorator<T>(configInterface, new PropertiesConfigSource(filePath))).getMapAsInterface(configInterface)
+        new DynoClass<T>(new PropertiesConfigSource(filePath)).getMapAsInterface(configInterface)
       }
 
       public T fromGroovyConfigFile(String filePath) {
-        new DynoClass<T>(new ValidatingDecorator<T>(configInterface, new GroovyConfigSource(filePath))).getMapAsInterface(configInterface)
+        new DynoClass<T>(new GroovyConfigSource(filePath)).getMapAsInterface(configInterface)
       }
 
       public CompositeConfigurationBuilder<T> composedOf() {
@@ -63,22 +63,22 @@ class Configurations<T> {
         List<T> sources = new ArrayList<>()
 
         public CompositeConfigurationBuilder<T> thenFallbackToDefaults() {
-          sources << new ValidatingDecorator<T>(configInterface, new DefaultConfigSource())
+          sources << new DefaultConfigSource()
           this
         }
 
         public CompositeConfigurationBuilder<T> fromXmlFile(String filePath) {
-          sources << new ValidatingDecorator<T>(configInterface, new XmlConfigSource(filePath))
+          sources << new XmlConfigSource(filePath)
           this
         }
 
         public CompositeConfigurationBuilder<T> fromPropertiesFile(String filePath) {
-          sources << new ValidatingDecorator<T>(configInterface, new PropertiesConfigSource(filePath))
+          sources << new PropertiesConfigSource(filePath)
           this
         }
 
         public CompositeConfigurationBuilder<T> fromGroovyConfigFile(String filePath) {
-          sources << new ValidatingDecorator<T>(configInterface, new GroovyConfigSource(filePath))
+          sources << new GroovyConfigSource(filePath)
           this
         }
 

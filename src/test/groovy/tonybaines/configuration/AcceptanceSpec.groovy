@@ -4,6 +4,9 @@ import spock.lang.Ignore
 import spock.lang.Specification
 import spock.lang.Unroll
 
+import javax.validation.Validation
+import javax.validation.Validator
+
 class AcceptanceSpec extends Specification {
   @Unroll
   def "Configurations can be queried (#name)"() {
@@ -172,7 +175,8 @@ class AcceptanceSpec extends Specification {
   @Unroll
   def "Throw an exception if validation constraints are broken (#name)"() {
     when:
-    configuration.getIntegerThatIsTooLarge()
+    Validator validator = Validation.buildDefaultValidatorFactory().validator
+    validator.validate(configuration).each { println it }
 
     then:
     def e = thrown(ConfigurationException)
