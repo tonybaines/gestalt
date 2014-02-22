@@ -1,7 +1,10 @@
 package tonybaines.configuration
 
+import groovy.util.logging.Slf4j
+
 import java.lang.reflect.Method
 
+@Slf4j
 class XmlConfigSource implements ConfigSource {
   Node xml
 
@@ -15,15 +18,21 @@ class XmlConfigSource implements ConfigSource {
 
   @Override
   def lookup(List<String> path, Method method) {
-    def node = path.inject(xml) { acc, val -> acc."$val" }
+    try {
+      def node = path.inject(xml) { acc, val -> acc."$val" }
+      if (node.size() > 1) throw new ConfigurationException(method.name, "more than one definition")
 
-    if (method.returnType.enum) return method.returnType.valueOf(valueOf(node))
-    if (Configurations.isAList(method.genericReturnType)) {
-      def list = handleList(node, method)
-      return list
+      if (method.returnType.enum) return method.returnType.valueOf(valueOf(node))
+      if (Configurations.isAList(method.genericReturnType)) {
+        def list = handleList(node, method)
+        return list
+      }
+
+      return decoded(node, method.returnType)
+    } catch (Throwable e) {
+      log.warn "Failed to find a definition for ${method.name} in ${this.class.simpleName.replace('ConfigProxy', '')}"
+      throw new ConfigurationException(method, e)
     }
-
-    return decoded(node, method.returnType)
   }
 
   protected def decoded(node, Class returnType) {

@@ -36,7 +36,7 @@ class AcceptanceSpec extends Specification {
   @Unroll
   def "Definitions which don't match their type are an error (#name)"() {
     when:
-    TestConfig config = configuration.load()
+    TestConfig config = configuration//.load()
     config.getDeclaredAsAnIntegerButIsAString()
 
     then:
@@ -47,9 +47,10 @@ class AcceptanceSpec extends Specification {
 
     where:
     name     | configuration
-    'XML'    | Configurations.definedBy(TestConfig).fromXmlFile('common.xml')
-    'Props'  | Configurations.definedBy(TestConfig).fromPropertiesFile('common.properties')
-    'Groovy' | Configurations.definedBy(TestConfig).fromGroovyConfigFile('common.groovy')
+//    'XML'    | Configurations.definedBy(TestConfig).fromXmlFile('common.xml')
+//    'Props'  | Configurations.definedBy(TestConfig).fromPropertiesFile('common.properties')
+//    'Groovy' | Configurations.definedBy(TestConfig).fromGroovyConfigFile('common.groovy')
+    'New' | new DynoClass(new XmlConfigSource('common.xml')).getMapAsInterface(TestConfig.class)
   }
 
   @Unroll
@@ -91,13 +92,14 @@ class AcceptanceSpec extends Specification {
 
   def "Multiple config definitions for the same property are an error (XML)"() {
     when:
-    TestConfig config = Configurations.definedBy(TestConfig).fromXmlFile('common.xml').load()
+//    TestConfig config = Configurations.definedBy(TestConfig).fromXmlFile('common.xml').load()
+    TestConfig config = new DynoClass(new XmlConfigSource('common.xml')).getMapAsInterface(TestConfig.class)
     config.getSomethingDefinedTwice()
 
     then:
     def e = thrown(ConfigurationException)
     e.message.contains('Failed to handle getSomethingDefinedTwice')
-    e.cause.message.contains('somethingDefinedTwice: more than one definition')
+    e.cause.message.contains('more than one definition')
   }
 
   @Unroll
