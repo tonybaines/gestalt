@@ -3,23 +3,35 @@ package tonybaines.configuration
 import java.lang.reflect.InvocationHandler
 import java.lang.reflect.Method
 
-class PathBuildingInvocationHandler implements InvocationHandler {
+class PathBuildingInvocationHandler<T> implements InvocationHandler {
   private def source
-  private final Object path
 
-  PathBuildingInvocationHandler(source, path = []) {
+  PathBuildingInvocationHandler(source) {
     this.source = source
-    this.path = path
+  }
+
+  def around(configInterface, path = []) {
+    java.lang.reflect.Proxy.newProxyInstance(this.class.classLoader, (Class[]) [configInterface], new PathBuildingInvocationHandler(source))
   }
 
   @Override
   Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+    return buildPath(method)
+  }
+
+  protected buildPath(Method method, path = []) {
     path << Configurations.fromBeanSpec(method.name)
     if (returnsAValue(method)) return source.lookup(path)
-    else null
   }
 
   boolean returnsAValue(Method method) {
-    true
+    switch (method.returnType) {
+      case String: return true
+      case Integer: return true
+      case Double: return true
+      case Boolean: return true
+
+      default: return false
+    }
   }
 }
