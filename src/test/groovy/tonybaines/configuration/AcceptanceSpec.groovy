@@ -8,7 +8,7 @@ class AcceptanceSpec extends Specification {
   @Unroll
   def "Configurations can be queried (#name)"() {
     when:
-    TestConfig config = configuration.load()
+    TestConfig config = configuration//.load()
 
     then:
     config.getIntValue() == 5
@@ -27,9 +27,10 @@ class AcceptanceSpec extends Specification {
 
     where:
     name     | configuration
-    'XML'    | Configurations.definedBy(TestConfig).fromXmlFile('common.xml')
-    'Props'  | Configurations.definedBy(TestConfig).fromPropertiesFile('common.properties')
-    'Groovy' | Configurations.definedBy(TestConfig).fromGroovyConfigFile('common.groovy')
+//    'XML'    | Configurations.definedBy(TestConfig).fromXmlFile('common.xml')
+//    'Props'  | Configurations.definedBy(TestConfig).fromPropertiesFile('common.properties')
+//    'Groovy' | Configurations.definedBy(TestConfig).fromGroovyConfigFile('common.groovy')
+    'New' | new DynoClass(new XmlConfigSource('common.xml')).getMapAsInterface(TestConfig.class)
   }
 
   @Unroll
@@ -54,11 +55,11 @@ class AcceptanceSpec extends Specification {
   @Unroll
   def "Configurations are strongly typed (#name)"() {
     when:
-    TestConfig config = configuration.load()
+    TestConfig config = configuration//.load()
 
     then:
-    config.getIntValue() instanceof Integer
     config.getStringValue() instanceof String
+    config.getIntValue() instanceof Integer
     config.getDoubleValue() instanceof Double
     config.getBooleanValue() instanceof Boolean
     config.getHandedness() instanceof Handed
@@ -68,9 +69,10 @@ class AcceptanceSpec extends Specification {
 
     where:
     name     | configuration
-    'XML'    | Configurations.definedBy(TestConfig).fromXmlFile('common.xml')
-    'Props'  | Configurations.definedBy(TestConfig).fromPropertiesFile('common.properties')
-    'Groovy' | Configurations.definedBy(TestConfig).fromGroovyConfigFile('common.groovy')
+//    'XML'    | Configurations.definedBy(TestConfig).fromXmlFile('common.xml')
+//    'Props'  | Configurations.definedBy(TestConfig).fromPropertiesFile('common.properties')
+//    'Groovy' | Configurations.definedBy(TestConfig).fromGroovyConfigFile('common.groovy')
+    'New' | new DynoClass(new XmlConfigSource('common.xml')).getMapAsInterface(TestConfig.class)
   }
 
   @Unroll

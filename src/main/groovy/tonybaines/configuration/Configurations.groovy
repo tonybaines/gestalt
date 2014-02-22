@@ -3,6 +3,8 @@ package tonybaines.configuration
 import javax.validation.Validation
 import javax.validation.Validator
 import java.beans.Introspector
+import java.lang.reflect.Method
+import java.lang.reflect.ParameterizedType
 
 class Configurations<T> {
   static <T> Configuration.Factory<T> definedBy(Class configInterface) {
@@ -11,6 +13,21 @@ class Configurations<T> {
 
   static String fromBeanSpec(String methodName) {
     Introspector.decapitalize(methodName.replace('get', ''))
+  }
+
+  static isAList(type) {
+    type instanceof ParameterizedType && type.rawType.isAssignableFrom(List)
+  }
+
+  static boolean returnsAValue(Method method) {
+    switch (method.returnType) {
+      case String: return true
+      case Integer: return true
+      case Double: return true
+      case Boolean: return true
+
+      default: return false
+    }
   }
 
   static void validate(T config) {
