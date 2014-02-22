@@ -1,10 +1,7 @@
 package tonybaines.configuration;
 
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.util.List;
 
 public interface TestConfig {
@@ -69,6 +66,9 @@ public interface TestConfig {
 
   public static interface SubConfigLevel1 {
     Integer getIntValue();
+
+    @AssertTrue
+    Boolean getBooleanValueWhoseValueBreaksValidation();
   }
 
   public static interface Thing {

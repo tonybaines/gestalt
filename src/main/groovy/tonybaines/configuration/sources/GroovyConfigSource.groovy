@@ -13,6 +13,7 @@ class GroovyConfigSource implements ConfigSource {
   def config
 
   GroovyConfigSource(String filePath) {
+    log.info "Loading GroovyConfig configuration from $filePath"
     config = new ConfigSlurper().parse(this.class.classLoader.getResourceAsStream(filePath).text).values().first()
   }
 
@@ -35,7 +36,7 @@ class GroovyConfigSource implements ConfigSource {
 
       return decoded(node, method.returnType)
     } catch (Throwable e) {
-      log.warn "Failed to find a definition for ${method.name} in ${this.class.simpleName.replace('ConfigProxy', '')}"
+      log.warn "Failed to find a definition for ${method.name} in ${this.class.simpleName.replace('ConfigSource', '')}"
       throw new ConfigurationException(method, e)
     }
   }

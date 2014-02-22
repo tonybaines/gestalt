@@ -38,7 +38,7 @@ class PropertiesConfigSource implements ConfigSource {
 
       return decoded(node, method.returnType)
     } catch (Throwable e) {
-      log.warn "Failed to find a definition for ${method.name} in ${this.class.simpleName.replace('ConfigProxy', '')}"
+      log.warn "Failed to find a definition for ${method.name} in ${this.class.simpleName.replace('ConfigSource', '')}"
       throw new ConfigurationException(method, e)
     }
   }

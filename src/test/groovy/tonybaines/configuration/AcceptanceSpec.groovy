@@ -170,9 +170,9 @@ class AcceptanceSpec extends Specification {
 
   @Ignore
   @Unroll
-  def "Throw an exception if validation constraints are broken, and validation is required (#name)"() {
+  def "Throw an exception if validation constraints are broken (#name)"() {
     when:
-    configuration
+    configuration.getIntegerThatIsTooLarge()
 
     then:
     def e = thrown(ConfigurationException)
@@ -180,24 +180,33 @@ class AcceptanceSpec extends Specification {
 
     where:
     name     | configuration
-    'XML'    | Configurations.definedBy(TestConfig).validateOnLoad().composedOf().fromXmlFile('common.xml').thenFallbackToDefaults().done()
-    'Props'  | Configurations.definedBy(TestConfig).validateOnLoad().composedOf().fromPropertiesFile('common.properties').thenFallbackToDefaults().done()
-    'Groovy' | Configurations.definedBy(TestConfig).validateOnLoad().composedOf().fromGroovyConfigFile('common.groovy').thenFallbackToDefaults().done()
+    'XML'    | Configurations.definedBy(TestConfig).composedOf().fromXmlFile('common.xml').thenFallbackToDefaults().done()
+    'Props'  | Configurations.definedBy(TestConfig).composedOf().fromPropertiesFile('common.properties').thenFallbackToDefaults().done()
+    'Groovy' | Configurations.definedBy(TestConfig).composedOf().fromGroovyConfigFile('common.groovy').thenFallbackToDefaults().done()
   }
 
   @Ignore
   def "If the default value is used and it breaks validation constraints, it is an error"() {
     when:
-    Configurations.definedBy(TestConfig).validateOnLoad().composedOf().
-      fromPropertiesFile('common.properties').
-      fromXmlFile('common.xml').
-      fromGroovyConfigFile('common.groovy').
-      thenFallbackToDefaults().
-      done()
+    TestConfig configuration = newCompositeConfiguration()
+    configuration.getStringValueWhoseDefaultBreaksValidation()
 
     then:
     def e = thrown(ConfigurationException)
     e.message.contains('stringValueWhoseDefaultBreaksValidation size must be between 1 and 2')
+  }
+
+  @Ignore
+  def "If a value is defined in a sub-interface and it breaks validation constraints, it is an error"() {
+    when:
+    TestConfig configuration = newCompositeConfiguration()
+    def subConfig = configuration.getSubConfig()
+    subConfig.getBooleanValueWhoseValueBreaksValidation()
+
+
+    then:
+    def e = thrown(ConfigurationException)
+    e.message.contains('booleanValueWhoseValueBreaksValidation must be true')
   }
 
   @Ignore

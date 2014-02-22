@@ -2,8 +2,6 @@ package tonybaines.configuration
 
 import tonybaines.configuration.sources.*
 
-import javax.validation.Validation
-import javax.validation.Validator
 import java.beans.Introspector
 import java.lang.reflect.Method
 import java.lang.reflect.ParameterizedType
@@ -22,7 +20,11 @@ class Configurations<T> {
   }
 
   static boolean returnsAValue(Method method) {
-    switch (method.returnType) {
+    isAValueType(method.returnType)
+  }
+
+  static isAValueType(Class type) {
+    switch (type) {
       case String: return true
       case Integer: return true
       case Double: return true
@@ -32,39 +34,25 @@ class Configurations<T> {
     }
   }
 
-  static void validate(T config) {
-    Validator validator = Validation.buildDefaultValidatorFactory().validator
-    def validationResults = validator.validate(config)
-    if (!validationResults.empty) {
-      throw new ConfigurationException(validationResults.collect { "${it.propertyPath} ${it.interpolatedMessage}" })
-    }
-  }
-
   public static interface Configuration<T> {
 
     static class Factory<T> {
       Class configInterface
-      boolean validateOnLoad
 
       Factory(configInterface) {
         this.configInterface = configInterface
       }
 
-      public <T> Factory<T> validateOnLoad() {
-        validateOnLoad = true
-        this
-      }
-
       public T fromXmlFile(String filePath) {
-        new DynoClass<T>(new XmlConfigSource(filePath)).getMapAsInterface(configInterface)
+        new DynoClass<T>(new ValidatingDecorator<T>(configInterface, new XmlConfigSource(filePath))).getMapAsInterface(configInterface)
       }
 
       public T fromPropertiesFile(String filePath) {
-        new DynoClass<T>(new PropertiesConfigSource(filePath)).getMapAsInterface(configInterface)
+        new DynoClass<T>(new ValidatingDecorator<T>(configInterface, new PropertiesConfigSource(filePath))).getMapAsInterface(configInterface)
       }
 
       public T fromGroovyConfigFile(String filePath) {
-        new DynoClass<T>(new GroovyConfigSource(filePath)).getMapAsInterface(configInterface)
+        new DynoClass<T>(new ValidatingDecorator<T>(configInterface, new GroovyConfigSource(filePath))).getMapAsInterface(configInterface)
       }
 
       public CompositeConfigurationBuilder<T> composedOf() {
@@ -75,22 +63,22 @@ class Configurations<T> {
         List<T> sources = new ArrayList<>()
 
         public CompositeConfigurationBuilder<T> thenFallbackToDefaults() {
-          sources << new DefaultConfigSource()
+          sources << new ValidatingDecorator<T>(configInterface, new DefaultConfigSource())
           this
         }
 
         public CompositeConfigurationBuilder<T> fromXmlFile(String filePath) {
-          sources << new XmlConfigSource(filePath)
+          sources << new ValidatingDecorator<T>(configInterface, new XmlConfigSource(filePath))
           this
         }
 
         public CompositeConfigurationBuilder<T> fromPropertiesFile(String filePath) {
-          sources << new PropertiesConfigSource(filePath)
+          sources << new ValidatingDecorator<T>(configInterface, new PropertiesConfigSource(filePath))
           this
         }
 
         public CompositeConfigurationBuilder<T> fromGroovyConfigFile(String filePath) {
-          sources << new GroovyConfigSource(filePath)
+          sources << new ValidatingDecorator<T>(configInterface, new GroovyConfigSource(filePath))
           this
         }
 

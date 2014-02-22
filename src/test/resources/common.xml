@@ -7,6 +7,7 @@
     <handedness>left</handedness>
     <subConfig>
         <intValue>6</intValue>
+        <booleanValueWhoseValueBreaksValidation>false</booleanValueWhoseValueBreaksValidation>
     </subConfig>
     <strings>
         <!-- The enclosing element names are ignored here -->
