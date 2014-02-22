@@ -1,5 +1,7 @@
 package tonybaines.configuration
 
+import tonybaines.configuration.sources.*
+
 import javax.validation.Validation
 import javax.validation.Validator
 import java.beans.Introspector
@@ -40,8 +42,6 @@ class Configurations<T> {
 
   public static interface Configuration<T> {
 
-    T load()
-
     static class Factory<T> {
       Class configInterface
       boolean validateOnLoad
@@ -55,20 +55,16 @@ class Configurations<T> {
         this
       }
 
-      public <T> Configuration<T> fromXmlFile(String filePath, boolean shouldValidateIfAsked = true) {
-        new XmlConfiguration(configInterface, filePath, validateOnLoad && shouldValidateIfAsked)
+      public T fromXmlFile(String filePath) {
+        new DynoClass<T>(new XmlConfigSource(filePath)).getMapAsInterface(configInterface)
       }
 
-      public <T> Configuration<T> fromPropertiesFile(String filePath, boolean shouldValidateIfAsked = true) {
-        new PropertiesConfiguration(configInterface, filePath, validateOnLoad && shouldValidateIfAsked)
+      public T fromPropertiesFile(String filePath) {
+        new DynoClass<T>(new PropertiesConfigSource(filePath)).getMapAsInterface(configInterface)
       }
 
-      public <T> Configuration<T> fromGroovyConfigFile(String filePath, boolean shouldValidateIfAsked = true) {
-        new GroovyConfigConfiguration(configInterface, filePath, validateOnLoad && shouldValidateIfAsked)
-      }
-
-      public <T> Configuration<T> fromDefaults() {
-        new DefaultConfiguration(configInterface)
+      public T fromGroovyConfigFile(String filePath) {
+        new DynoClass<T>(new GroovyConfigSource(filePath)).getMapAsInterface(configInterface)
       }
 
       public CompositeConfigurationBuilder<T> composedOf() {
@@ -76,30 +72,30 @@ class Configurations<T> {
       }
 
       class CompositeConfigurationBuilder<T> {
-        List<Configuration<T>> strategies = new ArrayList<>()
+        List<T> sources = new ArrayList<>()
 
         public CompositeConfigurationBuilder<T> thenFallbackToDefaults() {
-          strategies << Factory.this.fromDefaults()
+          sources << new DefaultConfigSource()
           this
         }
 
         public CompositeConfigurationBuilder<T> fromXmlFile(String filePath) {
-          strategies << Factory.this.fromXmlFile(filePath, !validateOnLoad)
+          sources << new XmlConfigSource(filePath)
           this
         }
 
         public CompositeConfigurationBuilder<T> fromPropertiesFile(String filePath) {
-          strategies << Factory.this.fromPropertiesFile(filePath, !validateOnLoad)
+          sources << new PropertiesConfigSource(filePath)
           this
         }
 
         public CompositeConfigurationBuilder<T> fromGroovyConfigFile(String filePath) {
-          strategies << Factory.this.fromGroovyConfigFile(filePath, !validateOnLoad)
+          sources << new GroovyConfigSource(filePath)
           this
         }
 
-        public <T> Configuration<T> done() {
-          new CompositeConfiguration<T>(configInterface, strategies, validateOnLoad)
+        public T done() {
+          new DynoClass<T>(new CompositeConfigSource(sources)).getMapAsInterface(configInterface)
         }
       }
 

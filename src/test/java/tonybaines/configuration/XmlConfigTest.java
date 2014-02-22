@@ -8,8 +8,8 @@ import static org.junit.Assert.assertThat;
 public class XmlConfigTest {
   @Test
   public void readsAnXmlConfigFileAndMakesThePropertiesAvailable() {
-    Configurations.Configuration<TestConfig> config = Configurations.definedBy(TestConfig.class).composedOf().fromXmlFile("common.xml").thenFallbackToDefaults().done();
-    TestConfig testConfig = config.load();
+    TestConfig testConfig = (TestConfig) Configurations.definedBy(TestConfig.class).composedOf().fromXmlFile("common.xml").thenFallbackToDefaults().done();
+
 
     assertThat(testConfig.getIntValue(), is(5));
     assertThat(testConfig.getStringValue(), is("Five"));

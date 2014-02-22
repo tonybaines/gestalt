@@ -8,7 +8,7 @@ class AcceptanceSpec extends Specification {
   @Unroll
   def "Configurations can be queried (#name)"() {
     when:
-    TestConfig config = configuration//.load()
+    TestConfig config = configuration
 
     then:
     config.getIntValue() == 5
@@ -27,16 +27,15 @@ class AcceptanceSpec extends Specification {
 
     where:
     name     | configuration
-//    'XML'    | Configurations.definedBy(TestConfig).fromXmlFile('common.xml')
-//    'Props'  | Configurations.definedBy(TestConfig).fromPropertiesFile('common.properties')
-//    'Groovy' | Configurations.definedBy(TestConfig).fromGroovyConfigFile('common.groovy')
-    'New' | new DynoClass(new XmlConfigSource('common.xml')).getMapAsInterface(TestConfig.class)
+    'XML'    | Configurations.definedBy(TestConfig).fromXmlFile('common.xml')
+    'Props'  | Configurations.definedBy(TestConfig).fromPropertiesFile('common.properties')
+    'Groovy' | Configurations.definedBy(TestConfig).fromGroovyConfigFile('common.groovy')
   }
 
   @Unroll
   def "Definitions which don't match their type are an error (#name)"() {
     when:
-    TestConfig config = configuration//.load()
+    TestConfig config = configuration
     config.getDeclaredAsAnIntegerButIsAString()
 
     then:
@@ -47,16 +46,15 @@ class AcceptanceSpec extends Specification {
 
     where:
     name     | configuration
-//    'XML'    | Configurations.definedBy(TestConfig).fromXmlFile('common.xml')
-//    'Props'  | Configurations.definedBy(TestConfig).fromPropertiesFile('common.properties')
-//    'Groovy' | Configurations.definedBy(TestConfig).fromGroovyConfigFile('common.groovy')
-    'New' | new DynoClass(new XmlConfigSource('common.xml')).getMapAsInterface(TestConfig.class)
+    'XML'    | Configurations.definedBy(TestConfig).fromXmlFile('common.xml')
+    'Props'  | Configurations.definedBy(TestConfig).fromPropertiesFile('common.properties')
+    'Groovy' | Configurations.definedBy(TestConfig).fromGroovyConfigFile('common.groovy')
   }
 
   @Unroll
   def "Configurations are strongly typed (#name)"() {
     when:
-    TestConfig config = configuration//.load()
+    TestConfig config = configuration
 
     then:
     config.getStringValue() instanceof String
@@ -70,16 +68,15 @@ class AcceptanceSpec extends Specification {
 
     where:
     name     | configuration
-//    'XML'    | Configurations.definedBy(TestConfig).fromXmlFile('common.xml')
-//    'Props'  | Configurations.definedBy(TestConfig).fromPropertiesFile('common.properties')
-//    'Groovy' | Configurations.definedBy(TestConfig).fromGroovyConfigFile('common.groovy')
-    'New' | new DynoClass(new XmlConfigSource('common.xml')).getMapAsInterface(TestConfig.class)
+    'XML'    | Configurations.definedBy(TestConfig).fromXmlFile('common.xml')
+    'Props'  | Configurations.definedBy(TestConfig).fromPropertiesFile('common.properties')
+    'Groovy' | Configurations.definedBy(TestConfig).fromGroovyConfigFile('common.groovy')
   }
 
   @Unroll
   def "Last-one-wins for multiple config definitions for the same property (#name)"() {
     when:
-    TestConfig config = configuration.load()
+    TestConfig config = configuration
 
     then:
     config.getSomethingDefinedTwice() == 'Bar'
@@ -92,8 +89,7 @@ class AcceptanceSpec extends Specification {
 
   def "Multiple config definitions for the same property are an error (XML)"() {
     when:
-//    TestConfig config = Configurations.definedBy(TestConfig).fromXmlFile('common.xml').load()
-    TestConfig config = new DynoClass(new XmlConfigSource('common.xml')).getMapAsInterface(TestConfig.class)
+    TestConfig config = Configurations.definedBy(TestConfig).fromXmlFile('common.xml')
     config.getSomethingDefinedTwice()
 
     then:
@@ -105,13 +101,13 @@ class AcceptanceSpec extends Specification {
   @Unroll
   def "Undefined values (with no default configured) are an error (#name)"() {
     when:
-    TestConfig config = configuration.load()
+    TestConfig config = configuration
     config.getNonExistent()
 
     then:
     def e = thrown(ConfigurationException)
     e.message.contains('getNonExistent')
-    e.message.contains('no default value defined')
+    e.message.contains('not found in any source')
 
     where:
     name     | configuration
@@ -123,7 +119,7 @@ class AcceptanceSpec extends Specification {
   @Unroll
   def "Missing config elements use the supplied defaults (#name)"() {
     when:
-    TestConfig config = configuration.load()
+    TestConfig config = configuration
 
     then:
     config.getNonExistentStringWithDefault() == "default-value"
@@ -144,7 +140,7 @@ class AcceptanceSpec extends Specification {
     def configuration = newCompositeConfiguration()
 
     when:
-    TestConfig config = configuration.load()
+    TestConfig config = configuration
 
     then:
     config.getPropertyDefinedOnlyInGroovyConfig() == 'some-value'
@@ -152,7 +148,7 @@ class AcceptanceSpec extends Specification {
 
   def "Bad default definitions are an error (when accessed)"() {
     when:
-    TestConfig config = newCompositeConfiguration().load()
+    TestConfig config = newCompositeConfiguration()
     config.getDefaultedValueWithBadDefinition()
 
     then:
@@ -166,16 +162,17 @@ class AcceptanceSpec extends Specification {
     def configuration = newCompositeConfiguration()
 
     when:
-    TestConfig config = configuration.load()
+    TestConfig config = configuration
 
     then:
     config.getPropertyDefinedAllConfigSources() == 'from-properties'
   }
 
+  @Ignore
   @Unroll
-  def "Throw an exception validation if constraints are broken, and validation is required (#name)"() {
+  def "Throw an exception if validation constraints are broken, and validation is required (#name)"() {
     when:
-    configuration.load()
+    configuration
 
     then:
     def e = thrown(ConfigurationException)
@@ -188,6 +185,7 @@ class AcceptanceSpec extends Specification {
     'Groovy' | Configurations.definedBy(TestConfig).validateOnLoad().composedOf().fromGroovyConfigFile('common.groovy').thenFallbackToDefaults().done()
   }
 
+  @Ignore
   def "If the default value is used and it breaks validation constraints, it is an error"() {
     when:
     Configurations.definedBy(TestConfig).validateOnLoad().composedOf().
@@ -195,7 +193,7 @@ class AcceptanceSpec extends Specification {
       fromXmlFile('common.xml').
       fromGroovyConfigFile('common.groovy').
       thenFallbackToDefaults().
-      done().load()
+      done()
 
     then:
     def e = thrown(ConfigurationException)

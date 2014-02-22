@@ -1,7 +1,6 @@
 package tonybaines.configuration
 
 class DynoClass<T> {
-
   def source
 
   DynoClass(source) {
@@ -10,7 +9,6 @@ class DynoClass<T> {
 
   T getMapAsInterface(Class configInterface, prefix = []) {
     def map = [:]
-
     configInterface.methods.each() { method ->
       map."$method.name" = { Object[] args ->
         def propName = Configurations.fromBeanSpec(method.name)
@@ -20,8 +18,6 @@ class DynoClass<T> {
         else return new DynoClass(source).getMapAsInterface(method.returnType, prefix + propName)
       }
     }
-
     return map.asType(configInterface)
   }
-
 }
