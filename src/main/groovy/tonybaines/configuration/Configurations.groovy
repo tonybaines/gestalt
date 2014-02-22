@@ -63,22 +63,22 @@ class Configurations<T> {
         List<T> sources = new ArrayList<>()
 
         public CompositeConfigurationBuilder<T> thenFallbackToDefaults() {
-          sources << new DefaultConfigSource()
+          sources << validating(new DefaultConfigSource())
           this
         }
 
         public CompositeConfigurationBuilder<T> fromXmlFile(String filePath) {
-          sources << new XmlConfigSource(filePath)
+          sources << validating(new XmlConfigSource(filePath))
           this
         }
 
         public CompositeConfigurationBuilder<T> fromPropertiesFile(String filePath) {
-          sources << new PropertiesConfigSource(filePath)
+          sources << validating(new PropertiesConfigSource(filePath))
           this
         }
 
         public CompositeConfigurationBuilder<T> fromGroovyConfigFile(String filePath) {
-          sources << new GroovyConfigSource(filePath)
+          sources << validating(new GroovyConfigSource(filePath))
           this
         }
 
@@ -87,6 +87,9 @@ class Configurations<T> {
         }
       }
 
+      static ConfigSource validating(ConfigSource source) {
+        new ValidatingDecorator<>(source)
+      }
     }
   }
 }

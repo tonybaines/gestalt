@@ -7,6 +7,7 @@ config {
   handedness = 'left' // Don't want to import the enum definition into the config file
   subConfig {
     intValue = 6
+    valueWhichIsDefinedToBreakValidationButHasADefault = 'groovy'
   }
   strings = [
     "A",

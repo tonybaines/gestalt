@@ -68,7 +68,12 @@ public interface TestConfig {
     Integer getIntValue();
 
     @AssertTrue
+    @Default.Boolean(false)
     Boolean getBooleanValueWhoseValueBreaksValidation();
+
+    @Pattern(regexp = "f.*")
+    @Default.String("fin")
+    String getValueWhichIsDefinedToBreakValidationButHasADefault();
   }
 
   public static interface Thing {

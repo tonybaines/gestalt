@@ -1,16 +1,16 @@
 package tonybaines.configuration
 
+import groovy.util.logging.Slf4j
+
 import javax.validation.Validation
-import javax.validation.Validator
-import java.lang.reflect.GenericDeclaration
+import javax.validation.executable.ExecutableValidator
 import java.lang.reflect.Method
 
+@Slf4j
 class ValidatingDecorator<T> implements ConfigSource {
-  private final GenericDeclaration configInterface
   private final ConfigSource configSource
 
-  ValidatingDecorator(Class configInterface, ConfigSource configSource) {
-    this.configInterface = configInterface
+  ValidatingDecorator(ConfigSource configSource) {
     this.configSource = configSource
   }
 
@@ -18,17 +18,20 @@ class ValidatingDecorator<T> implements ConfigSource {
   def lookup(List<String> path, Method method) {
     def value = configSource.lookup(path, method)
     if (value != null && Configurations.isAValueType(value.class)) {
-      validate(method)
+      return validate(method, value)
     }
     value
   }
 
-  def validate(Method method) {
-    def property = Configurations.fromBeanSpec(method.name)
-    Validator validator = Validation.buildDefaultValidatorFactory().validator
-    def validationResults = validator.validateProperty(new DynoClass<T>(configSource).getMapAsInterface(method.declaringClass), property)
+  def validate(Method method, value) {
+    ExecutableValidator validator = Validation.buildDefaultValidatorFactory().validator.forExecutables()
+    def validationResults = validator.validateReturnValue(new DynoClass<>(configSource).getMapAsInterface(method.declaringClass), method, value)
     if (!validationResults.empty) {
-      throw new ConfigurationException(validationResults.collect { "${it.propertyPath} ${it.interpolatedMessage}" })
+      validationResults.each {
+        log.warn "Validation failed for ${it.propertyPath.first()}: ${it.interpolatedMessage} (was $value)"
+      }
+      return null
     }
+    return value
   }
 }

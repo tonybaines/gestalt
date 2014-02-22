@@ -4,9 +4,6 @@ import spock.lang.Ignore
 import spock.lang.Specification
 import spock.lang.Unroll
 
-import javax.validation.Validation
-import javax.validation.Validator
-
 class AcceptanceSpec extends Specification {
   @Unroll
   def "Configurations can be queried (#name)"() {
@@ -171,46 +168,36 @@ class AcceptanceSpec extends Specification {
     config.getPropertyDefinedAllConfigSources() == 'from-properties'
   }
 
-  @Ignore
-  @Unroll
-  def "Throw an exception if validation constraints are broken (#name)"() {
-    when:
-    Validator validator = Validation.buildDefaultValidatorFactory().validator
-    validator.validate(configuration).each { println it }
-
-    then:
-    def e = thrown(ConfigurationException)
-    e.message.contains('integerThatIsTooLarge must be less than or equal to 10')
-
-    where:
-    name     | configuration
-    'XML'    | Configurations.definedBy(TestConfig).composedOf().fromXmlFile('common.xml').thenFallbackToDefaults().done()
-    'Props'  | Configurations.definedBy(TestConfig).composedOf().fromPropertiesFile('common.properties').thenFallbackToDefaults().done()
-    'Groovy' | Configurations.definedBy(TestConfig).composedOf().fromGroovyConfigFile('common.groovy').thenFallbackToDefaults().done()
-  }
-
-  @Ignore
-  def "If the default value is used and it breaks validation constraints, it is an error"() {
-    when:
+  def "If the default value is used and it breaks validation constraints, it is ignored (null returned)"() {
+    given:
     TestConfig configuration = newCompositeConfiguration()
+
+    when:
     configuration.getStringValueWhoseDefaultBreaksValidation()
 
     then:
     def e = thrown(ConfigurationException)
-    e.message.contains('stringValueWhoseDefaultBreaksValidation size must be between 1 and 2')
+    e.message.contains('Failed to handle getStringValueWhoseDefaultBreaksValidation')
   }
 
-  @Ignore
-  def "If a value is defined in a sub-interface and it breaks validation constraints, it is an error"() {
-    when:
+  def "If the default value is used and it breaks validation constraints, it is ignored (null returned) in a sub-interface"() {
+    given:
     TestConfig configuration = newCompositeConfiguration()
-    def subConfig = configuration.getSubConfig()
-    subConfig.getBooleanValueWhoseValueBreaksValidation()
 
+    when:
+    configuration.getStringValueWhoseDefaultBreaksValidation()
 
     then:
     def e = thrown(ConfigurationException)
-    e.message.contains('booleanValueWhoseValueBreaksValidation must be true')
+    e.message.contains('Failed to handle getStringValueWhoseDefaultBreaksValidation')
+  }
+
+  def "An invalid configured value in all sources will fall-back to a default"() {
+    given:
+    TestConfig configuration = newCompositeConfiguration()
+
+    expect:
+    configuration.getSubConfig().getValueWhichIsDefinedToBreakValidationButHasADefault() == "fin"
   }
 
   @Ignore
