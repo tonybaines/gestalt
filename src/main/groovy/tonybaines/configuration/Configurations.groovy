@@ -34,7 +34,11 @@ class Configurations<T> {
     }
   }
 
-  public static interface Configuration<T> {
+  static enum Feature {
+    Validation, Defaults, ExceptionOnNullValue, Caching
+  }
+
+  static interface Configuration<T> {
 
     static class Factory<T> {
       Class configInterface
@@ -60,36 +64,49 @@ class Configurations<T> {
       }
 
       class CompositeConfigurationBuilder<T> {
-        List<T> sources = new ArrayList<>()
+        List<Feature> features = Feature.values().clone()
+
+        def sources = new ArrayList<>()
 
         public CompositeConfigurationBuilder<T> thenFallbackToDefaults() {
-          sources << validating(new DefaultConfigSource())
+          sources << new DefaultConfigSource()
           this
         }
 
         public CompositeConfigurationBuilder<T> fromXmlFile(String filePath) {
-          sources << validating(new XmlConfigSource(filePath))
+          sources << new XmlConfigSource(filePath)
           this
         }
 
         public CompositeConfigurationBuilder<T> fromPropertiesFile(String filePath) {
-          sources << validating(new PropertiesConfigSource(filePath))
+          sources << new PropertiesConfigSource(filePath)
           this
         }
 
         public CompositeConfigurationBuilder<T> fromGroovyConfigFile(String filePath) {
-          sources << validating(new GroovyConfigSource(filePath))
+          sources << new GroovyConfigSource(filePath)
+          this
+        }
+
+        def without(Feature... feature) {
+          feature.each { features.remove(it) }
           this
         }
 
         public T done() {
-          new DynoClass<T>(new CompositeConfigSource(sources)).getMapAsInterface(configInterface)
+          thenFallbackToDefaults()
+          new DynoClass<T>(new CompositeConfigSource(sources.collect {
+            validating(it)
+          })).getMapAsInterface(configInterface)
+        }
+
+        ConfigSource validating(ConfigSource source) {
+          if (features.contains(Feature.Validation)) new ValidatingDecorator<>(source)
+          else source
         }
       }
 
-      static ConfigSource validating(ConfigSource source) {
-        new ValidatingDecorator<>(source)
-      }
+
     }
   }
 }
