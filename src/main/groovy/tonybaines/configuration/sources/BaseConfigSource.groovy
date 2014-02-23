@@ -29,7 +29,7 @@ abstract class BaseConfigSource implements ConfigSource {
       }
       if (Configurations.isAList(method.genericReturnType)) {
         def list = handleList(node, method)
-        return list
+        return list.asImmutable()
       }
 
       return decoded(node, method.returnType)
