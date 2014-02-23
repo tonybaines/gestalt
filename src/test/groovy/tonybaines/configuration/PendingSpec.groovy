@@ -6,8 +6,6 @@ import spock.lang.Specification
 @Ignore
 class PendingSpec extends Specification {
 
-  def "Configuration lookups should be cached"() {}
-
   def "Configurations can be saved"() {}
 
   def "Configuration can be loaded from a JDBC DataSource"() {}
