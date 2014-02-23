@@ -1,6 +1,7 @@
 package tonybaines.configuration
 
 import tonybaines.configuration.sources.*
+import tonybaines.configuration.sources.features.CachingDecorator
 import tonybaines.configuration.sources.features.ExceptionOnNullValueDecorator
 import tonybaines.configuration.sources.features.ValidatingDecorator
 
@@ -94,13 +95,18 @@ class Configurations<T> {
           if (enabledFeatures.contains(Feature.Defaults)) sources << new DefaultConfigSource()
 
           new DynoClass<T>(
-            withExceptionOnNullValue(new CompositeConfigSource(sources
+            withExceptionOnNullValue(withCaching(new CompositeConfigSource(sources
               .collect { withValidation(it) }
-            ))).getMapAsInterface(configInterface)
+            )))).getMapAsInterface(configInterface)
         }
 
         ConfigSource withValidation(ConfigSource source) {
           if (enabledFeatures.contains(Feature.Validation)) new ValidatingDecorator<>(source)
+          else source
+        }
+
+        ConfigSource withCaching(ConfigSource source) {
+          if (enabledFeatures.contains(Feature.Caching)) new CachingDecorator<>(source)
           else source
         }
 

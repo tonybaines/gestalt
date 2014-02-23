@@ -15,12 +15,16 @@ dependencies {
     'org.hibernate:hibernate-validator:5.1.0.CR1',
     'javax.el:javax.el-api:2.2.4',
     'org.glassfish.web:javax.el:2.2.4',
+    'com.google.guava:guava:12.0',
   ])
 
   testCompile([
     'org.spockframework:spock-core:0.7-groovy-2.0',
   ])
 
+  testRuntime([
+    'org.objenesis:objenesis:1.2',
+  ])
   runtime([])
 }
 

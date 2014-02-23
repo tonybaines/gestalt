@@ -36,6 +36,12 @@ class ConfiguringConfigurationSpec extends Specification {
     config.getNonExistent() == null
   }
 
-  @Ignore
-  def "Caching can be switched-off"() {}
+  @Ignore('No idea how to verify this without breaking encapsulation')
+  def "Caching can be switched-off"() {
+    given:
+    TestConfig config = newCompositeConfigurationBuilder().without(Caching).done()
+
+    expect:
+    config.getSubConfig().getIntValue() == 6
+  }
 }
