@@ -64,7 +64,7 @@ class Configurations<T> {
       }
 
       class CompositeConfigurationBuilder<T> {
-        List<Feature> features = Feature.values().clone()
+        List<Feature> enabledFeatures = Feature.values().clone()
 
         def sources = new ArrayList<>()
 
@@ -89,19 +89,19 @@ class Configurations<T> {
         }
 
         def without(Feature... feature) {
-          feature.each { features.remove(it) }
+          feature.each { enabledFeatures.remove(it) }
           this
         }
 
         public T done() {
-          thenFallbackToDefaults()
+          if (enabledFeatures.contains(Feature.Defaults)) thenFallbackToDefaults()
           new DynoClass<T>(new CompositeConfigSource(sources.collect {
             validating(it)
           })).getMapAsInterface(configInterface)
         }
 
         ConfigSource validating(ConfigSource source) {
-          if (features.contains(Feature.Validation)) new ValidatingDecorator<>(source)
+          if (enabledFeatures.contains(Feature.Validation)) new ValidatingDecorator<>(source)
           else source
         }
       }
