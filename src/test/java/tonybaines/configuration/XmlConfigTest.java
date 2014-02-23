@@ -1,5 +1,7 @@
 package tonybaines.configuration;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.FluentIterable;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -9,7 +11,6 @@ public class XmlConfigTest {
   @Test
   public void readsAnXmlConfigFileAndMakesThePropertiesAvailable() {
     TestConfig testConfig = (TestConfig) Configurations.definedBy(TestConfig.class).composedOf().fromXmlFile("common.xml").done();
-
 
     assertThat(testConfig.getIntValue(), is(5));
     assertThat(testConfig.getStringValue(), is("Five"));
@@ -21,5 +22,10 @@ public class XmlConfigTest {
     assertThat(testConfig.getStrings().get(2), is("C"));
     assertThat(testConfig.getHandedness(), is(Handed.left));
     assertThat(testConfig.getNonExistentDoubleWithDefault(), is(42.5));
+    FluentIterable.from(testConfig.getThings()).anyMatch(new Predicate<TestConfig.Thing>() {
+      public boolean apply(TestConfig.Thing thing) {
+        return thing.getId().equals("alpha");
+      }
+    });
   }
 }
