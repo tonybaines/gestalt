@@ -20,9 +20,9 @@ class MiscFeaturesSpec extends Specification {
 
     where:
     name     | configuration
-    'XML'    | Configurations.definedBy(TestConfig).composedOf().fromXmlFile('common.xml').thenFallbackToDefaults().done()
-    'Props'  | Configurations.definedBy(TestConfig).composedOf().fromPropertiesFile('common.properties').thenFallbackToDefaults().done()
-    'Groovy' | Configurations.definedBy(TestConfig).composedOf().fromGroovyConfigFile('common.groovy').thenFallbackToDefaults().done()
+    'XML'    | Configurations.definedBy(TestConfig).composedOf().fromXmlFile('common.xml').done()
+    'Props'  | Configurations.definedBy(TestConfig).composedOf().fromPropertiesFile('common.properties').done()
+    'Groovy' | Configurations.definedBy(TestConfig).composedOf().fromGroovyConfigFile('common.groovy').done()
   }
 
   @Unroll
@@ -39,9 +39,9 @@ class MiscFeaturesSpec extends Specification {
 
     where:
     name     | configuration
-    'XML'    | Configurations.definedBy(TestConfig).composedOf().fromXmlFile('common.xml').thenFallbackToDefaults().done()
-    'Props'  | Configurations.definedBy(TestConfig).composedOf().fromPropertiesFile('common.properties').thenFallbackToDefaults().done()
-    'Groovy' | Configurations.definedBy(TestConfig).composedOf().fromGroovyConfigFile('common.groovy').thenFallbackToDefaults().done()
+    'XML'    | Configurations.definedBy(TestConfig).composedOf().fromXmlFile('common.xml').done()
+    'Props'  | Configurations.definedBy(TestConfig).composedOf().fromPropertiesFile('common.properties').done()
+    'Groovy' | Configurations.definedBy(TestConfig).composedOf().fromGroovyConfigFile('common.groovy').done()
   }
 
   def "Configurations will fall-back until a value is found"() {

@@ -1,6 +1,8 @@
 package tonybaines.configuration
 
 import tonybaines.configuration.sources.*
+import tonybaines.configuration.sources.features.ExceptionOnNullValueDecorator
+import tonybaines.configuration.sources.features.ValidatingDecorator
 
 import java.beans.Introspector
 import java.lang.reflect.Method
@@ -68,11 +70,6 @@ class Configurations<T> {
 
         def sources = new ArrayList<>()
 
-        public CompositeConfigurationBuilder<T> thenFallbackToDefaults() {
-          sources << new DefaultConfigSource()
-          this
-        }
-
         public CompositeConfigurationBuilder<T> fromXmlFile(String filePath) {
           sources << new XmlConfigSource(filePath)
           this
@@ -94,15 +91,21 @@ class Configurations<T> {
         }
 
         public T done() {
-          boolean exceptionOnNullValue = enabledFeatures.contains(Feature.ExceptionOnNullValue)
-          if (enabledFeatures.contains(Feature.Defaults)) thenFallbackToDefaults()
-          new DynoClass<T>(new CompositeConfigSource(sources.collect {
-            validating(it)
-          }, exceptionOnNullValue)).getMapAsInterface(configInterface)
+          if (enabledFeatures.contains(Feature.Defaults)) sources << new DefaultConfigSource()
+
+          new DynoClass<T>(
+            withExceptionOnNullValue(new CompositeConfigSource(sources
+              .collect { withValidation(it) }
+            ))).getMapAsInterface(configInterface)
         }
 
-        ConfigSource validating(ConfigSource source) {
+        ConfigSource withValidation(ConfigSource source) {
           if (enabledFeatures.contains(Feature.Validation)) new ValidatingDecorator<>(source)
+          else source
+        }
+
+        ConfigSource withExceptionOnNullValue(ConfigSource source) {
+          if (enabledFeatures.contains(Feature.ExceptionOnNullValue)) new ExceptionOnNullValueDecorator<>(source)
           else source
         }
       }

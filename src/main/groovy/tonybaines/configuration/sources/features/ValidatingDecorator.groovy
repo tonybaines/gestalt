@@ -1,6 +1,9 @@
-package tonybaines.configuration
+package tonybaines.configuration.sources.features
 
 import groovy.util.logging.Slf4j
+import tonybaines.configuration.ConfigSource
+import tonybaines.configuration.Configurations
+import tonybaines.configuration.DynoClass
 
 import javax.validation.Validation
 import javax.validation.executable.ExecutableValidator
