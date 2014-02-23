@@ -94,10 +94,11 @@ class Configurations<T> {
         }
 
         public T done() {
+          boolean exceptionOnNullValue = enabledFeatures.contains(Feature.ExceptionOnNullValue)
           if (enabledFeatures.contains(Feature.Defaults)) thenFallbackToDefaults()
           new DynoClass<T>(new CompositeConfigSource(sources.collect {
             validating(it)
-          })).getMapAsInterface(configInterface)
+          }, exceptionOnNullValue)).getMapAsInterface(configInterface)
         }
 
         ConfigSource validating(ConfigSource source) {

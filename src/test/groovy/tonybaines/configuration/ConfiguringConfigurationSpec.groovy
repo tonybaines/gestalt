@@ -3,8 +3,7 @@ package tonybaines.configuration
 import spock.lang.Ignore
 import spock.lang.Specification
 
-import static tonybaines.configuration.Configurations.Feature.Defaults
-import static tonybaines.configuration.Configurations.Feature.Validation
+import static tonybaines.configuration.Configurations.Feature.*
 import static tonybaines.configuration.Fixture.newCompositeConfigurationBuilder
 
 class ConfiguringConfigurationSpec extends Specification {
@@ -29,8 +28,13 @@ class ConfiguringConfigurationSpec extends Specification {
     e.message.contains('Failed to handle getNonExistentBooleanWithDefault')
   }
 
-  @Ignore
-  def "Exceptions on missing lookups can be switched-off"() {}
+  def "Exceptions on missing lookups can be switched-off"() {
+    given:
+    TestConfig config = newCompositeConfigurationBuilder().without(ExceptionOnNullValue).done()
+
+    expect:
+    config.getNonExistent() == null
+  }
 
   @Ignore
   def "Caching can be switched-off"() {}
