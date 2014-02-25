@@ -5,17 +5,19 @@ apply plugin: 'jdepend'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'project-report'
+apply plugin: 'maven-publish'
+
+group = 'tonybaines.configuration'
+version = '0.1-SNAPSHOT'
 
 dependencies {
   compile([
     'org.codehaus.groovy:groovy-all:2.2.1',
-    'joda-time:joda-time:2.2',
     'com.google.guava:guava:14.0.1',
     'org.slf4j:slf4j-simple:1.6.1',
     'org.hibernate:hibernate-validator:5.1.0.CR1',
     'javax.el:javax.el-api:2.2.4',
     'org.glassfish.web:javax.el:2.2.4',
-    'com.google.guava:guava:12.0',
   ])
 
   testCompile([
@@ -26,6 +28,25 @@ dependencies {
     'org.objenesis:objenesis:1.2',
   ])
   runtime([])
+}
+
+publishing {
+  publications {
+    mavenJava(MavenPublication) {
+      from components.java
+    }
+  }
+}
+
+
+task release(type: Zip, dependsOn: ['clean', 'jar', 'generatePomFileForMavenJavaPublication']) {
+  from('build/publications/mavenJava/pom-default.xml') {
+    rename 'pom-default.xml', 'pom.xml'
+  }
+  from("build/libs/${project.name}-${project.version}.jar") {
+    rename "${project.name}-${project.version}.jar", "${project.group}.${project.name}-${project.version}.jar"
+  }
+  baseName "${project.group}.${project.name}"
 }
 
 
