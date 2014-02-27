@@ -78,5 +78,7 @@ public interface TestConfig {
 
   public static interface Thing {
     String getId();
+
+    String getStringValue();
   }
 }

@@ -37,6 +37,10 @@ class Configurations<T> {
     }
   }
 
+  static def toXml(instance, Class configInterface) {
+    new ConfigXmlSerialiser(instance).toXmlString(configInterface)
+  }
+
   static enum Feature {
     Validation, Defaults, ExceptionOnNullValue, Caching
   }
@@ -119,4 +123,5 @@ class Configurations<T> {
 
     }
   }
+
 }
