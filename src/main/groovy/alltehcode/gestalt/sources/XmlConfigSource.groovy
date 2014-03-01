@@ -6,9 +6,9 @@ import groovy.util.logging.Slf4j
 
 @Slf4j
 class XmlConfigSource extends BaseConfigSource {
-  XmlConfigSource(String filePath) {
-    log.info "Loading XML gestalt from $filePath"
-    config = new XmlParser().parse(this.class.classLoader.getResourceAsStream(filePath))
+
+  XmlConfigSource(InputStream inputStream) {
+    config = new XmlParser().parse(inputStream)
   }
 
   private XmlConfigSource(Node node) {

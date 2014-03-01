@@ -5,9 +5,9 @@ import groovy.util.logging.Slf4j
 
 @Slf4j
 class GroovyConfigSource extends BaseConfigSource {
-  GroovyConfigSource(String filePath) {
-    log.info "Loading GroovyConfig gestalt from $filePath"
-    config = new ConfigSlurper().parse(this.class.classLoader.getResourceAsStream(filePath).text).values().first()
+
+  GroovyConfigSource(InputStream inputStream) {
+    config = new ConfigSlurper().parse(inputStream.text).values().first()
   }
 
   private GroovyConfigSource(Object node) {

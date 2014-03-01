@@ -5,10 +5,10 @@ import groovy.util.logging.Slf4j
 
 @Slf4j
 class PropertiesConfigSource extends BaseConfigSource {
-  PropertiesConfigSource(String filePath) {
+
+  PropertiesConfigSource(InputStream inputStream) {
     def propsFile = new Properties()
-    log.info "Loading Properties gestalt from $filePath"
-    propsFile.load(this.class.classLoader.getResourceAsStream(filePath))
+    propsFile.load(inputStream)
     config = new ConfigSlurper().parse(propsFile)
   }
 

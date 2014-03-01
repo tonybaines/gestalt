@@ -28,8 +28,8 @@ class BasicBehaviourSpec extends Specification {
     where:
     name     | configuration
     'XML'    | Configurations.definedBy(TestConfig).fromXmlFile('common.xml')
-    'Props'  | Configurations.definedBy(TestConfig).fromPropertiesFile('common.properties')
-    'Groovy' | Configurations.definedBy(TestConfig).fromGroovyConfigFile('common.groovy')
+//    'Props'  | Configurations.definedBy(TestConfig).fromPropertiesFile('common.properties')
+//    'Groovy' | Configurations.definedBy(TestConfig).fromGroovyConfigFile('common.groovy')
   }
 
   @Unroll

@@ -55,19 +55,23 @@ class Configurations<T> {
       }
 
       public T fromXmlFile(String filePath) {
-        new DynoClass<T>(new XmlConfigSource(filePath)).getMapAsInterface(configInterface)
+        new DynoClass<T>(new XmlConfigSource(resourceAsStream(filePath))).getMapAsInterface(configInterface)
       }
 
       public T fromPropertiesFile(String filePath) {
-        new DynoClass<T>(new PropertiesConfigSource(filePath)).getMapAsInterface(configInterface)
+        new DynoClass<T>(new PropertiesConfigSource(resourceAsStream(filePath))).getMapAsInterface(configInterface)
       }
 
       public T fromGroovyConfigFile(String filePath) {
-        new DynoClass<T>(new GroovyConfigSource(filePath)).getMapAsInterface(configInterface)
+        new DynoClass<T>(new GroovyConfigSource(resourceAsStream(filePath))).getMapAsInterface(configInterface)
       }
 
       public CompositeConfigurationBuilder<T> composedOf() {
         new CompositeConfigurationBuilder()
+      }
+
+      private static InputStream resourceAsStream(String path) {
+        Configurations.class.classLoader.getResourceAsStream(path)
       }
 
       class CompositeConfigurationBuilder<T> {
@@ -76,17 +80,17 @@ class Configurations<T> {
         def sources = new ArrayList<>()
 
         public CompositeConfigurationBuilder<T> fromXmlFile(String filePath) {
-          sources << new XmlConfigSource(filePath)
+          sources << new XmlConfigSource(resourceAsStream(filePath))
           this
         }
 
         public CompositeConfigurationBuilder<T> fromPropertiesFile(String filePath) {
-          sources << new PropertiesConfigSource(filePath)
+          sources << new PropertiesConfigSource(resourceAsStream(filePath))
           this
         }
 
         public CompositeConfigurationBuilder<T> fromGroovyConfigFile(String filePath) {
-          sources << new GroovyConfigSource(filePath)
+          sources << new GroovyConfigSource(resourceAsStream(filePath))
           this
         }
 
