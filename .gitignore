@@ -1,4 +1,5 @@
 build/
 .gradle
-configuration.iml
+gestalt.i*
 .idea/
+out/
