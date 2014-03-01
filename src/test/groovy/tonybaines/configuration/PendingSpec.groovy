@@ -8,6 +8,8 @@ class PendingSpec extends Specification {
 
   def "Configurations can be saved"() {}
 
+  def "Configuration sources can be optional"() {}
+
   def "Configuration can be loaded from a JDBC DataSource"() {}
 
   def "Configuration can be loaded from a https://github.com/typesafehub/config source"() {}
