@@ -1,4 +1,4 @@
-# Configuration
+# *Gestalt* Configuration
 
 ## What's it for?
 Configuration in Java is usually semi-weakly-typed e.g. the key-value store of a `.properties` file
@@ -44,7 +44,7 @@ parameter and created as anonymous instances for test-injection.
 
 ## Getting Started
 
-Using this library can be as simple as
+Using *Gestalt* can be as simple as
 
 ```java
 ThingConfig config = (ThingConfig)
@@ -111,11 +111,11 @@ public interface ThingConfig {
 }
 ```
 
-Any config source that defines a value which breaks the constraints has that property ignored, and the library falls-back to the next available definition
+Any config source that defines a value which breaks the constraints has that property ignored, and *Gestalt* falls-back to the next available definition
 
 ### Disabling Features
 
-Features can be switched-off e.g. falling back to defaults and throwing an exception for undefined values can be disabled by calling
+*Gestalt* features can be switched-off e.g. falling back to defaults and throwing an exception for undefined values can be disabled by calling
 
 ```java
 Configuration.without(Feature.Defaults, Feature.ExceptionOnNullValue)...
