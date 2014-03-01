@@ -15,7 +15,7 @@ class Configurations<T> {
   }
 
   static String fromBeanSpec(String methodName) {
-    Introspector.decapitalize(methodName.replace('get', ''))
+    Introspector.decapitalize(methodName.replaceFirst(/(get|is)/, ''))
   }
 
   static isAList(type) {

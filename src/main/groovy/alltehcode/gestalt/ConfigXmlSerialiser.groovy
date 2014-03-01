@@ -17,7 +17,7 @@ class ConfigXmlSerialiser {
     writer.toString()
   }
 
-  /* The method is a little large, but simple 'extract' method refactorings don't
+  /* The method is a little large, but simple 'extract method' refactorings don't
    * seem to work when dealing with the closures expected by MarkupBuilder
    */
 

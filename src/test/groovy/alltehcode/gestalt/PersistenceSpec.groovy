@@ -20,7 +20,7 @@ class PersistenceSpec extends Specification {
     xml.intValue == 1
     xml.handedness == 'left'
     xml.doubleValue == 42.5
-    xml.hasBooleanValue == false
+    xml.booleanValue == false
     xml.things.children().any { thing ->
       thing.id == "123abc" &&
         thing.stringValue == "foo"
@@ -42,7 +42,7 @@ class PersistenceSpec extends Specification {
 
       Double getDoubleValue() { 42.5 }
 
-      Boolean hasBooleanValue() { false }
+      Boolean isBooleanValue() { false }
 
       Handed getHandedness() { Handed.left }
 
