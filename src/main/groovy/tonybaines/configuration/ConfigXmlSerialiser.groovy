@@ -17,6 +17,9 @@ class ConfigXmlSerialiser {
     writer.toString()
   }
 
+  /* The method is a little large, but simple 'extract' method refactorings don't
+   * seem to work when dealing with the closures expected by MarkupBuilder
+   */
 
   def interfaceToClosure(configInterface, object) {
     return {
@@ -24,22 +27,29 @@ class ConfigXmlSerialiser {
         def propName = Configurations.fromBeanSpec(method.name)
         def value = object."$propName"
 
-
+        // Simple values
         if (Configurations.returnsAValue(method) || method.returnType.enum) {
           "$propName"(value)
-        } else if (Configurations.isAList(method.genericReturnType)) {
-
+        }
+        // Lists of values
+        else if (Configurations.isAList(method.genericReturnType)) {
           Class listGenericType = method.genericReturnType.actualTypeArguments[0]
+          String listTypeName = "${Introspector.decapitalize(listGenericType.simpleName)}"
+
           "$propName" {
             value.each { item ->
               if (Configurations.isAValueType(listGenericType)) {
-                "${Introspector.decapitalize(listGenericType.simpleName)}"(item)
-              } else {
-                "${Introspector.decapitalize(listGenericType.simpleName)}"(interfaceToClosure(listGenericType, item))
+                "$listTypeName"(item)
+              }
+              else {
+                // A list of sub-types
+                "$listTypeName"(interfaceToClosure(listGenericType, item))
               }
             }
           }
-        } else {
+        }
+        // a single sub-type
+        else {
           if (value != null) "$propName"(interfaceToClosure(method.returnType, value))
           else "$propName"()
         }
