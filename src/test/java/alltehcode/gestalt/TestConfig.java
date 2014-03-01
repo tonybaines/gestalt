@@ -12,7 +12,7 @@ public interface TestConfig {
 
   Double getDoubleValue();
 
-  Boolean getBooleanValue();
+  Boolean hasBooleanValue();
 
   Handed getHandedness();
 
