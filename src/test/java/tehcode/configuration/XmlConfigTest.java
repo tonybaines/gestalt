@@ -10,7 +10,7 @@ import static org.junit.Assert.assertThat;
 public class XmlConfigTest {
   @Test
   public void readsAnXmlConfigFileAndMakesThePropertiesAvailable() {
-    TestConfig testConfig = (TestConfig) Configurations.definedBy(TestConfig.class).composedOf().fromXmlFile("common.xml").done();
+    TestConfig testConfig = (TestConfig) Configurations.definedBy(TestConfig.class).fromXmlFile("common.xml");
 
     assertThat(testConfig.getIntValue(), is(5));
     assertThat(testConfig.getStringValue(), is("Five"));

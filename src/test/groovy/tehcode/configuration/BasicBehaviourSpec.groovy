@@ -73,8 +73,7 @@ class BasicBehaviourSpec extends Specification {
     'Groovy' | Configurations.definedBy(TestConfig).fromGroovyConfigFile('common.groovy')
   }
 
-  @Unroll
-  def "Last-one-wins for multiple config definitions for the same property (#name)"() {
+  def "Last-one-wins for multiple config definitions for the same property in a single file (#name)"() {
     when:
     TestConfig config = configuration
 
