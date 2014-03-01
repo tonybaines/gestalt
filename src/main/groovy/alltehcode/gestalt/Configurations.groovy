@@ -10,8 +10,8 @@ import java.lang.reflect.Method
 import java.lang.reflect.ParameterizedType
 
 class Configurations<T> {
-  static <T> Configuration.Factory<T> definedBy(Class configInterface) {
-    new Configuration.Factory(configInterface)
+  static <T> Configuration.Factory<T> definedBy(Class<T> configInterface) {
+    new Configuration<T>.Factory<T>(configInterface)
   }
 
   static String fromBeanSpec(String methodName) {
