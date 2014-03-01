@@ -48,7 +48,7 @@ Using *Gestalt* can be as simple as
 
 ```java
 ThingConfig config =
-    Configurations.definedBy(ThingConfig.class).fromPropertiesFile("thing.properties");
+    Configurations.definedBy(ThingConfig.class).fromPropertiesFile("thing.properties").done();
 
 assertEquals("foo", config.getName());
 assertEquals(7, config.getSize());
@@ -81,7 +81,7 @@ So a lookup to ```config.getSize()``` when the value isn't explicitly defined wi
 Multiple sources can be combined from XML, ```.properties``` and [GroovyConfig](http://groovy.codehaus.org/gapi/groovy/util/ConfigSlurper.html) (last definition wins)
 
 ```java
-ThingConfig config = Configurations.definedBy(ThingConfig.class).composedOf()
+ThingConfig config = Configurations.definedBy(ThingConfig.class)
         .fromPropertiesFile("common.properties")
         .fromXmlFile("common.xml")
         .fromGroovyConfigFile("common.groovy")

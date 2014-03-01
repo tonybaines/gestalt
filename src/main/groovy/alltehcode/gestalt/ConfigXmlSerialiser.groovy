@@ -24,21 +24,21 @@ class ConfigXmlSerialiser {
   def interfaceToClosure(configInterface, object) {
     return {
       configInterface.methods.each() { method ->
-        def propName = Configurations.fromBeanSpec(method.name)
+        def propName = Configurations.Utils.fromBeanSpec(method.name)
         def value = object."$propName"
 
         // Simple values
-        if (Configurations.returnsAValue(method) || method.returnType.enum) {
+        if (Configurations.Utils.returnsAValue(method) || method.returnType.enum) {
           "$propName"(value)
         }
         // Lists of values
-        else if (Configurations.isAList(method.genericReturnType)) {
+        else if (Configurations.Utils.isAList(method.genericReturnType)) {
           Class listGenericType = method.genericReturnType.actualTypeArguments[0]
           String listTypeName = "${Introspector.decapitalize(listGenericType.simpleName)}"
 
           "$propName" {
             value.each { item ->
-              if (Configurations.isAValueType(listGenericType)) {
+              if (Configurations.Utils.isAValueType(listGenericType)) {
                 "$listTypeName"(item)
               }
               else {

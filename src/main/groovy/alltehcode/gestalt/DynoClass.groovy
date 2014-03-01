@@ -11,9 +11,9 @@ class DynoClass<T> {
     def map = [:]
     configInterface.methods.each() { method ->
       map."$method.name" = { Object[] args ->
-        def propName = Configurations.fromBeanSpec(method.name)
-        if (Configurations.returnsAValue(method)
-          || Configurations.isAList(method.genericReturnType)
+        def propName = Configurations.Utils.fromBeanSpec(method.name)
+        if (Configurations.Utils.returnsAValue(method)
+          || Configurations.Utils.isAList(method.genericReturnType)
           || method.returnType.enum) return source.lookup(prefix + propName, method)
         else return new DynoClass(source).getMapAsInterface(method.returnType, prefix + propName)
       }

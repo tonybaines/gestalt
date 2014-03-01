@@ -20,7 +20,7 @@ class ValidatingDecorator<T> implements ConfigSource {
   @Override
   def lookup(List<String> path, Method method) {
     def value = configSource.lookup(path, method)
-    if (value != null && Configurations.isAValueType(value.class)) {
+    if (value != null && Configurations.Utils.isAValueType(value.class)) {
       return validate(method, value)
     }
     value

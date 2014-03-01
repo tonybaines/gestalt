@@ -7,8 +7,8 @@ class Fixture {
     newCompositeConfigurationBuilder().done()
   }
 
-  static Configurations.Configuration.Factory.CompositeConfigurationBuilder newCompositeConfigurationBuilder() {
-    Configurations.definedBy(TestConfig).composedOf().
+  static Configurations.CompositeConfigurationBuilder newCompositeConfigurationBuilder() {
+    Configurations.definedBy(TestConfig).
       fromPropertiesFile('common.properties').
       fromXmlFile('common.xml').
       fromGroovyConfigFile('common.groovy')

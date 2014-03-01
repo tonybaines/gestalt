@@ -27,7 +27,7 @@ abstract class BaseConfigSource implements ConfigSource {
         def stringValue = valueOf(node)
         return (stringValue != null) ? method.returnType.valueOf(stringValue) : null
       }
-      if (Configurations.isAList(method.genericReturnType)) {
+      if (Configurations.Utils.isAList(method.genericReturnType)) {
         def list = handleList(node, method)
         return list.asImmutable()
       }
