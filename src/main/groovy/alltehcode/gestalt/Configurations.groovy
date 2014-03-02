@@ -118,6 +118,7 @@ class Configurations<T> {
     }
 
     public T done() {
+      if (sources.isEmpty()) throw new ConfigurationException("No valid sources configured!")
       if (enabledFeatures.contains(Feature.Defaults)) sources << new DefaultConfigSource()
 
       new DynoClass<T>(

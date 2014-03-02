@@ -100,7 +100,7 @@ ThingConfig config = Configurations.definedBy(ThingConfig.class)
         .done();
 ```
 
-The default is for a runtime exception to be thrown
+The default is for a runtime exception to be thrown, this will also happen if there are no valid sources at all.
 
 ### Validation
 
