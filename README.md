@@ -85,18 +85,18 @@ ThingConfig config = Configurations.definedBy(ThingConfig.class)
         .fromPropertiesFile("common.properties")
         .fromXmlFile("common.xml")
         .fromGroovyConfigFile("common.groovy")
-        .fromPropertiesFile('user.properties")
+        .fromPropertiesFile(System.getProperty("user.name")+".properties")
         .done();
 ```
 
 #### Optional Sources
 
-A source can be declared as optional (i.e. it may not exist at runtime)
+A source can be declared as optional (i.e. it may or may not exist at runtime)
 
 ```java
 ThingConfig config = Configurations.definedBy(ThingConfig.class)
         .fromPropertiesFile("common.properties")
-        .fromPropertiesFile("${System.getProperty('user.name')}.properties", isOptional)
+        .fromPropertiesFile(System.getProperty("user.name")+".properties", isOptional)
         .done();
 ```
 
@@ -145,7 +145,7 @@ The switchable features are
 An existing instance of the config-interface can be turned into the appropriate XML-string (ready to be persisted through the mechanism of your choice)
 
 ```java
-def xmlString = Configurations.toXml(configInstance, SimpleConfig)
+Configurations.toXml(configInstance, SimpleConfig.class);
 ```
 
 would produce something like
