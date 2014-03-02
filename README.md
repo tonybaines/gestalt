@@ -57,7 +57,7 @@ assertEquals(true, config.getEnabled());
 
 Your definition of the interface drives what properties are expected to be defined in the underlying source files.
 
-Follow the instructions in INSTALLING.md to prepare your runtime environment/IDE.
+Follow the instructions in [INSTALLING](INSTALLING.md) to prepare your runtime environment/IDE.
 
 ### Default Values
 Out-of-the-box, an undefined property results in a runtime exception, but we can define defaults in the interface
@@ -160,5 +160,5 @@ would produce something like
 
 ## See the specifications for more
 
-The features described above (and more) were developed from the specifications in src/test/groovy/ , using the example config sources in src/test/resources.
+The features described above (and more) were developed from the specifications in [src/test/groovy/alltehcode/gestalt/](src/test/groovy/) , using the example config sources in [src/test/resources](src/test/resources).
 Please read the descriptions and bodies of the tests to see patterns of use and expected behaviour.
