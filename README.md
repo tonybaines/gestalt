@@ -55,8 +55,9 @@ assertEquals(7, config.getSize());
 assertEquals(true, config.getEnabled());
 ```
 
-The definition of the ```ThingConfig``` interface drives what properties are expected to be defined in the underlying source files.
+Your definition of the interface drives what properties are expected to be defined in the underlying source files.
 
+Follow the instructions in INSTALLING.md to prepare your runtime environment/IDE.
 
 ### Default Values
 Out-of-the-box, an undefined property results in a runtime exception, but we can define defaults in the interface
