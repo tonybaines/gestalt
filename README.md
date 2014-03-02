@@ -136,10 +136,10 @@ Configuration.without(Feature.Defaults, Feature.ExceptionOnNullValue)...
 
 The switchable features are
 
-* Defaults - don't use declared default values
-* Validation - don't validate values
-* Caching - by default the result of every lookup is cached, this switches it off
-* ExceptionOnNullValue - return ```null``` if a value is undefined
+* ```Defaults``` - don't use declared default values
+* ```Validation``` - don't validate values
+* ```Caching``` - by default the result of every lookup is cached, this switches it off
+* ```ExceptionOnNullValue``` - if disabled returns ```null``` if a value is undefined instead
 
 ### Persisting
 
@@ -160,5 +160,5 @@ would produce something like
 
 ## See the specifications for more
 
-The features described above (and more) were developed from the specifications in [src/test/groovy/alltehcode/gestalt/](src/test/groovy/) , using the example config sources in [src/test/resources](src/test/resources).
+The features described above (and more) were developed from the specifications in [src/test/groovy/alltehcode/gestalt](src/test/groovy/alltehcode/gestalt/) , using the example config sources in [src/test/resources](src/test/resources).
 Please read the descriptions and bodies of the tests to see patterns of use and expected behaviour.
