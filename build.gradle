@@ -6,6 +6,7 @@ apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'project-report'
 apply plugin: 'signing'
+apply plugin: 'java-library-distribution'
 buildscript {
   repositories {
     jcenter()
@@ -47,6 +48,13 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
 task sourceJar(type: Jar) {
   from sourceSets.main.allSource
   classifier = 'sources'
+}
+
+/* The java-library-distribution plugin*/
+distributions {
+  main {
+    baseName = "${project.group}-${project.name}"
+  }
 }
 
 /* The Nexus plugin */
