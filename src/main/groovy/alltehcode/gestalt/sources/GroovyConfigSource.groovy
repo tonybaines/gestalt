@@ -3,10 +3,12 @@ package alltehcode.gestalt.sources
 import alltehcode.gestalt.ConfigSource
 import groovy.util.logging.Slf4j
 
+import javax.validation.constraints.NotNull
+
 @Slf4j
 class GroovyConfigSource extends BaseConfigSource {
 
-  GroovyConfigSource(InputStream inputStream) {
+  GroovyConfigSource(@NotNull InputStream inputStream) {
     config = new ConfigSlurper().parse(inputStream.text).values().first()
   }
 

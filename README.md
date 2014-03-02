@@ -89,6 +89,19 @@ ThingConfig config = Configurations.definedBy(ThingConfig.class)
         .done();
 ```
 
+#### Optional Sources
+
+A source can be declared as optional (e.g. it may not exist at runtime)
+
+```java
+ThingConfig config = Configurations.definedBy(ThingConfig.class)
+        .fromPropertiesFile("common.properties")
+        .fromPropertiesFile("${System.getProperty('user.name')}.properties", isOptional)
+        .done();
+```
+
+The default is for a runtime exception to be thrown
+
 ### Validation
 
 Validation can be defined for one or more properties using the [JSR-303 Bean Validation annotations](http://docs.oracle.com/javaee/6/api/javax/validation/constraints/package-summary.html)  e.g.

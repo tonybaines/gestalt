@@ -4,11 +4,13 @@ import alltehcode.gestalt.sources.*
 import alltehcode.gestalt.sources.features.CachingDecorator
 import alltehcode.gestalt.sources.features.ExceptionOnNullValueDecorator
 import alltehcode.gestalt.sources.features.ValidatingDecorator
+import groovy.util.logging.Slf4j
 
 import java.beans.Introspector
 import java.lang.reflect.Method
 import java.lang.reflect.ParameterizedType
 
+@Slf4j
 class Configurations<T> {
   static <T> CompositeConfigurationBuilder<T> definedBy(Class<T> configInterface) {
     new CompositeConfigurationBuilder<T>(configInterface)
@@ -48,6 +50,10 @@ class Configurations<T> {
     Validation, Defaults, ExceptionOnNullValue, Caching
   }
 
+  static enum Behaviour {
+    isOptional
+  }
+
 
   static class CompositeConfigurationBuilder<T> {
     private Class configInterface
@@ -60,18 +66,49 @@ class Configurations<T> {
 
     private def sources = new ArrayList<>()
 
-    public CompositeConfigurationBuilder<T> fromXmlFile(String filePath) {
-      sources << new XmlConfigSource(resourceAsStream(filePath))
+    public CompositeConfigurationBuilder<T> fromXmlFile(String filePath, Behaviour... behaviours) {
+      tryToLoadWith(behaviours, filePath) {
+        fromXml(resourceAsStream(filePath))
+      }
       this
     }
 
-    public CompositeConfigurationBuilder<T> fromPropertiesFile(String filePath) {
-      sources << new PropertiesConfigSource(resourceAsStream(filePath))
+    public CompositeConfigurationBuilder<T> fromPropertiesFile(String filePath, Behaviour... behaviours) {
+      tryToLoadWith(behaviours, filePath) {
+        fromProperties(resourceAsStream(filePath))
+      }
       this
     }
 
-    public CompositeConfigurationBuilder<T> fromGroovyConfigFile(String filePath) {
-      sources << new GroovyConfigSource(resourceAsStream(filePath))
+    public CompositeConfigurationBuilder<T> fromGroovyConfigFile(String filePath, Behaviour... behaviours) {
+      tryToLoadWith(behaviours, filePath) {
+        fromGroovyConfig(resourceAsStream(filePath))
+      }
+      this
+    }
+
+    private def tryToLoadWith(behaviours, filePath, Closure c) {
+      try {
+        c.call(filePath)
+      }
+      catch (Throwable e) {
+        if (isOptional(behaviours)) log.warn("Could not load the configuration from '$filePath', but it is optional so continuing", e)
+        else throw new ConfigurationException('Could not load the configuration', e)
+      }
+    }
+
+    public CompositeConfigurationBuilder<T> fromXml(InputStream stream) {
+      sources << new XmlConfigSource(stream)
+      this
+    }
+
+    public CompositeConfigurationBuilder<T> fromProperties(InputStream stream) {
+      sources << new PropertiesConfigSource(stream)
+      this
+    }
+
+    public CompositeConfigurationBuilder<T> fromGroovyConfig(InputStream stream) {
+      sources << new GroovyConfigSource(stream)
       this
     }
 
@@ -89,6 +126,7 @@ class Configurations<T> {
         )))).getMapAsInterface(configInterface)
     }
 
+
     private ConfigSource withValidation(ConfigSource source) {
       if (enabledFeatures.contains(Feature.Validation)) new ValidatingDecorator<>(source)
       else source
@@ -104,8 +142,14 @@ class Configurations<T> {
       else source
     }
 
+    private boolean isOptional(Configurations.Behaviour... behaviours) {
+      behaviours.contains(Configurations.Behaviour.isOptional)
+    }
+
     private static InputStream resourceAsStream(String path) {
-      Configurations.class.classLoader.getResourceAsStream(path)
+      def resourceStream = Configurations.class.classLoader.getResourceAsStream(path)
+      if (resourceStream == null) throw new ConfigurationException(["Could not load the configuration from '$path'"])
+      resourceStream
     }
 
   }

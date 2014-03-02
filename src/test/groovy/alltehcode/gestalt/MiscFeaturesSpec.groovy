@@ -3,6 +3,7 @@ package alltehcode.gestalt
 import spock.lang.Specification
 import spock.lang.Unroll
 
+import static alltehcode.gestalt.Configurations.Behaviour.isOptional
 import static alltehcode.gestalt.Fixture.newCompositeConfiguration
 
 class MiscFeaturesSpec extends Specification {
@@ -75,6 +76,57 @@ class MiscFeaturesSpec extends Specification {
 
     then:
     config.getPropertyDefinedAllConfigSources() == 'from-properties'
+  }
+
+  def "Loading a missing configuration source is a error (XML)"() {
+    when:
+    Configurations.definedBy(TestConfig).fromXmlFile('no-such-resource').done()
+
+    then:
+    def e = thrown(ConfigurationException)
+    e.message.contains('Could not load the configuration')
+  }
+
+  def "Loading a missing configuration source is a error (Properties)"() {
+    when:
+    Configurations.definedBy(TestConfig).fromPropertiesFile('no-such-resource').done()
+
+    then:
+    def e = thrown(ConfigurationException)
+    e.message.contains('Could not load the configuration')
+  }
+
+  def "Loading a missing configuration source is a error (GroovyConfig)"() {
+    when:
+    Configurations.definedBy(TestConfig).fromGroovyConfigFile('no-such-resource').done()
+
+    then:
+    def e = thrown(ConfigurationException)
+    e.message.contains('Could not load the configuration')
+  }
+
+  def "Loading a missing configuration source is not a error if it is optional (XML)"() {
+    when:
+    TestConfig config = Configurations.definedBy(TestConfig).fromXmlFile('no-such-resource', isOptional).done()
+
+    then:
+    config.getNonExistentIntegerWithDefault() == 42
+  }
+
+  def "Loading a missing configuration source is a not a error if it is optional (Properties)"() {
+    when:
+    TestConfig config = Configurations.definedBy(TestConfig).fromPropertiesFile('no-such-resource', isOptional).done()
+
+    then:
+    config.getNonExistentIntegerWithDefault() == 42
+  }
+
+  def "Loading a missing configuration source is a not a error if it is optional (GroovyConfig)"() {
+    when:
+    TestConfig config = Configurations.definedBy(TestConfig).fromGroovyConfigFile('no-such-resource', isOptional).done()
+
+    then:
+    config.getNonExistentIntegerWithDefault() == 42
   }
 
 }
