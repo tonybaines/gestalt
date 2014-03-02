@@ -49,6 +49,23 @@ class PersistenceSpec extends Specification {
 
   }
 
+  def "An instance created from a mutable implementation of the Config interface can be persisted"() {
+    given:
+    UpdateableSimpleConfig config = new UpdateableSimpleConfig()
+    config.setName("arthur")
+    config.setLevel(-1)
+    config.setEnabled(true)
+
+    when:
+    def xmlString = Configurations.toXml(config, SimpleConfig)
+    def xml = new XmlSlurper().parseText(xmlString)
+
+    then:
+    xml.name == 'arthur'
+    xml.level == -1
+    xml.enabled == true
+  }
+
   @Ignore
   def "A config-interface instance can be transformed into a Properties instance"() {}
 
@@ -61,6 +78,27 @@ class PersistenceSpec extends Specification {
 
     @Default.Boolean(false)
     boolean isEnabled()
+  }
+
+  private class UpdateableSimpleConfig implements SimpleConfig {
+    private String name
+    private int level
+    private boolean enabled
+
+    @Override
+    String getName() { this.name }
+
+    void setName(String name) { this.name = name }
+
+    @Override
+    int getLevel() { this.level }
+
+    void setLevel(int level) { this.level = level }
+
+    @Override
+    boolean isEnabled() { this.enabled }
+
+    void setEnabled(boolean enabled) { this.enabled = enabled }
   }
 
   private def STATIC_XML = """
