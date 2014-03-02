@@ -10,7 +10,7 @@ public interface TestConfig {
 
   String getStringValue();
 
-  Double getDoubleValue();
+  double getDoubleValue();
 
   Boolean isBooleanValue();
 
@@ -69,7 +69,7 @@ public interface TestConfig {
 
     @AssertTrue
     @Default.Boolean(false)
-    Boolean getBooleanValueWhoseValueBreaksValidation();
+    boolean getBooleanValueWhoseValueBreaksValidation();
 
     @Pattern(regexp = "f.*")
     @Default.String("fin")

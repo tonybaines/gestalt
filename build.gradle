@@ -22,7 +22,6 @@ dependencies {
 
   testCompile([
     'org.spockframework:spock-core:0.7-groovy-2.0',
-    'org.unitils:unitils:3.3',
   ])
 
   testRuntime([

@@ -34,8 +34,11 @@ class Configurations<T> {
       switch (type) {
         case String: return true
         case Integer: return true
+        case int: return true
         case Double: return true
+        case double: return true
         case Boolean: return true
+        case boolean: return true
 
         default: return false
       }

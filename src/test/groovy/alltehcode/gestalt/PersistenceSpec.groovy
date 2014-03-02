@@ -3,8 +3,6 @@ package alltehcode.gestalt
 import com.google.common.collect.Lists
 import org.junit.Ignore
 import spock.lang.Specification
-import org.unitils.*
-
 
 class PersistenceSpec extends Specification {
 
@@ -59,10 +57,10 @@ class PersistenceSpec extends Specification {
     String getName()
 
     @Default.Integer(42)
-    Integer getLevel()
+    int getLevel()
 
     @Default.Boolean(false)
-    Boolean isEnabled()
+    boolean isEnabled()
   }
 
   private def STATIC_XML = """
@@ -79,7 +77,7 @@ class PersistenceSpec extends Specification {
 
       String getStringValue() { "foo" }
 
-      Double getDoubleValue() { 42.5 }
+      double getDoubleValue() { 42.5 }
 
       Boolean isBooleanValue() { false }
 
@@ -90,7 +88,7 @@ class PersistenceSpec extends Specification {
         new TestConfig.SubConfigLevel1() {
           Integer getIntValue() { 42 }
 
-          Boolean getBooleanValueWhoseValueBreaksValidation() { false }
+          boolean getBooleanValueWhoseValueBreaksValidation() { false }
 
           String getValueWhichIsDefinedToBreakValidationButHasADefault() { "bar" }
         }

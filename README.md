@@ -131,7 +131,6 @@ Any config source that defines a value which breaks the constraints has that pro
 
 ```java
 Configuration.without(Feature.Defaults, Feature.ExceptionOnNullValue)...
-
 ```
 
 The switchable features are
@@ -141,6 +140,22 @@ The switchable features are
 * Caching - by default the result of every lookup is cached, this switches it off
 * ExceptionOnNullValue - return ```null``` if a value is undefined
 
+### Persisting
+
+An existing instance of the config-interface can be turned into the appropriate XML-string (ready to be persisted through the mechanism of your choice)
+
+```java
+def xmlString = Configurations.toXml(configInstance, SimpleConfig)
+```
+
+would produce something like
+```xml
+<SimpleConfig>
+  <level>42</level>
+  <enabled>true</enabled>
+  <name>bar</name>
+</SimpleConfig>
+```
 
 ## See the specifications for more
 

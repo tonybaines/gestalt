@@ -46,8 +46,11 @@ abstract class BaseConfigSource implements ConfigSource {
     switch (returnType) {
       case String: return valueOf(node)
       case Integer: return valueOf(node)?.toInteger()
+      case int: return valueOf(node)?.toInteger()
       case Double: return valueOf(node)?.toDouble()
+      case double: return valueOf(node)?.toDouble()
       case Boolean: return valueOf(node)?.toBoolean()
+      case boolean: return valueOf(node)?.toBoolean()
 
       default: new DynoClass(newInstanceAround(node)).getMapAsInterface(returnType)
     }
