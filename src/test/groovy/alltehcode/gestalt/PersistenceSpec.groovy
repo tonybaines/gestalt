@@ -3,6 +3,7 @@ package alltehcode.gestalt
 import com.google.common.collect.Lists
 import org.junit.Ignore
 import spock.lang.Specification
+import org.unitils.*
 
 
 class PersistenceSpec extends Specification {
@@ -30,8 +31,46 @@ class PersistenceSpec extends Specification {
 
   }
 
+  def "An instance created from an external source can be persisted"() {
+    given: 'a config instance'
+    SimpleConfig fromString = Configurations.definedBy(SimpleConfig).fromXml(new ByteArrayInputStream(STATIC_XML.bytes)).done()
+
+    when: "it's turned into a String and re-parsed"
+    def xmlString = Configurations.toXml(fromString, SimpleConfig)
+    println xmlString
+    SimpleConfig roundTripped = Configurations.definedBy(SimpleConfig).fromXml(new ByteArrayInputStream(xmlString.bytes)).done()
+
+    then:
+    fromString.name == "bar"
+    fromString.level == 42
+    fromString.enabled == true
+
+    roundTripped.name == "bar"
+    roundTripped.level == 42
+    roundTripped.enabled == true
+
+  }
+
   @Ignore
   def "A config-interface instance can be transformed into a Properties instance"() {}
+
+  private interface SimpleConfig {
+    @Default.String("foo")
+    String getName()
+
+    @Default.Integer(42)
+    Integer getLevel()
+
+    @Default.Boolean(false)
+    Boolean isEnabled()
+  }
+
+  private def STATIC_XML = """
+<simpleConfig>
+  <name>bar</name>
+  <enabled>true</enabled>
+</simpleConfig>
+"""
 
 
   TestConfig aNewConfigInstance() {
