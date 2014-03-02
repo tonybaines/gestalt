@@ -91,7 +91,7 @@ ThingConfig config = Configurations.definedBy(ThingConfig.class)
 
 #### Optional Sources
 
-A source can be declared as optional (e.g. it may not exist at runtime)
+A source can be declared as optional (i.e. it may not exist at runtime)
 
 ```java
 ThingConfig config = Configurations.definedBy(ThingConfig.class)
@@ -140,3 +140,9 @@ The switchable features are
 * Validation - don't validate values
 * Caching - by default the result of every lookup is cached, this switches it off
 * ExceptionOnNullValue - return ```null``` if a value is undefined
+
+
+## See the specifications for more
+
+The features described above (and more) were developed from the specifications in src/test/groovy/ , using the example config sources in src/test/resources.
+Please read the descriptions and bodies of the tests to see patterns of use and expected behaviour.
