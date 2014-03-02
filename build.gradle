@@ -5,11 +5,20 @@ apply plugin: 'jdepend'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'project-report'
-apply plugin: 'maven-publish'
+apply plugin: 'signing'
+buildscript {
+  repositories {
+    jcenter()
+  }
+
+  dependencies {
+    classpath 'org.gradle.api.plugins:gradle-nexus-plugin:0.7'
+  }
+}
+apply plugin: 'nexus'
 
 group = 'alltehcode'
 version = '0.3.0'
-
 dependencies {
   compile([
     'org.codehaus.groovy:groovy-all:2.2.1',
@@ -30,26 +39,55 @@ dependencies {
   runtime([])
 }
 
-publishing {
-  publications {
-    mavenJava(MavenPublication) {
-      from components.java
+task javadocJar(type: Jar, dependsOn: javadoc) {
+  classifier = 'javadoc'
+  from 'build/docs/javadoc'
+}
+
+task sourceJar(type: Jar) {
+  from sourceSets.main.allSource
+  classifier = 'sources'
+}
+
+/* The Nexus plugin */
+modifyPom {
+  project {
+    name 'Gestalt'
+    packaging 'jar'
+    description 'Gestalt is a library for making configuration easier in Java'
+    url 'https://github.com/tonybaines/gestalt'
+
+    scm {
+      url 'scm:git@github.com:tonybaines/gestalt.git'
+      connection 'scm:git@github.com:tonybaines/gestalt.git'
+      developerConnection 'scm:git@github.com:tonybaines/gestalt.git'
+    }
+
+    licenses {
+      license {
+        name 'The Apache Software License, Version 2.0'
+        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+        distribution 'repo'
+      }
+    }
+
+    developers {
+      developer {
+        id 'tonybaines'
+        name 'Tony Baines'
+      }
     }
   }
 }
 
-
-task release(type: Zip, dependsOn: ['clean', 'jar', 'generatePomFileForMavenJavaPublication']) {
-  from('build/publications/mavenJava/pom-default.xml') {
-    rename 'pom-default.xml', 'pom.xml'
-  }
-  from("build/libs/${project.name}-${project.version}.jar") {
-    rename "${project.name}-${project.version}.jar", "${project.group}.${project.name}-${project.version}.jar"
-  }
-  baseName "${project.group}.${project.name}"
+nexus {
+  attachSources = true
+  attachTests = true
+  attachJavadoc = false
+  sign = true
 }
 
-
+/* Static Analysis */
 tasks.withType(FindBugs) {
   reports {
     xml.enabled = false
