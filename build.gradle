@@ -21,6 +21,10 @@ apply plugin: 'nexus'
 
 group = 'com.github.tonybaines'
 version = '0.3.0'
+
+repositories {
+  mavenCentral()
+}
 dependencies {
   compile([
     'org.codehaus.groovy:groovy-all:2.2.1',
