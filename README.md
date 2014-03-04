@@ -161,5 +161,5 @@ would produce something like
 
 ## See the specifications for more
 
-The features described above (and more) were developed from the specifications in [src/test/groovy/alltehcode/gestalt](src/test/groovy/alltehcode/gestalt/) , using the example config sources in [src/test/resources](src/test/resources).
+The features described above (and more) were developed from the specifications in [src/test/groovy/com/github/tonybaines/gestalt](src/test/groovy/com/github/tonybaines/gestalt/) , using the example config sources in [src/test/resources](src/test/resources).
 Please read the descriptions and bodies of the tests to see patterns of use and expected behaviour.
