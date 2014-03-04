@@ -45,16 +45,6 @@ dependencies {
   runtime([])
 }
 
-task javadocJar(type: Jar, dependsOn: javadoc) {
-  classifier = 'javadoc'
-  from 'build/docs/javadoc'
-}
-
-task sourceJar(type: Jar) {
-  from sourceSets.main.allSource
-  classifier = 'sources'
-}
-
 /* The java-library-distribution plugin*/
 distributions {
   main {
@@ -71,7 +61,7 @@ modifyPom {
     url 'https://github.com/tonybaines/gestalt'
 
     scm {
-      url 'scm:git@github.com:tonybaines/gestalt.git'
+      url 'git@github.com:tonybaines/gestalt.git'
       connection 'scm:git@github.com:tonybaines/gestalt.git'
       developerConnection 'scm:git@github.com:tonybaines/gestalt.git'
     }
@@ -96,7 +86,7 @@ modifyPom {
 nexus {
   attachSources = true
   attachTests = true
-  attachJavadoc = false
+  attachJavadoc = true
   sign = true
 }
 
