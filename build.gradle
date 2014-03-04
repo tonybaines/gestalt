@@ -97,6 +97,9 @@ nexus {
 }
 
 /* Static Analysis */
+findbugs {
+  ignoreFailures = true
+}
 tasks.withType(FindBugs) {
   reports {
     xml.enabled = false
