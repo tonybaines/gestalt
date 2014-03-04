@@ -1,4 +1,5 @@
-# *Gestalt* Configuration
+# *Gestalt* Configuration [![Build Status](https://travis-ci.org/tonybaines/gestalt.png)](https://travis-ci.org/tonybaines/gestalt)
+
 
 ## What's it for?
 Configuration in Java is usually semi-weakly-typed e.g. the key-value store of a `.properties` file
