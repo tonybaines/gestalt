@@ -115,7 +115,7 @@ class Configurations<T> {
       this
     }
 
-    def without(Feature... feature) {
+    public CompositeConfigurationBuilder<T> without(Feature... feature) {
       feature.each { enabledFeatures.remove(it) }
       this
     }

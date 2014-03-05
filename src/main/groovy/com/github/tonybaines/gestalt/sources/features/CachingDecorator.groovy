@@ -15,7 +15,7 @@ class CachingDecorator implements ConfigSource {
 
   CachingDecorator(ConfigSource delegate) {
     this.delegate = delegate
-    cache = new CacheBuilder<String, Object>().build()
+    cache = CacheBuilder.newBuilder().build()
   }
 
   @Override

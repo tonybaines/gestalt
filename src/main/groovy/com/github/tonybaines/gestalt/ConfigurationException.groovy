@@ -18,4 +18,8 @@ class ConfigurationException extends RuntimeException {
   ConfigurationException(String... messages) {
     super(messages.join('\n'))
   }
+
+  ConfigurationException(List<String> messages) {
+    super(messages.join('\n'))
+  }
 }
