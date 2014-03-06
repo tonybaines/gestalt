@@ -9,7 +9,7 @@ import groovy.util.logging.Slf4j
 class PropertiesConfigSource extends BaseConfigSource {
 
   PropertiesConfigSource(InputStream inputStream) {
-    if (inputStream == null) throw new ConfigurationException(['Null input source'])
+    if (inputStream == null) throw new ConfigurationException('Null input source')
     def propsFile = new Properties()
     propsFile.load(inputStream)
     config = new ConfigSlurper().parse(propsFile)

@@ -152,7 +152,7 @@ class Configurations<T> {
 
     private static InputStream resourceAsStream(String path) {
       def resourceStream = Configurations.class.classLoader.getResourceAsStream(path)
-      if (resourceStream == null) throw new ConfigurationException(["Could not load the configuration from '$path'"])
+      if (resourceStream == null) throw new ConfigurationException("Could not load the configuration from '$path'")
       resourceStream
     }
 
