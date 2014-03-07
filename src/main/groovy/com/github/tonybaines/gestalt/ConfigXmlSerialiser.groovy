@@ -40,8 +40,7 @@ class ConfigXmlSerialiser {
             value.each { item ->
               if (Configurations.Utils.isAValueType(listGenericType)) {
                 "$listTypeName"(item)
-              }
-              else {
+              } else {
                 // A list of sub-types
                 "$listTypeName"(interfaceToClosure(listGenericType, item))
               }

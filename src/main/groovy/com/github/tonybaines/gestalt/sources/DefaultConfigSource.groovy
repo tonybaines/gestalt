@@ -27,12 +27,10 @@ class DefaultConfigSource implements ConfigSource {
         catch (IllegalArgumentException e) {
           throw new ConfigurationException(method, e)
         }
-      }
-      else {
+      } else {
         return annotationValue
       }
-    }
-    else log.info "Failed to find a default definition for ${method.name}"
+    } else log.info "Failed to find a default definition for ${method.name}"
 
     return null
   }
