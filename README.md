@@ -60,6 +60,61 @@ Your definition of the interface drives what properties are expected to be defin
 
 Follow the instructions in [INSTALLING](INSTALLING.md) to prepare your runtime environment/IDE.
 
+## Defining the Config interface
+
+The interface you use to describe your configuration needs to follow some rules, the [examples used in the tests](src/test/resources)
+are used to exercise all the features, and are also commented to explain non-obvious behaviour
+
+### Method Names
+You need to follow the Java Bean conventions for property access, basically ```getFoo()``` with the option of ```hasFoo()``` for ```boolean``` properties
+
+The name of the method and the content of the configuration resource need to match e.g.
+
+```java
+getFoo()
+```
+Would correspond to a configuration
+
+```xml
+...
+<foo>the value of foo</foo>
+...
+```
+
+or
+
+```properties
+...foo=the value of foo
+```
+
+### Types
+The following types (and their primitive counterparts where applicable) are supported as return types
+* String
+* Integer
+* Boolean
+* Double
+* Any ```Enum```
+* A ```List<T>``` where *T* **must** be declared for the reflection to work
+* Another Config interface (see below)
+
+### Hierarchy
+If your configuration requires nested types, then the return another interface e.g.
+
+```java
+public interface TopLevelConfig {
+...
+  SecondLevelConfig getSecondLevel();
+...
+}
+
+public interface SecondLevelConfig {
+    String getFoo();
+    Boolean hasBar();
+}
+```
+
+This can be repeated for as many levels as necessary
+
 ### Default Values
 Out-of-the-box, an undefined property results in a runtime exception, but we can define defaults in the interface
 
