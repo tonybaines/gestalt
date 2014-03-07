@@ -16,13 +16,12 @@
         <value>C</value>
     </strings>
     <things>
-        <thing>
-            <id>alpha</id>
-            <stringValue>A</stringValue>
+        <!-- For an XML source, either a child node (default) or an attribute (fall-back) can be used to match e.g. getId() -->
+        <thing id="alpha">
+        <stringValue>A</stringValue>
         </thing>
-        <thing>
-            <id>bravo</id>
-            <stringValue>B</stringValue>
+        <thing id="bravo">
+        <stringValue>B</stringValue>
         </thing>
         <thing>
             <id>charlie</id>

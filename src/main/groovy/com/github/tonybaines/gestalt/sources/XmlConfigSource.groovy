@@ -27,7 +27,8 @@ class XmlConfigSource extends BaseConfigSource {
 
   @Override
   protected String valueOf(node) {
-    if (node instanceof NodeList && node.isEmpty()) null
+    if (node == null || node instanceof NodeList && node.isEmpty()) null
+    else if (node instanceof String) node
     else node.text()
   }
 
@@ -36,5 +37,11 @@ class XmlConfigSource extends BaseConfigSource {
     node[0].collect { child ->
       decoded(child, method.genericReturnType.actualTypeArguments[0])
     }
+  }
+
+  @Override
+  protected def fallbackLookupStrategy(path, returnType) {
+    // Fall-back to looking up property as an XML attribute
+    return decoded(config."@${path.last()}", returnType)
   }
 }
