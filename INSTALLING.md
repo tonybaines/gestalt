@@ -4,7 +4,6 @@ To install and use *Gestalt*, just point your dependency-management system of ch
 #### [Gradle](http://gradle.org)
 ```groovy
 'com.github.tonybaines:gestalt:0.5.0'
-
 ```
 
 
@@ -26,4 +25,4 @@ To install and use *Gestalt*, just point your dependency-management system of ch
 The gestalt JAR is available in [Maven Central](http://central.maven.org/maven2/com/github/tonybaines/gestalt/).
 Download and install it and the ```compile``` dependencies the same way you do for any other JAR
 
-But really, you should take a look at [Gradle](http://gradle.org)
+But really you should take a look at [Gradle](http://www.gradle.org/docs/current/userguide/tutorial_java_projects.html#N103D7)
