@@ -1,20 +1,29 @@
-To install and use *Gestalt*, first download a release ZIP from https://github.com/tonybaines/gestalt/releases
+# Installation
+To install and use *Gestalt*, just point your dependency-management system of choice at the latest release (hosted in Maven Central)
 
-Unpacking the ZIP you will find two files
+#### [Gradle](http://gradle.org)
+```groovy
+'com.github.tonybaines:gestalt:0.5.0'
 
-    com.github.tonybaines.gestalt-<version>.zip
-       |
-       |- pom.xml
-       |- com.github.tonybaines.gestalt-<version>.jar
+```
 
-The dependencies in ```pom.xml``` need to be available at runtime [1], either
 
-* Create the appropriate runtime dependencies in your ```ivy.xml```/```build.gradle```
-* Copy the runtime dependencies into your ```pom.xml```
-* Download them separately (vanilla Ant)
+#### [Maven](http://maven.apache.org/)
+```xml
+<dependency>
+    <groupId>com.github.tonybaines</groupId>
+    <artifactId>gestalt</artifactId>
+    <version>0.5.0</version>
+</dependency>
+```
 
-You'll need to copy/declare/locally-publish the ```com.github.tonybaines.gestalt-<version>.jar``` as appropriate for your
-build system
+#### [Ivy](https://ant.apache.org/ivy/)
+```xml
+<dependency org="com.github.tonybaines" name="gestalt" rev="0.5.0"/>
+```
 
-[1] Probably.  If you're not using JSR-303 validation then hibernate-validator, javax.el-api and javax.el
-    may not be needed
+#### Manual installation
+The gestalt JAR is available in [Maven Central](http://central.maven.org/maven2/com/github/tonybaines/gestalt/).
+Download and install it and the ```compile``` dependencies the same way you do for any other JAR
+
+But really, you should take a look at [Gradle](http://gradle.org)

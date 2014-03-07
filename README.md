@@ -71,7 +71,7 @@ You need to follow the Java Bean conventions for property access, basically ```g
 The name of the method and the content of the configuration resource need to match e.g.
 
 ```java
-getFoo()
+String getFoo();
 ```
 Would correspond to a configuration
 
