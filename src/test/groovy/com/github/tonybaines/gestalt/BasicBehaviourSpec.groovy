@@ -27,9 +27,9 @@ class BasicBehaviourSpec extends Specification {
 
     where:
     name     | configuration
-    'XML'    | Configurations.definedBy(TestConfig).fromXmlFile('common.xml').done()
-    'Props'  | Configurations.definedBy(TestConfig).fromPropertiesFile('common.properties').done()
-    'Groovy' | Configurations.definedBy(TestConfig).fromGroovyConfigFile('common.groovy').done()
+    'XML'    | Configurations.definedBy(TestConfig).fromXmlResource('common.xml').done()
+    'Props'  | Configurations.definedBy(TestConfig).fromPropertiesResource('common.properties').done()
+    'Groovy' | Configurations.definedBy(TestConfig).fromGroovyConfigResource('common.groovy').done()
   }
 
   @Unroll
@@ -46,9 +46,9 @@ class BasicBehaviourSpec extends Specification {
 
     where:
     name     | configuration
-    'XML'    | Configurations.definedBy(TestConfig).fromXmlFile('common.xml').done()
-    'Props'  | Configurations.definedBy(TestConfig).fromPropertiesFile('common.properties').done()
-    'Groovy' | Configurations.definedBy(TestConfig).fromGroovyConfigFile('common.groovy').done()
+    'XML'    | Configurations.definedBy(TestConfig).fromXmlResource('common.xml').done()
+    'Props'  | Configurations.definedBy(TestConfig).fromPropertiesResource('common.properties').done()
+    'Groovy' | Configurations.definedBy(TestConfig).fromGroovyConfigResource('common.groovy').done()
   }
 
   @Unroll
@@ -68,9 +68,9 @@ class BasicBehaviourSpec extends Specification {
 
     where:
     name     | configuration
-    'XML'    | Configurations.definedBy(TestConfig).fromXmlFile('common.xml').done()
-    'Props'  | Configurations.definedBy(TestConfig).fromPropertiesFile('common.properties').done()
-    'Groovy' | Configurations.definedBy(TestConfig).fromGroovyConfigFile('common.groovy').done()
+    'XML'    | Configurations.definedBy(TestConfig).fromXmlResource('common.xml').done()
+    'Props'  | Configurations.definedBy(TestConfig).fromPropertiesResource('common.properties').done()
+    'Groovy' | Configurations.definedBy(TestConfig).fromGroovyConfigResource('common.groovy').done()
   }
 
   def "Last-one-wins for multiple config definitions for the same property in a single file (#name)"() {
@@ -82,13 +82,13 @@ class BasicBehaviourSpec extends Specification {
 
     where:
     name     | configuration
-    'Props'  | Configurations.definedBy(TestConfig).fromPropertiesFile('common.properties').done()
-    'Groovy' | Configurations.definedBy(TestConfig).fromGroovyConfigFile('common.groovy').done()
+    'Props'  | Configurations.definedBy(TestConfig).fromPropertiesResource('common.properties').done()
+    'Groovy' | Configurations.definedBy(TestConfig).fromGroovyConfigResource('common.groovy').done()
   }
 
   def "Multiple config definitions for the same property are an error (XML)"() {
     when:
-    TestConfig config = Configurations.definedBy(TestConfig).fromXmlFile('common.xml').done()
+    TestConfig config = Configurations.definedBy(TestConfig).fromXmlResource('common.xml').done()
     config.getSomethingDefinedTwice()
 
     then:

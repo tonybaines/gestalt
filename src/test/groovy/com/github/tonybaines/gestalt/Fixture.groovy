@@ -9,8 +9,8 @@ class Fixture {
 
   static Configurations.CompositeConfigurationBuilder newCompositeConfigurationBuilder() {
     Configurations.definedBy(TestConfig).
-      fromPropertiesFile('common.properties').
-      fromXmlFile('common.xml').
-      fromGroovyConfigFile('common.groovy')
+      fromPropertiesResource('common.properties').
+      fromXmlResource('common.xml').
+      fromGroovyConfigResource('common.groovy')
   }
 }

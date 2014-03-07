@@ -9,7 +9,7 @@ import org.junit.Test;
 public class XmlConfigTest {
     @Test
     public void readsAnXmlConfigFileAndMakesThePropertiesAvailable() {
-        TestConfig testConfig = Configurations.definedBy(TestConfig.class).fromXmlFile("common.xml").done();
+        TestConfig testConfig = Configurations.definedBy(TestConfig.class).fromXmlResource("common.xml").done();
 
         assertThat(testConfig.getIntValue(), is(5));
         assertThat(testConfig.getStringValue(), is("Five"));
@@ -26,5 +26,11 @@ public class XmlConfigTest {
                 return thing.getId().equals("alpha");
             }
         });
+    }
+
+    @Test
+    public void supplyingAClassInstanceMakesItEasierToLocateResourcesWithARelativePath() throws Exception {
+        Configurations.definedBy(SimpleConfig.class).fromXmlResource("com/github/tonybaines/gestalt/config/simple-config.xml").done();
+        Configurations.definedBy(SimpleConfig.class).fromXmlResource("config/simple-config.xml", this.getClass()).done();
     }
 }

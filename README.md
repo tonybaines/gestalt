@@ -49,7 +49,7 @@ Using *Gestalt* can be as simple as
 
 ```java
 ThingConfig config =
-    Configurations.definedBy(ThingConfig.class).fromPropertiesFile("thing.properties").done();
+    Configurations.definedBy(ThingConfig.class).fromPropertiesResource("thing.properties").done();
 
 assertEquals("foo", config.getName());
 assertEquals(7, config.getSize());
@@ -84,10 +84,10 @@ Multiple sources can be combined from XML, ```.properties``` and [GroovyConfig](
 
 ```java
 ThingConfig config = Configurations.definedBy(ThingConfig.class)
-        .fromPropertiesFile("common.properties")
-        .fromXmlFile("common.xml")
-        .fromGroovyConfigFile("common.groovy")
-        .fromPropertiesFile(System.getProperty("user.name")+".properties")
+        .fromPropertiesResource("common.properties")
+        .fromXmlResource("common.xml")
+        .fromGroovyConfigResource("common.groovy")
+        .fromPropertiesResource(System.getProperty("user.name")+".properties")
         .done();
 ```
 
@@ -97,12 +97,28 @@ A source can be declared as optional (i.e. it may or may not exist at runtime)
 
 ```java
 ThingConfig config = Configurations.definedBy(ThingConfig.class)
-        .fromPropertiesFile("common.properties")
-        .fromPropertiesFile(System.getProperty("user.name")+".properties", isOptional)
+        .fromPropertiesResource("common.properties")
+        .fromPropertiesResource(System.getProperty("user.name")+".properties", isOptional)
         .done();
 ```
 
 The default is for a runtime exception to be thrown, this will also happen if there are no valid sources at all.
+
+#### Locating Resources to load
+
+If your config source is in the root of the classpath it can be cumbersome to locate,
+
+```java
+        Configurations.definedBy(SimpleConfig.class).fromXmlResource("com/github/tonybaines/gestalt/config/simple-config.xml").done();
+```
+
+There is an overloaded version of the 'from...' methods which accepts a Class instance, which will be used for relative lookups if provided.
+
+e.g. if you have a Class in the package ```com.github.tonybaines.gestalt``` the path can be simplified as follows
+
+```java
+        Configurations.definedBy(SimpleConfig.class).fromXmlResource("config/simple-config.xml", this.getClass()).done();
+```
 
 ### Validation
 

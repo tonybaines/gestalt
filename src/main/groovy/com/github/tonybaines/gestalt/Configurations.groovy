@@ -69,23 +69,23 @@ class Configurations<T> {
 
     private def sources = new ArrayList<>()
 
-    public CompositeConfigurationBuilder<T> fromXmlFile(String filePath, Behaviour... behaviours) {
+    public CompositeConfigurationBuilder<T> fromXmlResource(String filePath, Class clazz = null, Behaviour... behaviours) {
       tryToLoadWith(behaviours, filePath) {
-        fromXml(resourceAsStream(filePath))
+        fromXml(resourceAsStream(filePath, clazz))
       }
       this
     }
 
-    public CompositeConfigurationBuilder<T> fromPropertiesFile(String filePath, Behaviour... behaviours) {
+    public CompositeConfigurationBuilder<T> fromPropertiesResource(String filePath, Class clazz = null, Behaviour... behaviours) {
       tryToLoadWith(behaviours, filePath) {
-        fromProperties(resourceAsStream(filePath))
+        fromProperties(resourceAsStream(filePath, clazz))
       }
       this
     }
 
-    public CompositeConfigurationBuilder<T> fromGroovyConfigFile(String filePath, Behaviour... behaviours) {
+    public CompositeConfigurationBuilder<T> fromGroovyConfigResource(String filePath, Class clazz = null, Behaviour... behaviours) {
       tryToLoadWith(behaviours, filePath) {
-        fromGroovyConfig(resourceAsStream(filePath))
+        fromGroovyConfig(resourceAsStream(filePath, clazz))
       }
       this
     }
@@ -150,8 +150,9 @@ class Configurations<T> {
       behaviours.contains(Configurations.Behaviour.isOptional)
     }
 
-    private static InputStream resourceAsStream(String path) {
-      def resourceStream = Configurations.class.classLoader.getResourceAsStream(path)
+    private static InputStream resourceAsStream(String path, Class loadingClass) {
+      def loader = loadingClass != null ? loadingClass : Configurations.class.classLoader
+      def resourceStream = loader.getResourceAsStream(path)
       if (resourceStream == null) throw new ConfigurationException("Could not load the configuration from '$path'")
       resourceStream
     }

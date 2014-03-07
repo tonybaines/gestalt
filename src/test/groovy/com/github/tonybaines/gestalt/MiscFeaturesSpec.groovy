@@ -21,9 +21,9 @@ class MiscFeaturesSpec extends Specification {
 
     where:
     name     | configuration
-    'XML'    | Configurations.definedBy(TestConfig).fromXmlFile('common.xml').done()
-    'Props'  | Configurations.definedBy(TestConfig).fromPropertiesFile('common.properties').done()
-    'Groovy' | Configurations.definedBy(TestConfig).fromGroovyConfigFile('common.groovy').done()
+    'XML'    | Configurations.definedBy(TestConfig).fromXmlResource('common.xml').done()
+    'Props'  | Configurations.definedBy(TestConfig).fromPropertiesResource('common.properties').done()
+    'Groovy' | Configurations.definedBy(TestConfig).fromGroovyConfigResource('common.groovy').done()
   }
 
   @Unroll
@@ -40,9 +40,9 @@ class MiscFeaturesSpec extends Specification {
 
     where:
     name     | configuration
-    'XML'    | Configurations.definedBy(TestConfig).fromXmlFile('common.xml').done()
-    'Props'  | Configurations.definedBy(TestConfig).fromPropertiesFile('common.properties').done()
-    'Groovy' | Configurations.definedBy(TestConfig).fromGroovyConfigFile('common.groovy').done()
+    'XML'    | Configurations.definedBy(TestConfig).fromXmlResource('common.xml').done()
+    'Props'  | Configurations.definedBy(TestConfig).fromPropertiesResource('common.properties').done()
+    'Groovy' | Configurations.definedBy(TestConfig).fromGroovyConfigResource('common.groovy').done()
   }
 
   def "Configurations will fall-back until a value is found"() {
@@ -80,7 +80,7 @@ class MiscFeaturesSpec extends Specification {
 
   def "Loading a missing configuration source is a error (XML)"() {
     when:
-    Configurations.definedBy(TestConfig).fromXmlFile('no-such-resource').done()
+    Configurations.definedBy(TestConfig).fromXmlResource('no-such-resource').done()
 
     then:
     def e = thrown(ConfigurationException)
@@ -89,7 +89,7 @@ class MiscFeaturesSpec extends Specification {
 
   def "Loading a missing configuration source is a error (Properties)"() {
     when:
-    Configurations.definedBy(TestConfig).fromPropertiesFile('no-such-resource').done()
+    Configurations.definedBy(TestConfig).fromPropertiesResource('no-such-resource').done()
 
     then:
     def e = thrown(ConfigurationException)
@@ -98,7 +98,7 @@ class MiscFeaturesSpec extends Specification {
 
   def "Loading a missing configuration source is a error (GroovyConfig)"() {
     when:
-    Configurations.definedBy(TestConfig).fromGroovyConfigFile('no-such-resource').done()
+    Configurations.definedBy(TestConfig).fromGroovyConfigResource('no-such-resource').done()
 
     then:
     def e = thrown(ConfigurationException)
@@ -108,8 +108,8 @@ class MiscFeaturesSpec extends Specification {
   def "Loading a missing configuration source is not a error if it is optional (XML)"() {
     when:
     TestConfig config = Configurations.definedBy(TestConfig)
-      .fromXmlFile('common.xml')
-      .fromXmlFile('no-such-resource', isOptional)
+      .fromXmlResource('common.xml')
+      .fromXmlResource('no-such-resource', isOptional)
       .done()
 
     then:
@@ -119,8 +119,8 @@ class MiscFeaturesSpec extends Specification {
   def "Loading a missing configuration source is a not a error if it is optional (Properties)"() {
     when:
     TestConfig config = Configurations.definedBy(TestConfig)
-      .fromPropertiesFile('common.properties')
-      .fromPropertiesFile('no-such-resource', isOptional)
+      .fromPropertiesResource('common.properties')
+      .fromPropertiesResource('no-such-resource', isOptional)
       .done()
 
     then:
@@ -130,8 +130,8 @@ class MiscFeaturesSpec extends Specification {
   def "Loading a missing configuration source is a not a error if it is optional (GroovyConfig)"() {
     when:
     TestConfig config = Configurations.definedBy(TestConfig)
-      .fromGroovyConfigFile('common.groovy')
-      .fromGroovyConfigFile('no-such-resource', isOptional)
+      .fromGroovyConfigResource('common.groovy')
+      .fromGroovyConfigResource('no-such-resource', isOptional)
       .done()
 
     then:
@@ -141,9 +141,9 @@ class MiscFeaturesSpec extends Specification {
   def "No valid configured optional sources is an error"() {
     when:
     Configurations.definedBy(TestConfig)
-      .fromXmlFile('no-such-resource', isOptional)
-      .fromPropertiesFile('no-such-resource', isOptional)
-      .fromGroovyConfigFile('no-such-resource', isOptional)
+      .fromXmlResource('no-such-resource', isOptional)
+      .fromPropertiesResource('no-such-resource', isOptional)
+      .fromGroovyConfigResource('no-such-resource', isOptional)
       .done()
 
     then:

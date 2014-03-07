@@ -69,16 +69,6 @@ class PersistenceSpec extends Specification {
   @Ignore
   def "A config-interface instance can be transformed into a Properties instance"() {}
 
-  private interface SimpleConfig {
-    @Default.String("foo")
-    String getName()
-
-    @Default.Integer(42)
-    int getLevel()
-
-    @Default.Boolean(false)
-    boolean isEnabled()
-  }
 
   private class UpdateableSimpleConfig implements SimpleConfig {
     private String name
