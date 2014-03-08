@@ -4,6 +4,7 @@ import com.github.tonybaines.gestalt.sources.*
 import com.github.tonybaines.gestalt.sources.features.CachingDecorator
 import com.github.tonybaines.gestalt.sources.features.ExceptionOnNullValueDecorator
 import com.github.tonybaines.gestalt.sources.features.ValidatingDecorator
+import groovy.transform.TupleConstructor
 import groovy.util.logging.Slf4j
 
 import java.beans.Introspector
@@ -57,9 +58,20 @@ class Configurations<T> {
     isOptional
   }
 
-
   static class CompositeConfigurationBuilder<T> {
     private Class configInterface
+    private Map<String, String> constants = [:]
+    private List<StreamSource> streams = []
+
+    @TupleConstructor
+    private static final class StreamSource {
+      public enum SourceType {
+        XML, Groovy, Properties
+      }
+
+      final SourceType type
+      final InputStream stream
+    }
 
     CompositeConfigurationBuilder(Class<T> configInterface) {
       this.configInterface = configInterface
@@ -90,6 +102,11 @@ class Configurations<T> {
       this
     }
 
+    public CompositeConfigurationBuilder<T> withConstants(Map<String, String> constants) {
+      this.constants = constants
+      this
+    }
+
     private def tryToLoadWith(behaviours, filePath, Closure c) {
       try {
         c.call(filePath)
@@ -101,17 +118,17 @@ class Configurations<T> {
     }
 
     public CompositeConfigurationBuilder<T> fromXml(InputStream stream) {
-      sources << new XmlConfigSource(stream)
+      streams << new StreamSource(StreamSource.SourceType.XML, stream)
       this
     }
 
     public CompositeConfigurationBuilder<T> fromProperties(InputStream stream) {
-      sources << new PropertiesConfigSource(stream)
+      streams << new StreamSource(StreamSource.SourceType.Properties, stream)
       this
     }
 
     public CompositeConfigurationBuilder<T> fromGroovyConfig(InputStream stream) {
-      sources << new GroovyConfigSource(stream)
+      streams << new StreamSource(StreamSource.SourceType.Groovy, stream)
       this
     }
 
@@ -121,6 +138,8 @@ class Configurations<T> {
     }
 
     public T done() {
+      loadAllSources()
+
       if (sources.isEmpty()) throw new ConfigurationException("No valid sources configured!")
       if (enabledFeatures.contains(Feature.Defaults)) sources << new DefaultConfigSource()
 
@@ -128,6 +147,16 @@ class Configurations<T> {
         withExceptionOnNullValue(withCaching(new CompositeConfigSource(sources
           .collect { withValidation(it) }
         )))).getMapAsInterface(configInterface)
+    }
+
+    private loadAllSources() {
+      streams.each { streamSource ->
+        switch (streamSource.type) {
+          case StreamSource.SourceType.XML: sources << new XmlConfigSource(streamSource.stream); break
+          case StreamSource.SourceType.Properties: sources << new PropertiesConfigSource(streamSource.stream); break
+          case StreamSource.SourceType.Groovy: sources << new GroovyConfigSource(streamSource.stream); break
+        }
+      }
     }
 
 

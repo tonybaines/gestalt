@@ -8,7 +8,7 @@ import groovy.util.logging.Slf4j
 class XmlConfigSource extends BaseConfigSource {
 
   XmlConfigSource(InputStream inputStream) {
-    config = new XmlParser().parse(inputStream)
+    this.config = new XmlParser().parse(inputStream)
   }
 
   private XmlConfigSource(Node node) {

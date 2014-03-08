@@ -18,6 +18,7 @@ class DynoClass<T> {
         else return new DynoClass(source).getMapAsInterface(method.returnType, prefix + propName)
       }
     }
+    map."toString" = { "Proxy for ${configInterface.simpleName}" }
     return map.asType(configInterface)
   }
 }

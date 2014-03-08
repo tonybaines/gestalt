@@ -3,7 +3,7 @@ package com.github.tonybaines.gestalt
 import java.lang.reflect.Method
 
 class ConfigurationException extends RuntimeException {
-  ConfigurationException(String message, Exception cause) {
+  ConfigurationException(String message, Throwable cause) {
     super(message, cause)
   }
 
