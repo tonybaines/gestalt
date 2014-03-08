@@ -9,7 +9,8 @@ import javax.validation.constraints.NotNull
 class GroovyConfigSource extends BaseConfigSource {
 
   GroovyConfigSource(@NotNull InputStream inputStream, constants) {
-    config = new ConfigSlurper().parse(inputStream.text).values().first()
+    super.config = new ConfigSlurper().parse(inputStream.text).values().first()
+    super.constants = constants
   }
 
   private GroovyConfigSource(Object node) {

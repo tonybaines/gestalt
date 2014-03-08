@@ -12,7 +12,8 @@ class PropertiesConfigSource extends BaseConfigSource {
     if (inputStream == null) throw new ConfigurationException('Null input source')
     def propsFile = new Properties()
     propsFile.load(inputStream)
-    config = new ConfigSlurper().parse(propsFile)
+    super.config = new ConfigSlurper().parse(propsFile)
+    super.constants = constants
   }
 
   private PropertiesConfigSource(Object node) {

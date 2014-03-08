@@ -1,19 +1,25 @@
 package com.github.tonybaines.gestalt
 
 import spock.lang.Specification
+import spock.lang.Unroll
 
 class ConstantsInjectionSpec extends Specification {
 
-  def "constant values from a Map can be injected and used"() {
+  @Unroll
+  def "constant values from a Map can be injected and used (#name)"() {
     given: "a config source that contains references to constants"
-    SimpleConfig config = Configurations
-      .definedBy(SimpleConfig)
-      .fromXmlResource("simple-config-with-constant-refs.xml")
+    SimpleConfig config = builder
       .withConstants(['BAR': 'bar'])
       .done()
 
     expect:
     config.name == "bar"
+
+    where:
+    name           | builder
+    'XML'          | Configurations.definedBy(SimpleConfig).fromXmlResource("simple-config-with-constant-refs.xml")
+    'Properties'   | Configurations.definedBy(SimpleConfig).fromPropertiesResource("simple-config-with-constant-refs.properties")
+    'GroovyConfig' | Configurations.definedBy(SimpleConfig).fromGroovyConfigResource("simple-config-with-constant-refs.groovy")
 
   }
 
