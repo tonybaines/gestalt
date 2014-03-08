@@ -66,7 +66,7 @@ The interface you use to describe your configuration needs to follow some rules,
 are used to exercise all the features, and are also commented to explain non-obvious behaviour
 
 ### Method Names
-You need to follow the Java Bean conventions for property access, basically ```getFoo()``` with the option of ```hasFoo()``` for ```boolean``` properties
+You need to follow the Java Bean conventions for property access, basically ```getFoo()``` with the option of ```isFoo()``` for ```boolean``` properties
 
 The name of the method and the content of the configuration resource need to match e.g.
 
@@ -109,7 +109,7 @@ public interface TopLevelConfig {
 
 public interface SecondLevelConfig {
     String getFoo();
-    Boolean hasBar();
+    Boolean isBar();
 }
 ```
 
@@ -132,6 +132,43 @@ public interface ThingConfig {
 ```
 
 So a lookup to ```config.getSize()``` when the value isn't explicitly defined will return ```42```
+
+### Constants
+Sometimes it's useful to able to declare and reuse constant values multiple times in a configuration, perhaps
+on a per-user or per-host basis.  The ```withConstants(...)``` & ```withConstantsFromResource(...)```
+methods inject a ```Map``` or ```Properties``` instance containing simple key-value
+definitions for constants e.g.
+
+```properties
+NAME = bar
+LEVEL = 11
+ENABLED = true
+```
+
+The configuration file references the constants using their keys, wrapped in ```%{...}``` e.g.
+```xml
+<simple>
+    <name>%{NAME}</name>
+    <level>11</level>
+    <enabled>%{ENABLED}</enabled>
+    <sub>
+      <id>%{NAME}</id>
+      <switched-on>%{ENABLED}</switched-on>
+    </sub>
+</simple>
+```
+
+... and brought together like this.
+
+```java
+// This could be created
+SimpleConfig config = Configurations.definedBy(SimpleConfig.class)
+        .fromGroovyConfigResource("config.xml")
+        .withConstantsFromResource("constants.properties")
+        .done();
+```
+
+
 
 ### Multiple sources
 

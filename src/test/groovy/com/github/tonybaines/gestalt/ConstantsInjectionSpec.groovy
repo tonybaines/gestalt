@@ -9,11 +9,13 @@ class ConstantsInjectionSpec extends Specification {
   def "constant values from a Map can be injected and used (#name)"() {
     given: "a config source that contains references to constants"
     SimpleConfig config = builder
-      .withConstants(['BAR': 'bar'])
+      .withConstants(['NAME': 'bar', 'LEVEL': '11', 'ENABLED': 'true'])
       .done()
 
     expect:
     config.name == "bar"
+    config.level == 11
+    config.enabled == true
 
     where:
     name           | builder

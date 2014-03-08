@@ -1,3 +1,5 @@
 simple {
-  name = '%{BAR}'
+  name = '%{NAME}'
+  level = '%{LEVEL}'
+  enabled = '%{ENABLED}'
 }

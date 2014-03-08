@@ -12,7 +12,5 @@ class PendingSpec extends Specification {
 
   def "Configuration can be loaded from an Apache Commons Configuration source"() {}
 
-  def "Constants can be defined and reused"() {}
-
   def "Changes to persisted stores are reflected without a restart"() {}
 }

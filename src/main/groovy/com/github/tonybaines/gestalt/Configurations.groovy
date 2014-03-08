@@ -63,6 +63,7 @@ class Configurations<T> {
     private Map<String, String> constants = [:]
     private List<StreamSource> streams = []
 
+
     @TupleConstructor
     private static final class StreamSource {
       public enum SourceType {
@@ -106,6 +107,17 @@ class Configurations<T> {
       this.constants = constants
       this
     }
+
+    public CompositeConfigurationBuilder<T> withConstants(Properties props) {
+      withConstants(props.asImmutable() as Map<String, String>)
+    }
+
+    public CompositeConfigurationBuilder<T> withConstantsFromResource(String filePath, Class clazz = null) {
+      Properties props = new Properties()
+      props.load(resourceAsStream(filePath, clazz))
+      withConstants(props)
+    }
+
 
     private def tryToLoadWith(behaviours, filePath, Closure c) {
       try {

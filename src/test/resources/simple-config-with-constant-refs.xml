@@ -1,3 +1,5 @@
 <simple>
-    <name>%{BAR}</name>
+    <name>%{NAME}</name>
+    <level>%{LEVEL}</level>
+    <enabled>%{ENABLED}</enabled>
 </simple>

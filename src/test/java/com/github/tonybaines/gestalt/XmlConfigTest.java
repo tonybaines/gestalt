@@ -33,4 +33,13 @@ public class XmlConfigTest {
         Configurations.definedBy(SimpleConfig.class).fromXmlResource("com/github/tonybaines/gestalt/config/simple-config.xml").done();
         Configurations.definedBy(SimpleConfig.class).fromXmlResource("config/simple-config.xml", this.getClass()).done();
     }
+
+    @Test
+    public void constantsCanBeInjectedFromAPropertiesObject() throws Exception {
+        SimpleConfig config = Configurations.definedBy(SimpleConfig.class).fromGroovyConfigResource("simple-config-with-constant-refs.groovy").withConstantsFromResource("constants.properties").done();
+
+        assertThat(config.getName(), is("bar"));
+        assertThat(config.getLevel(), is(11));
+        assertThat(config.isEnabled(), is(true));
+    }
 }
