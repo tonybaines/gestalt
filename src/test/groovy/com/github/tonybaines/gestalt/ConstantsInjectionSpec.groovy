@@ -1,9 +1,7 @@
 package com.github.tonybaines.gestalt
 
-import spock.lang.Ignore
 import spock.lang.Specification
 
-@Ignore
 class ConstantsInjectionSpec extends Specification {
 
   def "constant values from a Map can be injected and used"() {

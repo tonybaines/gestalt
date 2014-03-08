@@ -6,9 +6,11 @@ import groovy.util.logging.Slf4j
 
 @Slf4j
 class XmlConfigSource extends BaseConfigSource {
+  private Map<String, String> constants = [:]
 
-  XmlConfigSource(InputStream inputStream) {
+  XmlConfigSource(InputStream inputStream, constants) {
     this.config = new XmlParser().parse(inputStream)
+    this.constants = constants
   }
 
   private XmlConfigSource(Node node) {
@@ -27,6 +29,16 @@ class XmlConfigSource extends BaseConfigSource {
 
   @Override
   protected String valueOf(node) {
+    final def expansionRegex = /%\{(.+)\}/
+
+    def value = stringValueOf(node)
+    if (value != null && value =~ expansionRegex) {
+      def matcher = value =~ expansionRegex
+      return constants."${matcher[0][1]}"
+    } else return value
+  }
+
+  private String stringValueOf(node) {
     if (node == null || node instanceof NodeList && node.isEmpty()) null
     else if (node instanceof String) node
     else node.text()

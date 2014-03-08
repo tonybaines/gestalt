@@ -8,7 +8,7 @@ import javax.validation.constraints.NotNull
 @Slf4j
 class GroovyConfigSource extends BaseConfigSource {
 
-  GroovyConfigSource(@NotNull InputStream inputStream) {
+  GroovyConfigSource(@NotNull InputStream inputStream, constants) {
     config = new ConfigSlurper().parse(inputStream.text).values().first()
   }
 

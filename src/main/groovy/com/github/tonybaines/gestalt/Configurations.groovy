@@ -152,9 +152,9 @@ class Configurations<T> {
     private loadAllSources() {
       streams.each { streamSource ->
         switch (streamSource.type) {
-          case StreamSource.SourceType.XML: sources << new XmlConfigSource(streamSource.stream); break
-          case StreamSource.SourceType.Properties: sources << new PropertiesConfigSource(streamSource.stream); break
-          case StreamSource.SourceType.Groovy: sources << new GroovyConfigSource(streamSource.stream); break
+          case StreamSource.SourceType.XML: sources << new XmlConfigSource(streamSource.stream, constants); break
+          case StreamSource.SourceType.Properties: sources << new PropertiesConfigSource(streamSource.stream, constants); break
+          case StreamSource.SourceType.Groovy: sources << new GroovyConfigSource(streamSource.stream, constants); break
         }
       }
     }
