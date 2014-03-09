@@ -12,7 +12,7 @@ class ConfigXmlSerialiser {
   }
 
   def toXmlString(Class configInterface) {
-    def writer = new StringWriter();
+    def writer = new StringWriter()
     new MarkupBuilder(writer)."${configInterface.simpleName}" interfaceToClosure(configInterface, instance)
     writer.toString()
   }
@@ -23,7 +23,7 @@ class ConfigXmlSerialiser {
 
   def interfaceToClosure(configInterface, object) {
     return {
-      configInterface.methods.each() { method ->
+      configInterface.methods.each { method ->
         def propName = Configurations.Utils.fromBeanSpec(method.name)
         def value = object."$propName"
 

@@ -1,6 +1,6 @@
 apply plugin: 'groovy'
 apply plugin: 'jacoco'
-apply plugin: 'findbugs'
+apply plugin: 'codenarc'
 apply plugin: 'jdepend'
 apply plugin: 'build-dashboard'
 apply plugin: 'eclipse'
@@ -91,10 +91,12 @@ nexus {
 }
 
 /* Static Analysis */
-findbugs {
+codenarc {
   ignoreFailures = true
+  configFile = file("${project.projectDir}/config/codenarc/codenarc.groovy")
+  toolVersion = "0.20"
 }
-tasks.withType(FindBugs) {
+tasks.withType(CodeNarc) {
   reports {
     xml.enabled = false
     html.enabled = true
