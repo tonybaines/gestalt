@@ -1,5 +1,6 @@
-build/
 .gradle
-gestalt.i*
 .idea/
+build/
+gestalt.i*
 out/
+tpull
