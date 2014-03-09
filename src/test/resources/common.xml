@@ -5,8 +5,7 @@
     <doubleValue>5.0</doubleValue>
     <booleanValue>true</booleanValue>
     <handedness>left</handedness>
-    <subConfig>
-        <intValue>6</intValue>
+    <subConfig intValue="6">
         <valueWhichIsDefinedToBreakValidationButHasADefault>XML</valueWhichIsDefinedToBreakValidationButHasADefault>
     </subConfig>
     <strings>

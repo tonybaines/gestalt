@@ -13,13 +13,13 @@ class GroovyConfigSource extends BaseConfigSource {
     super.constants = constants
   }
 
-  private GroovyConfigSource(Object node) {
-    super(node)
+  private GroovyConfigSource(Object node, constants) {
+    super(node, constants)
   }
 
   @Override
-  protected ConfigSource newInstanceAround(node) {
-    new GroovyConfigSource(node)
+  protected ConfigSource newInstanceAround(node, constants) {
+    new GroovyConfigSource(node, constants)
   }
 
   @Override

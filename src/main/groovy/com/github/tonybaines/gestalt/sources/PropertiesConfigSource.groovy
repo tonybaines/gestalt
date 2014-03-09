@@ -16,13 +16,13 @@ class PropertiesConfigSource extends BaseConfigSource {
     super.constants = constants
   }
 
-  private PropertiesConfigSource(Object node) {
-    super(node)
+  private PropertiesConfigSource(Object node, constants) {
+    super(node, constants)
   }
 
   @Override
-  protected ConfigSource newInstanceAround(node) {
-    new PropertiesConfigSource(node)
+  protected ConfigSource newInstanceAround(node, constants) {
+    new PropertiesConfigSource(node, constants)
   }
 
   @Override

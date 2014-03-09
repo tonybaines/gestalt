@@ -1,5 +1,7 @@
-<simple>
-    <name>%{NAME}</name>
-    <level>%{LEVEL}</level>
-    <enabled>%{ENABLED}</enabled>
-</simple>
+<top>
+    <simpleConfig>
+        <name>%{NAME}</name>
+        <level>%{LEVEL}</level>
+        <enabled>%{ENABLED}</enabled>
+    </simpleConfig>
+</top>

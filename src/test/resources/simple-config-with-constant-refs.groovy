@@ -1,5 +1,7 @@
-simple {
-  name = '%{NAME}'
-  level = '%{LEVEL}'
-  enabled = '%{ENABLED}'
+top{
+  simpleConfig {
+    name = '%{NAME}'
+    level = '%{LEVEL}'
+    enabled = '%{ENABLED}'
+  }
 }

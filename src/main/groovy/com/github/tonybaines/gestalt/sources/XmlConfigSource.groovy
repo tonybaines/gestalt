@@ -12,8 +12,8 @@ class XmlConfigSource extends BaseConfigSource {
     super.constants = constants
   }
 
-  private XmlConfigSource(Node node) {
-    super(node)
+  private XmlConfigSource(node, constants) {
+    super(node, constants)
   }
 
   @Override
@@ -22,8 +22,8 @@ class XmlConfigSource extends BaseConfigSource {
   }
 
   @Override
-  protected ConfigSource newInstanceAround(node) {
-    new XmlConfigSource(node)
+  protected ConfigSource newInstanceAround(node, constants) {
+    new XmlConfigSource(node, constants)
   }
 
   @Override
@@ -42,7 +42,15 @@ class XmlConfigSource extends BaseConfigSource {
 
   @Override
   protected def fallbackLookupStrategy(path, returnType) {
-    // Fall-back to looking up property as an XML attribute
-    return decoded(config."@${path.last()}", returnType)
+    def node
+    // Lookup as far as the penultimate element of the path
+    if (path.size() > 1) {
+      node = path[0..-2].inject(config) { acc, val -> acc."$val" }
+    }
+    else {
+      node = config
+    }
+    // then try looking up the property as an XML attribute
+    return decoded(node."@${path.last()}", returnType)
   }
 }

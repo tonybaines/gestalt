@@ -16,8 +16,9 @@ abstract class BaseConfigSource implements ConfigSource {
 
   protected BaseConfigSource() {}
 
-  BaseConfigSource(config) {
+  BaseConfigSource(config, constants) {
     this.config = config
+    this.constants = constants
   }
 
   @Override
@@ -64,11 +65,11 @@ abstract class BaseConfigSource implements ConfigSource {
       case Boolean: return constantAwareValueOf(node)?.toBoolean()
       case boolean: return constantAwareValueOf(node)?.toBoolean()
 
-      default: new DynoClass(newInstanceAround(node)).getMapAsInterface(returnType)
+      default: new DynoClass(newInstanceAround(node, constants)).getMapAsInterface(returnType)
     }
   }
 
-  protected abstract ConfigSource newInstanceAround(node)
+  protected abstract ConfigSource newInstanceAround(node, constants)
 
   protected abstract String valueOf(node)
 
