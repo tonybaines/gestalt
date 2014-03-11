@@ -1,3 +1,6 @@
+# [0.7.0](http://central.maven.org/maven2/com/github/tonybaines/gestalt/0.7.0) (2014-03-11)
+* Serialise to Properties
+
 # [0.6.1](http://central.maven.org/maven2/com/github/tonybaines/gestalt/0.6.1) (2014-03-09)
 * Bug fixes
 
