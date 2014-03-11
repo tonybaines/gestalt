@@ -1,7 +1,6 @@
 package com.github.tonybaines.gestalt
 
 import com.google.common.collect.Lists
-import org.junit.Ignore
 import spock.lang.Specification
 
 class PersistenceSpec extends Specification {
@@ -66,7 +65,6 @@ class PersistenceSpec extends Specification {
     xml.enabled == true
   }
 
-  @Ignore
   def "A config-interface instance can be transformed into a Properties instance"() {
     given:
     TestConfig configInstance = aNewConfigInstance()
@@ -84,6 +82,20 @@ class PersistenceSpec extends Specification {
     props.'things.0.stringValue' == "foo"
     props.'strings.0' == "foo"
     props.'strings.1' == "bar"
+  }
+
+  def "A Properties instance created from an instance can be converted back into an instance"() {
+    given: 'a config instance'
+    SimpleConfig fromString = Configurations.definedBy(SimpleConfig).fromXml(new ByteArrayInputStream(STATIC_XML.bytes)).done()
+
+    when: "it's turned into a String and re-parsed"
+    def props = Configurations.toProperties(fromString, SimpleConfig)
+    def roundTripped = Configurations.definedBy(SimpleConfig).fromProperties(props).done()
+
+    then:
+    roundTripped.name == "bar"
+    roundTripped.level == 42
+    roundTripped.enabled == true
   }
 
 

@@ -267,6 +267,20 @@ would produce something like
 </SimpleConfig>
 ```
 
+A ```Properties``` instance can also be used for persistence
+
+```java
+Properties props = Configurations.toProperties(configInstance, SimpleConfig.class);
+```
+
+... and a ```Properties``` instance can be used to build a Configuration instance
+
+```java
+ SimpleConfig config = Configurations.definedBy(SimpleConfig.class).fromProperties(props)```
+```
+
+One use-case for this would be to load/save ```Properties``` instances from/to a database, thereby allowing a Configuration instance to be stored and retrieved.
+
 ## See the specifications for more
 
 The features described above (and more) were developed from the specifications in [src/test/groovy/com/github/tonybaines/gestalt](src/test/groovy/com/github/tonybaines/gestalt/) , using the example config sources in [src/test/resources](src/test/resources).

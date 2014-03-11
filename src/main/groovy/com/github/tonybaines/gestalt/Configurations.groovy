@@ -65,17 +65,17 @@ class Configurations<T> {
   static class CompositeConfigurationBuilder<T> {
     private Class configInterface
     private Map<String, String> constants = [:]
-    private List<StreamSource> streams = []
+    private List<Source> streams = []
 
 
     @TupleConstructor
-    private static final class StreamSource {
+    private static final class Source {
       public enum SourceType {
-        XML, Groovy, Properties
+        XMLStream, GroovyStream, PropertiesStream, Properties
       }
 
       final SourceType type
-      final InputStream stream
+      final def source
     }
 
     CompositeConfigurationBuilder(Class<T> configInterface) {
@@ -134,17 +134,22 @@ class Configurations<T> {
     }
 
     public CompositeConfigurationBuilder<T> fromXml(InputStream stream) {
-      streams << new StreamSource(StreamSource.SourceType.XML, stream)
+      streams << new Source(Source.SourceType.XMLStream, stream)
       this
     }
 
     public CompositeConfigurationBuilder<T> fromProperties(InputStream stream) {
-      streams << new StreamSource(StreamSource.SourceType.Properties, stream)
+      streams << new Source(Source.SourceType.PropertiesStream, stream)
+      this
+    }
+
+    public CompositeConfigurationBuilder<T> fromProperties(Properties props) {
+      streams << new Source(Source.SourceType.Properties, props)
       this
     }
 
     public CompositeConfigurationBuilder<T> fromGroovyConfig(InputStream stream) {
-      streams << new StreamSource(StreamSource.SourceType.Groovy, stream)
+      streams << new Source(Source.SourceType.GroovyStream, stream)
       this
     }
 
@@ -166,11 +171,12 @@ class Configurations<T> {
     }
 
     private loadAllSources() {
-      streams.each { streamSource ->
-        switch (streamSource.type) {
-          case StreamSource.SourceType.XML: sources << new XmlConfigSource(streamSource.stream, constants); break
-          case StreamSource.SourceType.Properties: sources << new PropertiesConfigSource(streamSource.stream, constants); break
-          case StreamSource.SourceType.Groovy: sources << new GroovyConfigSource(streamSource.stream, constants); break
+      streams.each { source ->
+        switch (source.type) {
+          case Source.SourceType.XMLStream: sources << new XmlConfigSource(source.source, constants); break
+          case Source.SourceType.PropertiesStream: sources << new PropertiesConfigSource(source.source, constants); break
+          case Source.SourceType.Properties: sources << new PropertiesConfigSource(source.source, constants); break
+          case Source.SourceType.GroovyStream: sources << new GroovyConfigSource(source.source, constants); break
         }
       }
     }

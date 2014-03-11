@@ -16,6 +16,11 @@ class PropertiesConfigSource extends BaseConfigSource {
     super.constants = constants
   }
 
+  PropertiesConfigSource(Properties props, constants) {
+    super.config = new ConfigSlurper().parse(props)
+    super.constants = constants
+  }
+
   private PropertiesConfigSource(Object node, constants) {
     super(node, constants)
   }
