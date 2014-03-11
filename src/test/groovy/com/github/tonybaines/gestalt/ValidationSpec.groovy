@@ -49,7 +49,7 @@ class ValidationSpec extends Specification {
       .done()
 
     when:
-    Set<ConstraintViolation> validationResult = Configurations.validate(configuration, TestConfig)
+    Set<ConstraintViolation> validationResult = Configurations.validate(configuration)
     validationResult.each {
       println "${it.propertyPath}: ${it.message}"
     }

@@ -18,7 +18,7 @@ class Configurations<T> {
     new CompositeConfigurationBuilder<T>(configInterface)
   }
 
-  static def validate(Object instance, Class configInterface) {
+  static def validate(Object instance) {
     Validation.buildDefaultValidatorFactory().getValidator().validate(instance)
   }
 
