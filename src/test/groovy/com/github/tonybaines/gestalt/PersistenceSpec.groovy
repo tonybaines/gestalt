@@ -82,6 +82,8 @@ class PersistenceSpec extends Specification {
     props.'subConfig.intValue' == '42'
     props.'things.0.id' == "123abc"
     props.'things.0.stringValue' == "foo"
+    props.'strings.0' == "foo"
+    props.'strings.1' == "bar"
   }
 
 

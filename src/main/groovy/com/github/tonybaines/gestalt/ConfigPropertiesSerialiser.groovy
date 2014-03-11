@@ -15,14 +15,22 @@ class ConfigPropertiesSerialiser<T> {
     def props = new Properties()
     configInterface.declaredMethods.each { method ->
       def propName = Configurations.Utils.fromBeanSpec(method.name)
-      println "$propName [${method.returnType}]"
 
       def value = object."$propName"
       if (Configurations.Utils.returnsAValue(method) || method.returnType.enum) {
         props[fullKey(prefix, propName)] = value.toString()
       }
       else if (Configurations.Utils.isAList(method.genericReturnType)) {
-        // TODO
+        Class listGenericType = method.genericReturnType.actualTypeArguments[0]
+        value.eachWithIndex { it, indx ->
+          def fullPathWithIndex = fullKey(prefix, propName) + ".$indx"
+          if (Configurations.Utils.isAValueType(listGenericType)) {
+            props[fullPathWithIndex] = it.toString()
+          } else {
+            // A list of sub-types
+            props += propsFrom(listGenericType, it, fullPathWithIndex)
+          }
+        }
       }
       else {
         props += propsFrom(method.returnType, value, propName)
