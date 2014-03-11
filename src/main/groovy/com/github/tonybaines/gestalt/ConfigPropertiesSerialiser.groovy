@@ -8,32 +8,30 @@ class ConfigPropertiesSerialiser<T> {
   }
 
   public <T> Properties toProperties(T configInterface) {
-    List<String> paths = pathsFrom(configInterface).flatten()
-    def props = new Properties()
-
-    paths.sort().each { path ->
-      def value = path.split(/\./).inject(instance) { obj, prop -> obj."$prop" }.toString()
-      println "$path = $value"
-      if (value != null) props["$path"] = value
-    }
-
-    props
+    propsFrom(configInterface, instance)
   }
 
-  def pathsFrom(Class configInterface, prefix=null) {
-    configInterface.declaredMethods.collect { method ->
+  def propsFrom(Class configInterface, def object, prefix = null) {
+    def props = new Properties()
+    configInterface.declaredMethods.each { method ->
       def propName = Configurations.Utils.fromBeanSpec(method.name)
       println "$propName [${method.returnType}]"
 
+      def value = object."$propName"
       if (Configurations.Utils.returnsAValue(method) || method.returnType.enum) {
-        return ((prefix != null) ? prefix+'.': "") +propName
+        props[fullKey(prefix, propName)] = value.toString()
       }
       else if (Configurations.Utils.isAList(method.genericReturnType)) {
-        return propName // TODO
+        // TODO
       }
       else {
-        return pathsFrom(method.returnType, propName)
+        props += propsFrom(method.returnType, value, propName)
       }
     }
+    props
+  }
+
+  private String fullKey(prefix, propName) {
+    ((prefix != null) ? prefix + '.' : "") + propName
   }
 }
