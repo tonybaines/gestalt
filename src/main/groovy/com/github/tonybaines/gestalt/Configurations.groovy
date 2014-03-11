@@ -7,6 +7,7 @@ import com.github.tonybaines.gestalt.sources.features.ValidatingDecorator
 import groovy.transform.TupleConstructor
 import groovy.util.logging.Slf4j
 
+import javax.validation.Validation
 import java.beans.Introspector
 import java.lang.reflect.Method
 import java.lang.reflect.ParameterizedType
@@ -17,6 +18,9 @@ class Configurations<T> {
     new CompositeConfigurationBuilder<T>(configInterface)
   }
 
+  static def validate(Object instance, Class configInterface) {
+    Validation.buildDefaultValidatorFactory().getValidator().validate(instance)
+  }
 
   static class Utils {
     static String fromBeanSpec(String methodName) {

@@ -2,6 +2,8 @@ package com.github.tonybaines.gestalt
 
 import spock.lang.Specification
 
+import javax.validation.ConstraintViolation
+
 import static com.github.tonybaines.gestalt.Fixture.newCompositeConfiguration
 
 
@@ -37,5 +39,23 @@ class ValidationSpec extends Specification {
 
     expect:
     configuration.getSubConfig().getValueWhichIsDefinedToBreakValidationButHasADefault() == "fin"
+  }
+
+  def "Validating an entire instance"() {
+    given:
+    TestConfig configuration = Configurations.definedBy(TestConfig)
+      .fromPropertiesResource('common.properties')
+      .without(Configurations.Feature.Validation, Configurations.Feature.ExceptionOnNullValue)
+      .done()
+
+    when:
+    Set<ConstraintViolation> validationResult = Configurations.validate(configuration, TestConfig)
+    validationResult.each {
+      println "${it.propertyPath}: ${it.message}"
+    }
+
+    then:
+    validationResult.any { it.propertyPath.toString() == 'stringValueWhoseDefaultBreaksValidation' }
+    validationResult.any { it.propertyPath.toString() == 'integerThatIsTooLarge' }
   }
 }
