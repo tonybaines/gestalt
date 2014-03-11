@@ -46,8 +46,12 @@ class Configurations<T> {
     }
   }
 
-  static def toXml(instance, Class configInterface) {
+  static String toXml(instance, Class configInterface) {
     new ConfigXmlSerialiser(instance).toXmlString(configInterface)
+  }
+
+  static <T> Properties toProperties(instance, T configInterface) {
+    new ConfigPropertiesSerialiser(instance).toProperties(configInterface)
   }
 
   static enum Feature {

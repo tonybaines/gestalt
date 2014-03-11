@@ -67,7 +67,22 @@ class PersistenceSpec extends Specification {
   }
 
   @Ignore
-  def "A config-interface instance can be transformed into a Properties instance"() {}
+  def "A config-interface instance can be transformed into a Properties instance"() {
+    given:
+    TestConfig configInstance = aNewConfigInstance()
+
+    when:
+    Properties props = Configurations.toProperties(configInstance, TestConfig)
+
+    then:
+    props.intValue == '1'
+    props.handedness == 'left'
+    props.doubleValue == '42.5'
+    props.booleanValue == 'false'
+    props.'subConfig.intValue' == '42'
+    props.'things.0.id' == "123abc"
+    props.'things.0.stringValue' == "foo"
+  }
 
 
   private class UpdateableSimpleConfig implements SimpleConfig {
