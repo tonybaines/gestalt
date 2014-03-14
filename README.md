@@ -48,8 +48,10 @@ parameter and created as anonymous instances for test-injection.
 Using *Gestalt* can be as simple as
 
 ```java
-ThingConfig config =
-    Configurations.definedBy(ThingConfig.class).fromPropertiesResource("thing.properties").done();
+ThingConfig config = Configurations
+                         .definedBy(ThingConfig.class)
+                         .fromPropertiesResource("thing.properties")
+                         .done();
 
 assertEquals("foo", config.getName());
 assertEquals(7, config.getSize());
@@ -163,9 +165,9 @@ The configuration file references the constants using their keys, wrapped in ```
 ```java
 // This could be created
 SimpleConfig config = Configurations.definedBy(SimpleConfig.class)
-        .fromGroovyConfigResource("config.xml")
-        .withConstantsFromResource("constants.properties")
-        .done();
+                        .fromGroovyConfigResource("config.xml")
+                        .withConstantsFromResource("constants.properties")
+                        .done();
 ```
 
 
@@ -176,11 +178,11 @@ Multiple sources can be combined from XML, ```.properties``` and [GroovyConfig](
 
 ```java
 ThingConfig config = Configurations.definedBy(ThingConfig.class)
-        .fromPropertiesResource("common.properties")
-        .fromXmlResource("common.xml")
-        .fromGroovyConfigResource("common.groovy")
-        .fromPropertiesResource(System.getProperty("user.name")+".properties")
-        .done();
+                        .fromPropertiesResource("common.properties")
+                        .fromXmlResource("common.xml")
+                        .fromGroovyConfigResource("common.groovy")
+                        .fromPropertiesResource(System.getProperty("user.name")+".properties")
+                        .done();
 ```
 
 #### Optional Sources
@@ -198,10 +200,13 @@ The default is for a runtime exception to be thrown, this will also happen if th
 
 #### Locating Resources to load
 
-If your config source is in the root of the classpath it can be cumbersome to locate,
+If your config source is not in the root of the classpath it can be cumbersome to locate,
 
 ```java
-        Configurations.definedBy(SimpleConfig.class).fromXmlResource("com/github/tonybaines/gestalt/config/simple-config.xml").done();
+Configurations
+  .definedBy(SimpleConfig.class)
+  .fromXmlResource("com/github/tonybaines/gestalt/config/simple-config.xml")
+  .done();
 ```
 
 There is an overloaded version of the 'from...' methods which accepts a Class instance, which will be used for relative lookups if provided.
@@ -209,7 +214,10 @@ There is an overloaded version of the 'from...' methods which accepts a Class in
 e.g. if you have a Class in the package ```com.github.tonybaines.gestalt``` the path can be simplified as follows
 
 ```java
-        Configurations.definedBy(SimpleConfig.class).fromXmlResource("config/simple-config.xml", this.getClass()).done();
+Configurations
+  .definedBy(SimpleConfig.class)
+  .fromXmlResource("config/simple-config.xml", this.getClass())
+  .done();
 ```
 
 ### Validation
@@ -276,7 +284,7 @@ Properties props = Configurations.toProperties(configInstance, SimpleConfig.clas
 ... and a ```Properties``` instance can be used to build a Configuration instance
 
 ```java
- SimpleConfig config = Configurations.definedBy(SimpleConfig.class).fromProperties(props)```
+ SimpleConfig config = Configurations.definedBy(SimpleConfig.class).fromProperties(props)
 ```
 
 One use-case for this would be to load/save ```Properties``` instances from/to a database, thereby allowing a Configuration instance to be stored and retrieved.
