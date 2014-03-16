@@ -46,9 +46,7 @@ class ValidationSpec extends Specification {
 
     when:
     ValidationResult validationResult = Configurations.validate(configuration, TestConfig)
-    validationResult.each {
-      println "${it.property}: ${it.message}"
-    }
+    println validationResult
 
     then:
     validationResult.hasFailures()

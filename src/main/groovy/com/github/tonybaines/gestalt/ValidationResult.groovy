@@ -18,8 +18,19 @@ public class ValidationResult implements Iterable<ValidationResult> {
     !(items.isEmpty())
   }
 
+  @Override
+  String toString() {
+    items.join('\n')
+  }
+
   @Immutable
   public static final class Item {
     final String property, message
+    final List<String> propertyMetadata
+
+    @Override
+    String toString() {
+      return "$property (${propertyMetadata.join(', ')}) - $message"
+    }
   }
 }
