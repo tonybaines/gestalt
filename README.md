@@ -243,6 +243,25 @@ public interface ThingConfig {
 
 Any config source that defines a value which breaks the constraints has that property ignored, and *Gestalt* falls-back to the next available definition
 
+#### Whole-instance Validation Report
+Sometimes it's useful to know whether all the properties of an instance are configured or have defaults (perhaps in unit tests or where user input is possible).
+
+A instance can be checked, returning a ```ValidationResult```
+
+```java
+TestConfig configuration = Configurations.definedBy(TestConfig)
+      .fromPropertiesResource('common.properties')
+      .done();
+
+ValidationResult validationResult = Configurations.validate(configuration, TestConfig.class);
+
+assertTrue(validationResult.hasFailures());
+for(ValidationResult.Item item : validationResult) {
+    ...
+}
+
+```
+
 ### Disabling Features
 
 *Gestalt* features can be switched-off e.g. falling back to defaults and throwing an exception for undefined values can be disabled by calling
