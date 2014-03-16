@@ -2,10 +2,7 @@ package com.github.tonybaines.gestalt
 
 import spock.lang.Specification
 
-import javax.validation.ConstraintViolation
-
 import static com.github.tonybaines.gestalt.Fixture.newCompositeConfiguration
-
 
 class ValidationSpec extends Specification {
 
@@ -45,17 +42,18 @@ class ValidationSpec extends Specification {
     given:
     TestConfig configuration = Configurations.definedBy(TestConfig)
       .fromPropertiesResource('common.properties')
-      .without(Configurations.Feature.Validation, Configurations.Feature.ExceptionOnNullValue)
       .done()
 
     when:
-    Set<ConstraintViolation> validationResult = Configurations.validate(configuration)
+    ValidationResult validationResult = Configurations.validate(configuration, TestConfig)
     validationResult.each {
-      println "${it.propertyPath}: ${it.message}"
+      println "${it.property}: ${it.message}"
     }
 
     then:
-    validationResult.any { it.propertyPath.toString() == 'stringValueWhoseDefaultBreaksValidation' }
-    validationResult.any { it.propertyPath.toString() == 'integerThatIsTooLarge' }
+    validationResult.hasFailures()
+    validationResult.any { it.property == 'TestConfig.stringValueWhoseDefaultBreaksValidation' }
+    validationResult.any { it.property == 'TestConfig.integerThatIsTooLarge' }
+    validationResult.any { it.property == 'TestConfig.subConfig.booleanValueWhoseValueBreaksValidation' }
   }
 }
