@@ -1,3 +1,6 @@
+# [0.8.0](http://central.maven.org/maven2/com/github/tonybaines/gestalt/0.8.0) (2014-03-16)
+* Whole-instance validation checking/reporting
+
 # [0.7.0](http://central.maven.org/maven2/com/github/tonybaines/gestalt/0.7.0) (2014-03-11)
 * Serialise to Properties
 
