@@ -42,6 +42,8 @@ class Configurations<T> {
         case int: return true
         case Double: return true
         case double: return true
+        case Long: return true
+        case long: return true
         case Boolean: return true
         case boolean: return true
 

@@ -62,6 +62,8 @@ abstract class BaseConfigSource implements ConfigSource {
       case int: return constantAwareValueOf(node)?.toInteger()
       case Double: return constantAwareValueOf(node)?.toDouble()
       case double: return constantAwareValueOf(node)?.toDouble()
+      case Long: return constantAwareValueOf(node)?.toLong()
+      case long: return constantAwareValueOf(node)?.toLong()
       case Boolean: return constantAwareValueOf(node)?.toBoolean()
       case boolean: return constantAwareValueOf(node)?.toBoolean()
 

@@ -3,6 +3,7 @@
     <intValue>5</intValue>
     <stringValue>Five</stringValue>
     <doubleValue>5.0</doubleValue>
+    <longValue>42000000000</longValue>
     <booleanValue>true</booleanValue>
     <handedness>left</handedness>
     <subConfig intValue="6">

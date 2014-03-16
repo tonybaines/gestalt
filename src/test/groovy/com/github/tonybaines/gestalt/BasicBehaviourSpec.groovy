@@ -60,6 +60,7 @@ class BasicBehaviourSpec extends Specification {
     config.getStringValue() instanceof String
     config.getIntValue() instanceof Integer
     config.getDoubleValue() instanceof Double
+    config.getLongValue() instanceof Long
     config.isBooleanValue() instanceof Boolean
     config.getHandedness() instanceof Handed
     config.getSubConfig() instanceof TestConfig.SubConfigLevel1

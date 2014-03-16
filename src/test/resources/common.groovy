@@ -3,6 +3,7 @@ config {
   intValue = 5
   stringValue = 'Five'
   doubleValue = 5.0
+  longValue = 42000000000
   booleanValue = true
   handedness = 'left' // Don't want to import the enum definition into the config file
   subConfig {

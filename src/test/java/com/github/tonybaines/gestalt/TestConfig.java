@@ -2,6 +2,7 @@ package com.github.tonybaines.gestalt;
 
 
 import java.util.List;
+
 import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -16,6 +17,9 @@ public interface TestConfig {
     String getStringValue();
 
     double getDoubleValue();
+
+    @NotNull
+    long getLongValue();
 
     Boolean isBooleanValue();
 
