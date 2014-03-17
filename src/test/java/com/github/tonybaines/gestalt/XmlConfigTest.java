@@ -1,10 +1,14 @@
 package com.github.tonybaines.gestalt;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+
+import org.junit.Test;
+
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-import org.junit.Test;
 
 public class XmlConfigTest {
     @Test
@@ -41,5 +45,33 @@ public class XmlConfigTest {
         assertThat(config.getSimpleConfig().getName(), is("bar"));
         assertThat(config.getSimpleConfig().getLevel(), is(11));
         assertThat(config.getSimpleConfig().isEnabled(), is(true));
+    }
+
+    @Test
+    public void anInstanceLoadedFromAResourceCanBeValidated() throws Exception {
+        TestConfig testConfig = Configurations.definedBy(TestConfig.class).fromXmlResource("common.xml").done();
+        final ValidationResult validationResult = Configurations.validate(testConfig, TestConfig.class);
+        assertTrue(validationResult.hasFailures());
+    }
+
+    @Test
+    public void anInstanceCreatedAnonymouslyCanBeValidated() throws Exception {
+        SimpleConfig simpleConfig = new SimpleConfig() {
+            public String getName() {
+                return null;
+            }
+
+            public int getLevel() {
+                return 0;
+            }
+
+            public boolean isEnabled() {
+                return false;
+            }
+        };
+
+        final ValidationResult validationResult = Configurations.validate(simpleConfig, SimpleConfig.class);
+
+        assertFalse("Validation Result:\n" + validationResult, validationResult.hasFailures());
     }
 }

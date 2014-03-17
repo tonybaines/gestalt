@@ -1,8 +1,6 @@
 package com.github.tonybaines.gestalt
 
-import javax.validation.Validation
 import javax.validation.constraints.*
-import javax.validation.executable.ExecutableValidator
 import java.lang.annotation.Annotation
 import java.lang.reflect.Method
 
@@ -27,9 +25,6 @@ class ReflectionValidator {
       String propertyName = Configurations.Utils.fromBeanSpec(method.name)
       try {
         def value = object."${propertyName}"
-
-        ExecutableValidator validator = Validation.buildDefaultValidatorFactory().validator.forExecutables()
-        def validationResults = validator.validateReturnValue(configInterface, method, value)
 
         // Simple values
         if (Configurations.Utils.returnsAValue(method) || method.returnType.enum) return
