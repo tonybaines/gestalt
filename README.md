@@ -95,6 +95,7 @@ The following types (and their primitive counterparts where applicable) are supp
 * Integer
 * Boolean
 * Double
+* Long
 * Any ```Enum```
 * A ```List<T>``` where *T* **must** be declared for the reflection to work
 * Another Config interface (see below)
