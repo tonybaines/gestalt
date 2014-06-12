@@ -39,13 +39,9 @@ public interface ThingConfig {
   Boolean getEnabled();
 }
 ```
-
-If configuration options are represented by an instance of `ThingConfig` then they can be safely passed as a single
-parameter and created as anonymous instances for test-injection.
+<hr/>
 
 ## Getting Started
-
-Using *Gestalt* can be as simple as
 
 ```java
 ThingConfig config = Configurations
@@ -60,12 +56,12 @@ assertEquals(true, config.getEnabled());
 
 Your definition of the interface drives what properties are expected to be defined in the underlying source files.
 
-Follow the instructions in [INSTALLING](INSTALLING.md) to prepare your runtime environment/IDE.
+
+<hr/>
 
 ## Defining the Config interface
 
-The interface you use to describe your configuration needs to follow some rules, the [examples used in the tests](src/test/resources)
-are used to exercise all the features, and are also commented to explain non-obvious behaviour
+The interface you use to describe your configuration needs to follow some rules
 
 ### Method Names
 You need to follow the Java Bean conventions for property access, basically ```getFoo()``` with the option of ```isFoo()``` for ```boolean``` properties
@@ -90,7 +86,7 @@ or
 ```
 
 ### Types
-The following types (and their primitive counterparts where applicable) are supported as return types
+The following return-types are supported
 * String
 * Integer
 * Boolean
@@ -101,7 +97,7 @@ The following types (and their primitive counterparts where applicable) are supp
 * Another Config interface (see below)
 
 ### Hierarchy
-If your configuration requires nested types, then the return another interface e.g.
+If your configuration requires nested types, then the return another interface
 
 ```java
 public interface TopLevelConfig {
@@ -116,7 +112,9 @@ public interface SecondLevelConfig {
 }
 ```
 
-This can be repeated for as many levels as necessary
+Repeat as necessary
+
+<hr/>
 
 ### Default Values
 Out-of-the-box, an undefined property results in a runtime exception, but we can define defaults in the interface
@@ -135,6 +133,9 @@ public interface ThingConfig {
 ```
 
 So a lookup to ```config.getSize()``` when the value isn't explicitly defined will return ```42```
+
+
+<hr/>
 
 ### Constants
 Sometimes it's useful to able to declare and reuse constant values multiple times in a configuration, perhaps
@@ -172,6 +173,7 @@ SimpleConfig config = Configurations.definedBy(SimpleConfig.class)
 ```
 
 
+<hr/>
 
 ### Multiple sources
 
@@ -200,10 +202,11 @@ ThingConfig config = Configurations.definedBy(ThingConfig.class)
 The default is for a runtime exception to be thrown, this will also happen if there are no valid sources at all.
 
 
+<hr/>
 
 ### Validation
 
-Validation can be defined for one or more properties using the [JSR-303 Bean Validation annotations](http://docs.oracle.com/javaee/6/api/javax/validation/constraints/package-summary.html)  e.g.
+Validation can be defined for one or more properties using the [JSR-303 Bean Validation annotations](http://docs.oracle.com/javaee/6/api/javax/validation/constraints/package-summary.html)
 
 ```java
 public interface ThingConfig {
@@ -224,24 +227,8 @@ public interface ThingConfig {
 
 Any config source that defines a value which breaks the constraints has that property ignored, and *Gestalt* falls-back to the next available definition
 
-#### Whole-instance Validation Report
-Sometimes it's useful to know whether all the properties of an instance are configured or have defaults (perhaps in unit tests or where user input is possible).
 
-A instance can be checked, returning a ```ValidationResult```
-
-```java
-TestConfig configuration = Configurations.definedBy(TestConfig)
-      .fromPropertiesResource('common.properties')
-      .done();
-
-ValidationResult validationResult = Configurations.validate(configuration, TestConfig.class);
-
-assertTrue(validationResult.hasFailures());
-for(ValidationResult.Item item : validationResult) {
-    ...
-}
-
-```
+<hr/>
 
 ### Disabling Features
 
@@ -257,6 +244,9 @@ The switchable features are
 * ```Validation``` - don't validate values
 * ```Caching``` - by default the result of every lookup is cached, this switches it off
 * ```ExceptionOnNullValue``` - if disabled returns ```null``` if a value is undefined instead
+
+
+<hr/>
 
 ### Persisting
 
@@ -286,10 +276,3 @@ Properties props = Configurations.toProperties(configInstance, SimpleConfig.clas
 ```java
  SimpleConfig config = Configurations.definedBy(SimpleConfig.class).fromProperties(props)
 ```
-
-One use-case for this would be to load/save ```Properties``` instances from/to a database, thereby allowing a Configuration instance to be stored and retrieved.
-
-## See the specifications for more
-
-The features described above (and more) were developed from the specifications in [src/test/groovy/com/github/tonybaines/gestalt](src/test/groovy/com/github/tonybaines/gestalt/) , using the example config sources in [src/test/resources](src/test/resources).
-Please read the descriptions and bodies of the tests to see patterns of use and expected behaviour.
