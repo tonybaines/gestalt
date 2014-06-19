@@ -27,7 +27,7 @@ repositories {
 }
 dependencies {
   compile([
-    'org.codehaus.groovy:groovy-all:2.1.7+',
+    'org.codehaus.groovy:groovy-all:2.3.3',
     'com.google.guava:guava:15.0',
     'org.slf4j:slf4j-simple:1.6.1',
     'org.hibernate:hibernate-validator:5.1.0.CR1',
