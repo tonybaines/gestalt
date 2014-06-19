@@ -68,10 +68,21 @@ public class XmlConfigTest {
             public boolean isEnabled() {
                 return false;
             }
+
+            public String getDefaultOnly() {
+                return null;
+            }
         };
 
         final ValidationResult validationResult = Configurations.validate(simpleConfig, SimpleConfig.class);
 
         assertFalse("Validation Result:\n" + validationResult, validationResult.hasFailures());
     }
+
+    @Test
+    public void anUndefinedChildConfigValueRevertsToDefaultValue() throws Exception {
+        EnclosingInterface config = Configurations.definedBy(EnclosingInterface.class).fromXmlResource("simple-config-with-constant-refs.xml").done();
+        assertThat(config.getSimpleConfig().getDefaultOnly(), is("defaulted"));
+    }
+
 }

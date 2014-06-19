@@ -13,4 +13,8 @@ public interface SimpleConfig {
 
     @Default.Boolean(false)
     boolean isEnabled();
+
+    @Default.String("defaulted")
+    String getDefaultOnly();
+
 }

@@ -118,6 +118,9 @@ class PersistenceSpec extends Specification {
     boolean isEnabled() { this.enabled }
 
     void setEnabled(boolean enabled) { this.enabled = enabled }
+
+    @Override
+    String getDefaultOnly() { return "" }
   }
 
   private def STATIC_XML = """

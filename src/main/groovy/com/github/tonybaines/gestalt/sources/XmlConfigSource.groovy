@@ -28,7 +28,7 @@ class XmlConfigSource extends BaseConfigSource {
 
   @Override
   protected String valueOf(node) {
-    if (node == null || node instanceof NodeList && node.isEmpty()) null
+    if (node == null || node instanceof NodeList && (node.isEmpty() || node.every { it == null })) null
     else if (node instanceof String) node
     else node.text()
   }
