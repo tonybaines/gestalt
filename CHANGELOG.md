@@ -1,3 +1,7 @@
+# [0.8.2](http://central.maven.org/maven2/com/github/tonybaines/gestalt/0.8.2) (2014-06-26)
+* Issue #2 : Maven dependencies not working
+* Issue : XML parsing for undefined values below the topmost level (e.g. sub-interfaces) returned an empty string instead of null.
+
 # [0.8.1](http://central.maven.org/maven2/com/github/tonybaines/gestalt/0.8.1) (2014-03-17)
 * Minor bugfix
 
