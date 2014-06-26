@@ -251,7 +251,7 @@ A instance can be checked, returning a ```ValidationResult```
 
 ```java
 TestConfig configuration = Configurations.definedBy(TestConfig)
-      .fromPropertiesResource('common.properties')
+      .fromPropertiesResource("common.properties")
       .done();
 
 ValidationResult validationResult = Configurations.validate(configuration, TestConfig.class);
