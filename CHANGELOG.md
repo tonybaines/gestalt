@@ -1,3 +1,6 @@
+# [0.8.3](PENDING) (TBA)
+* Issue #8: (null values being serialised to a Properties instance)
+
 # [0.8.2](http://central.maven.org/maven2/com/github/tonybaines/gestalt/0.8.2) (2014-06-26)
 * Issue #2 : Maven dependencies not working
 * Issue : XML parsing for undefined values below the topmost level (e.g. sub-interfaces) returned an empty string instead of null.
