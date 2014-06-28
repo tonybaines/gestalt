@@ -9,10 +9,10 @@ public interface SimpleConfig {
     String getName();
 
     @Default.Integer(42)
-    int getLevel();
+    Integer getLevel();
 
     @Default.Boolean(false)
-    boolean isEnabled();
+    Boolean getEnabled();
 
     @Default.String("defaulted")
     String getDefaultOnly();

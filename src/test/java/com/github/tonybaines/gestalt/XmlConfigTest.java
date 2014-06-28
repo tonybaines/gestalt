@@ -1,14 +1,11 @@
 package com.github.tonybaines.gestalt;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-
-import org.junit.Test;
-
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
+import org.junit.Test;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.*;
 
 public class XmlConfigTest {
     @Test
@@ -44,7 +41,7 @@ public class XmlConfigTest {
 
         assertThat(config.getSimpleConfig().getName(), is("bar"));
         assertThat(config.getSimpleConfig().getLevel(), is(11));
-        assertThat(config.getSimpleConfig().isEnabled(), is(true));
+      assertThat(config.getSimpleConfig().getEnabled(), is(true));
     }
 
     @Test
@@ -61,11 +58,11 @@ public class XmlConfigTest {
                 return null;
             }
 
-            public int getLevel() {
+          public Integer getLevel() {
                 return 0;
             }
 
-            public boolean isEnabled() {
+          public Boolean getEnabled() {
                 return false;
             }
 

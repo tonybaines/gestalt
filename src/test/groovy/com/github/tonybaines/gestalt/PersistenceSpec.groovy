@@ -98,6 +98,25 @@ class PersistenceSpec extends Specification {
     roundTripped.enabled == true
   }
 
+  def "Issue #8: a properties object from an instance with a null value"() {
+    given:
+    SimpleConfig config = new SimpleConfig() {
+      String name = null
+      Integer level = null
+      Boolean enabled = null
+      String defaultOnly = null
+    }
+
+    when:
+    Properties roundTripped = Configurations.toProperties(config, SimpleConfig)
+
+    then:
+    roundTripped.name == null
+    roundTripped.level == null
+    roundTripped.enabled == null
+    roundTripped.defaultOnly == null
+  }
+
 
   private class UpdateableSimpleConfig implements SimpleConfig {
     private String name
@@ -110,12 +129,12 @@ class PersistenceSpec extends Specification {
     void setName(String name) { this.name = name }
 
     @Override
-    int getLevel() { this.level }
+    Integer getLevel() { this.level }
 
     void setLevel(int level) { this.level = level }
 
     @Override
-    boolean isEnabled() { this.enabled }
+    Boolean getEnabled() { this.enabled }
 
     void setEnabled(boolean enabled) { this.enabled = enabled }
 

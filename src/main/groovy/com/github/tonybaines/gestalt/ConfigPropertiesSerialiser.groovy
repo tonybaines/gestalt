@@ -18,14 +18,14 @@ class ConfigPropertiesSerialiser<T> {
 
       def value = object."$propName"
       if (Configurations.Utils.returnsAValue(method) || method.returnType.enum) {
-        props[fullKey(prefix, propName)] = value.toString()
+        if (value != null) props[fullKey(prefix, propName)] = value.toString()
       }
       else if (Configurations.Utils.isAList(method.genericReturnType)) {
         Class listGenericType = method.genericReturnType.actualTypeArguments[0]
         value.eachWithIndex { it, indx ->
           def fullPathWithIndex = fullKey(prefix, propName) + ".$indx"
           if (Configurations.Utils.isAValueType(listGenericType)) {
-            props[fullPathWithIndex] = it.toString()
+            if (it != null) props[fullPathWithIndex] = it.toString()
           } else {
             // A list of sub-types
             props += propsFrom(listGenericType, it, fullPathWithIndex)
