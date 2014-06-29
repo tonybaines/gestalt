@@ -1,4 +1,4 @@
-# [0.8.3](PENDING) (TBA)
+# [0.8.3](http://central.maven.org/maven2/com/github/tonybaines/gestalt/0.8.3) (2014-06-29)
 * Issue #8: (null values being serialised to a Properties instance)
 
 # [0.8.2](http://central.maven.org/maven2/com/github/tonybaines/gestalt/0.8.2) (2014-06-26)
