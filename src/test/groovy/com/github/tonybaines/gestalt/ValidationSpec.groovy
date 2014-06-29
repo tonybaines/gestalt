@@ -1,6 +1,9 @@
 package com.github.tonybaines.gestalt
 
 import spock.lang.Specification
+import spock.lang.Unroll
+
+import javax.validation.constraints.NotNull
 
 import static com.github.tonybaines.gestalt.Fixture.newCompositeConfiguration
 
@@ -53,5 +56,30 @@ class ValidationSpec extends Specification {
     validationResult.any { it.property == 'TestConfig.stringValueWhoseDefaultBreaksValidation' }
     validationResult.any { it.property == 'TestConfig.integerThatIsTooLarge' }
     validationResult.any { it.property == 'TestConfig.subConfig.booleanValueWhoseValueBreaksValidation' }
+  }
+
+  @Unroll
+  def "Issue #7: Validating an instance where a mandatory value is null for #configInterface"() {
+    when:
+    ValidationResult validationResult = Configurations.validate(configuration, configInterface)
+    println validationResult
+
+    then:
+    validationResult.hasFailures()
+
+    where:
+    configuration                                                                                   | configInterface
+    Configurations.definedBy(Wrapper).fromProperties(new Properties()).done()                       | Wrapper
+    Configurations.definedBy(ValidatingANullMandatoryValue).fromProperties(new Properties()).done() | ValidatingANullMandatoryValue
+
+  }
+
+  interface Wrapper {
+    public ValidatingANullMandatoryValue getSubLevel()
+  }
+
+  interface ValidatingANullMandatoryValue {
+    @NotNull
+    public Integer getPort()
   }
 }

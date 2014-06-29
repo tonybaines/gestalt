@@ -48,7 +48,7 @@ class ReflectionValidator {
     }
   }
 
-  private def annotationInfo(Method method) {
+  private static def annotationInfo(Method method) {
     def info = []
     method.declaredAnnotations.each { Annotation a ->
       Class type = a.annotationType()
