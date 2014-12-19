@@ -82,6 +82,7 @@ class PersistenceSpec extends Specification {
     props.'things.0.stringValue' == "foo"
     props.'strings.0' == "foo"
     props.'strings.1' == "bar"
+    props.'subConfig.l2.level3Property' == 'baz'
   }
 
   def "A Properties instance created from an instance can be converted back into an instance"() {
@@ -164,7 +165,6 @@ class PersistenceSpec extends Specification {
 
       Handed getHandedness() { Handed.left }
 
-//      TestConfig.SubConfigLevel1 getSubConfig() {null}
       TestConfig.SubConfigLevel1 getSubConfig() {
         new TestConfig.SubConfigLevel1() {
           Integer getIntValue() { 42 }
@@ -172,6 +172,12 @@ class PersistenceSpec extends Specification {
           boolean getBooleanValueWhoseValueBreaksValidation() { false }
 
           String getValueWhichIsDefinedToBreakValidationButHasADefault() { "bar" }
+
+          TestConfig.SubConfigLevel2 getL2() { return new TestConfig.SubConfigLevel2() {
+            String getLevel3Property() {
+              return "baz"
+            }
+          } }
         }
       }
 

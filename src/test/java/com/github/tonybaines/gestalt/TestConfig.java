@@ -83,6 +83,13 @@ public interface TestConfig {
         @Pattern(regexp = "f.*")
         @Default.String("fin")
         String getValueWhichIsDefinedToBreakValidationButHasADefault();
+
+        SubConfigLevel2 getL2();
+    }
+
+    public static interface SubConfigLevel2 {
+        @Default.String("foobar")
+        String getLevel3Property();
     }
 
     public static interface Thing {

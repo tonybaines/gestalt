@@ -33,7 +33,7 @@ class ConfigPropertiesSerialiser<T> {
         }
       }
       else {
-        props += propsFrom(method.returnType, value, propName)
+        props += propsFrom(method.returnType, value, fullKey(prefix, propName))
       }
     }
     props
