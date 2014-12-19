@@ -1,5 +1,5 @@
 # [0.8.4](PENDING)
-* Issue #9: Converting top a Properties instance mor ethan two levels deep fails
+* Issue #9: Converting to a Properties instance more than two levels deep fails
 
 # [0.8.3](http://central.maven.org/maven2/com/github/tonybaines/gestalt/0.8.3) (2014-06-29)
 * Issue #8: (null values being serialised to a Properties instance)
