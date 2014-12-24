@@ -1,4 +1,5 @@
 # [0.8.4](PENDING)
+* Issue #10: Converting to a Properties instance more than two levels deep fails
 * Issue #9: Converting to a Properties instance more than two levels deep fails
 
 # [0.8.3](http://central.maven.org/maven2/com/github/tonybaines/gestalt/0.8.3) (2014-06-29)

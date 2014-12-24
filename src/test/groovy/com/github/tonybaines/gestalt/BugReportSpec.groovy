@@ -1,20 +1,28 @@
 package com.github.tonybaines.gestalt
 
-import issue10.Eventing
 import spock.lang.Specification
 
 class BugReportSpec extends Specification {
+  public interface Eventing {
+    MetricsConfig getMetrics()
+  }
+  interface MetricsConfig {
+//    @Default.Boolean(false)
+    boolean isJvmGaugesEnabled();
+  }
 
-  def "Issue ???????: NPE when accessing a missing value"() {
-    expect:
+  def "Issue 12: NPE when accessing a missing primitive value"() {
+    given:
     Eventing configInstance = Configurations.definedBy(Eventing)
       .without(Configurations.Feature.Validation)
       .without(Configurations.Feature.ExceptionOnNullValue)
-      .fromXmlResource('issue-10.xml')
+      .fromXml(new ByteArrayInputStream('<Eventing/>'.bytes))
       .done()
 
-    configInstance.metrics == null
-    configInstance.metrics.jvmGaugesEnabled == null
+    when:
+    configInstance.metrics.isJvmGaugesEnabled() == null
 
+    then:
+    thrown(NullPointerException)
   }
 }

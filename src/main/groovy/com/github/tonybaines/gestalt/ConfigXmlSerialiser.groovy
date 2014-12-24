@@ -27,7 +27,6 @@ class ConfigXmlSerialiser {
         def propName = Configurations.Utils.fromBeanSpec(method.name)
 
         def value = object."$propName"
-
         // Simple values
         if (Configurations.Utils.returnsAValue(method) || method.returnType.enum) {
           "$propName"(value)
@@ -51,11 +50,7 @@ class ConfigXmlSerialiser {
         // a single sub-type
         else {
           if (value != null) {
-            println method.returnType
-            def subValue = interfaceToClosure(method.returnType, value)
-            if (subValue != null) {
-              "$propName"(subValue)
-            }
+            "$propName"(interfaceToClosure(method.returnType, value))
           }
           else "$propName"()
         }
