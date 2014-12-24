@@ -13,10 +13,12 @@ class BugReportSpec extends Specification {
       .fromXmlResource('issue-10.xml')
       .done()
     when:
-    Configurations.toXml(configInstance, Eventing)
+    println configInstance.getMetrics().class
+
+    String xml = Configurations.toXml(configInstance, Eventing)
 
     then:
-    thrown(NullPointerException)
+    xml != null
 
   }
 }
