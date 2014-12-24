@@ -309,6 +309,14 @@ Properties props = Configurations.toProperties(configInstance, SimpleConfig.clas
 
 One use-case for this would be to load/save ```Properties``` instances from/to a database, thereby allowing a Configuration instance to be stored and retrieved.
 
+Java ```Properties``` are backed by a ```Hashtable``` which doesn't allow ```null``` values, if you'd like the serialised ```Properties``` to include these keys
+then the serialisation can set their value to 'UNDEFINED'
+
+
+```java
+Properties props = Configurations.toProperties(configInstance, SimpleConfig.class, PropertiesSerialiserFeatures.MissingValuesAsUndefined);
+```
+
 ## See the specifications for more
 
 The features described above (and more) were developed from the specifications in [src/test/groovy/com/github/tonybaines/gestalt](src/test/groovy/com/github/tonybaines/gestalt/) , using the example config sources in [src/test/resources](src/test/resources).

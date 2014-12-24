@@ -28,7 +28,7 @@ class PersistenceSpec extends Specification {
 
   }
 
-  def "An instance created from an external source can be persisted"() {
+  def "An instance created from an external source can be persisted [XML]"() {
     given: 'a config instance'
     SimpleConfig fromString = Configurations.definedBy(SimpleConfig).fromXml(new ByteArrayInputStream(STATIC_XML.bytes)).done()
 
@@ -38,13 +38,25 @@ class PersistenceSpec extends Specification {
     SimpleConfig roundTripped = Configurations.definedBy(SimpleConfig).fromXml(new ByteArrayInputStream(xmlString.bytes)).done()
 
     then:
-    fromString.name == "bar"
-    fromString.level == 42
-    fromString.enabled == true
+    fromString.name == roundTripped.name
+    fromString.level == roundTripped.level
+    fromString.enabled == roundTripped.enabled
 
-    roundTripped.name == "bar"
-    roundTripped.level == 42
-    roundTripped.enabled == true
+  }
+
+  def "An instance created from an external source can be persisted [Properties]"() {
+    given: 'a config instance'
+    SimpleConfig propsFromFile = Configurations.definedBy(SimpleConfig).fromPropertiesResource('simple-config-with-constant-refs.properties').done()
+
+    when: "it's turned into a String and re-parsed"
+    def props = Configurations.toProperties(propsFromFile, SimpleConfig)
+    println props
+    SimpleConfig roundTripped = Configurations.definedBy(SimpleConfig).fromProperties(props).done()
+
+    then:
+    propsFromFile.name == roundTripped.name
+    propsFromFile.level == roundTripped.level
+    propsFromFile.enabled == roundTripped.enabled
 
   }
 
@@ -116,6 +128,21 @@ class PersistenceSpec extends Specification {
     roundTripped.level == null
     roundTripped.enabled == null
     roundTripped.defaultOnly == null
+  }
+
+  def "Issue 10: NPE when serialising a config instance with null/missing values [Properties]"() {
+    given:
+    A configInstance = new A() {
+      B getB() { return new B() {
+        C getC() { return null }
+      } }
+    }
+    when:
+    Properties properties = Configurations.toProperties(configInstance, A)
+
+    then:
+    properties.'b.c' == null
+
   }
 
 
