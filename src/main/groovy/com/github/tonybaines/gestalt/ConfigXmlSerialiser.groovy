@@ -21,10 +21,11 @@ class ConfigXmlSerialiser {
    * seem to work when dealing with the closures expected by MarkupBuilder
    */
 
-  def interfaceToClosure(configInterface, object) {
+  def interfaceToClosure(Class configInterface, object) {
     return {
       configInterface.methods.each { method ->
         def propName = Configurations.Utils.fromBeanSpec(method.name)
+
         def value = object."$propName"
 
         // Simple values
@@ -49,7 +50,13 @@ class ConfigXmlSerialiser {
         }
         // a single sub-type
         else {
-          if (value != null) "$propName"(interfaceToClosure(method.returnType, value))
+          if (value != null) {
+            println method.returnType
+            def subValue = interfaceToClosure(method.returnType, value)
+            if (subValue != null) {
+              "$propName"(subValue)
+            }
+          }
           else "$propName"()
         }
       }

@@ -5,20 +5,16 @@ import spock.lang.Specification
 
 class BugReportSpec extends Specification {
 
-  def "Issue 10: NPE when serialising a config instance with null/missing values [XML Serialisation]"() {
-    given:
+  def "Issue ???????: NPE when accessing a missing value"() {
+    expect:
     Eventing configInstance = Configurations.definedBy(Eventing)
       .without(Configurations.Feature.Validation)
       .without(Configurations.Feature.ExceptionOnNullValue)
       .fromXmlResource('issue-10.xml')
       .done()
-    when:
-    println configInstance.getMetrics().class
 
-    String xml = Configurations.toXml(configInstance, Eventing)
-
-    then:
-    xml != null
+    configInstance.metrics == null
+    configInstance.metrics.jvmGaugesEnabled == null
 
   }
 }
