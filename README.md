@@ -278,6 +278,12 @@ The switchable features are
 * ```Caching``` - by default the result of every lookup is cached, this switches it off
 * ```ExceptionOnNullValue``` - if disabled returns ```null``` if a value is undefined instead
 
+> **WARNING**: If the configuration interfaces define methods which return primitives, and if 
+> ```ExceptionOnNullValue``` is switched off, then a non-obvious exception is thrown anyway for 
+> any attempt to access the undefined primitive value!
+> 
+> Workarounds include switching to the object wrappers (e.g. boolean -> Boolean) and defining defaults 
+
 ### Persisting
 
 An existing instance of the config-interface can be turned into the appropriate XML-string (ready to be persisted through the mechanism of your choice)

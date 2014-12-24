@@ -1,4 +1,5 @@
 # [0.8.4](PENDING)
+* Issue #12: NPE when accessing unassigned primitive values (fixed in README.md)
 * Issue #10: Converting to a Properties instance more than two levels deep fails
 * Issue #9: Converting to a Properties instance more than two levels deep fails
 
