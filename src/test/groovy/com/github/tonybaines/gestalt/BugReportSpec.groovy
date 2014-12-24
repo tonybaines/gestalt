@@ -1,15 +1,19 @@
 package com.github.tonybaines.gestalt
 
+import issue10.Eventing
 import spock.lang.Specification
 
 class BugReportSpec extends Specification {
 
   def "Issue 10: NPE when serialising a config instance with null/missing values [XML Serialisation]"() {
     given:
-    A configInstance = Configurations.definedBy(A).without(Configurations.Feature.ExceptionOnNullValue, Configurations.Feature.Validation)
-      .fromXml(new StringBufferInputStream("""<a><b><c/></b></a>""")).done()
+    Eventing configInstance = Configurations.definedBy(Eventing)
+      .without(Configurations.Feature.Validation)
+      .without(Configurations.Feature.ExceptionOnNullValue)
+      .fromXmlResource('issue-10.xml')
+      .done()
     when:
-    Configurations.toXml(configInstance, A)
+    Configurations.toXml(configInstance, Eventing)
 
     then:
     thrown(NullPointerException)
