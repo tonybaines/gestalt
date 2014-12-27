@@ -278,11 +278,11 @@ The switchable features are
 * ```Caching``` - by default the result of every lookup is cached, this switches it off
 * ```ExceptionOnNullValue``` - if disabled returns ```null``` if a value is undefined instead
 
-> **WARNING**: If the configuration interfaces define methods which return primitives, and if 
-> ```ExceptionOnNullValue``` is switched off, then a non-obvious exception is thrown anyway for 
+> **WARNING**: If the configuration interfaces define methods which return primitives, and if
+> ```ExceptionOnNullValue``` is switched off, then a non-obvious exception is thrown anyway for
 > any attempt to access the undefined primitive value!
-> 
-> Workarounds include switching to the object wrappers (e.g. boolean -> Boolean) and defining defaults 
+>
+> Workarounds include switching to the object wrappers (e.g. boolean -> Boolean) and defining defaults
 
 ### Persisting
 
@@ -321,6 +321,34 @@ then the serialisation can set their value to 'UNDEFINED'
 
 ```java
 Properties props = Configurations.toProperties(configInstance, SimpleConfig.class, PropertiesSerialiserFeatures.MissingValuesAsUndefined);
+```
+
+#### Persistence with Customised Naming
+When serialising to/from XML or Properties files it may be more idiomatic to generate and read e.g. ```Properties``` files of the form
+
+```properties
+thing.sub-level.name='foo'
+thing.a-different-section.size=7
+```
+
+or
+
+```xml
+<thing>
+  <some-sub-config>42</some-sub-config>
+</thing>
+```
+
+rather than the default ```camelCase```.
+
+By specifying a ```PropertyNameTransformer``` implementation (just a single method ```String fromPropertyName(String propertyName)```) when serialising **and de-serialising** the results can be customised.
+
+E.g. Using the supplied ```HyphenatedPropertyNameTransformer```
+
+```java
+Properties props = Configurations.toProperties(configInstance, SimpleConfig.class, new HyphenatedPropertyNameTransformer())
+...
+SimpleConfig config = Configurations.definedBy(SimpleConfig.class).fromProperties(props, new HyphenatedPropertyNameTransformer())
 ```
 
 ## See the specifications for more

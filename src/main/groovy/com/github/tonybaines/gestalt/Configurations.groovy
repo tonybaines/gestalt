@@ -4,6 +4,9 @@ import com.github.tonybaines.gestalt.sources.*
 import com.github.tonybaines.gestalt.sources.features.CachingDecorator
 import com.github.tonybaines.gestalt.sources.features.ExceptionOnNullValueDecorator
 import com.github.tonybaines.gestalt.sources.features.ValidatingDecorator
+import com.github.tonybaines.gestalt.transformers.DefaultPropertyNameTransformer
+import com.github.tonybaines.gestalt.transformers.HyphenatedPropertyNameTransformer
+import com.github.tonybaines.gestalt.transformers.PropertyNameTransformer
 import groovy.transform.TupleConstructor
 import groovy.util.logging.Slf4j
 
@@ -51,12 +54,12 @@ class Configurations<T> {
     }
   }
 
-  static String toXml(instance, Class configInterface) {
-    new ConfigXmlSerialiser(instance).toXmlString(configInterface)
+  static String toXml(instance, Class configInterface, PropertyNameTransformer propertyNameTransformer = new DefaultPropertyNameTransformer()) {
+    new ConfigXmlSerialiser(instance, propertyNameTransformer).toXmlString(configInterface)
   }
 
-  static <T> Properties toProperties(instance, T configInterface) {
-    new ConfigPropertiesSerialiser(instance).toProperties(configInterface)
+  static <T> Properties toProperties(instance, T configInterface, PropertyNameTransformer propertyNameTransformer = new DefaultPropertyNameTransformer()) {
+    new ConfigPropertiesSerialiser(instance, propertyNameTransformer).toProperties(configInterface)
   }
 
   static enum Feature {
@@ -81,6 +84,7 @@ class Configurations<T> {
 
       final SourceType type
       final def source
+      final PropertyNameTransformer propNameTxformer
     }
 
     CompositeConfigurationBuilder(Class<T> configInterface) {
@@ -138,23 +142,23 @@ class Configurations<T> {
       }
     }
 
-    public CompositeConfigurationBuilder<T> fromXml(InputStream stream) {
-      streams << new Source(Source.SourceType.XMLStream, stream)
+    public CompositeConfigurationBuilder<T> fromXml(InputStream stream, PropertyNameTransformer propertyNameTransformer = new DefaultPropertyNameTransformer()) {
+      streams << new Source(Source.SourceType.XMLStream, stream, propertyNameTransformer)
       this
     }
 
-    public CompositeConfigurationBuilder<T> fromProperties(InputStream stream) {
-      streams << new Source(Source.SourceType.PropertiesStream, stream)
+    public CompositeConfigurationBuilder<T> fromProperties(InputStream stream, PropertyNameTransformer propertyNameTransformer = new DefaultPropertyNameTransformer()) {
+      streams << new Source(Source.SourceType.PropertiesStream, stream, propertyNameTransformer)
       this
     }
 
-    public CompositeConfigurationBuilder<T> fromProperties(Properties props) {
-      streams << new Source(Source.SourceType.Properties, props)
+    public CompositeConfigurationBuilder<T> fromProperties(Properties props, PropertyNameTransformer propertyNameTransformer = new DefaultPropertyNameTransformer()) {
+      streams << new Source(Source.SourceType.Properties, props, propertyNameTransformer)
       this
     }
 
     public CompositeConfigurationBuilder<T> fromGroovyConfig(InputStream stream) {
-      streams << new Source(Source.SourceType.GroovyStream, stream)
+      streams << new Source(Source.SourceType.GroovyStream, stream, new DefaultPropertyNameTransformer())
       this
     }
 
@@ -178,10 +182,10 @@ class Configurations<T> {
     private loadAllSources() {
       streams.each { source ->
         switch (source.type) {
-          case Source.SourceType.XMLStream: sources << new XmlConfigSource(source.source, constants); break
-          case Source.SourceType.PropertiesStream: sources << new PropertiesConfigSource(source.source, constants); break
-          case Source.SourceType.Properties: sources << new PropertiesConfigSource(source.source, constants); break
-          case Source.SourceType.GroovyStream: sources << new GroovyConfigSource(source.source, constants); break
+          case Source.SourceType.XMLStream: sources << new XmlConfigSource(source.source, source.propNameTxformer, constants); break
+          case Source.SourceType.PropertiesStream: sources << new PropertiesConfigSource(source.source, source.propNameTxformer, constants); break
+          case Source.SourceType.Properties: sources << new PropertiesConfigSource(source.source, source.propNameTxformer, constants); break
+          case Source.SourceType.GroovyStream: sources << new GroovyConfigSource(source.source, source.propNameTxformer, constants); break
         }
       }
     }

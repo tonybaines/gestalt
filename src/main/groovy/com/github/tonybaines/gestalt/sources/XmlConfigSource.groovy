@@ -2,18 +2,20 @@ package com.github.tonybaines.gestalt.sources
 
 import com.github.tonybaines.gestalt.ConfigSource
 import com.github.tonybaines.gestalt.ConfigurationException
+import com.github.tonybaines.gestalt.transformers.PropertyNameTransformer
 import groovy.util.logging.Slf4j
 
 @Slf4j
 class XmlConfigSource extends BaseConfigSource {
 
-  XmlConfigSource(InputStream inputStream, constants) {
+  XmlConfigSource(InputStream inputStream, PropertyNameTransformer propertyNameTransformer, constants) {
     super.config = new XmlParser().parse(inputStream)
     super.constants = constants
+    super.propertyNameTransformer = propertyNameTransformer
   }
 
-  private XmlConfigSource(node, constants) {
-    super(node, constants)
+  private XmlConfigSource(node, PropertyNameTransformer propertyNameTransformer, constants) {
+    super(node, propertyNameTransformer, constants)
   }
 
   @Override
@@ -23,7 +25,7 @@ class XmlConfigSource extends BaseConfigSource {
 
   @Override
   protected ConfigSource newInstanceAround(node, constants) {
-    new XmlConfigSource(node, constants)
+    new XmlConfigSource(node, super.propertyNameTransformer, constants)
   }
 
   @Override

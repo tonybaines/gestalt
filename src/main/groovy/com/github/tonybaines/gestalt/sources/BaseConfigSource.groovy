@@ -4,6 +4,7 @@ import com.github.tonybaines.gestalt.ConfigSource
 import com.github.tonybaines.gestalt.ConfigurationException
 import com.github.tonybaines.gestalt.Configurations
 import com.github.tonybaines.gestalt.DynoClass
+import com.github.tonybaines.gestalt.transformers.PropertyNameTransformer
 import groovy.util.logging.Slf4j
 
 import java.lang.reflect.Method
@@ -13,18 +14,21 @@ abstract class BaseConfigSource implements ConfigSource {
   public static final CONSTANT_REF_REGEX = /%\{(.+)\}/
   protected def config
   protected Map<String, String> constants = [:]
+  protected PropertyNameTransformer propertyNameTransformer
 
   protected BaseConfigSource() {}
 
-  BaseConfigSource(config, constants) {
+  BaseConfigSource(config, PropertyNameTransformer propertyNameTransformer, constants) {
     this.config = config
+    this.propertyNameTransformer = propertyNameTransformer
     this.constants = constants
   }
 
-  @Override
-  def lookup(List<String> path, Method method) {
+  @Override def lookup(List<String> path, Method method) {
     try {
-      def node = path.inject(config) { acc, val -> acc."$val" }
+      def node = path.inject(config) { acc, val ->
+          acc."${propertyNameTransformer.fromPropertyName(val)}"
+      }
       handleMultipleNodes(node, method)
       if (method.returnType.enum) {
         def stringValue = constantAwareValueOf(node)

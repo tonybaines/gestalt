@@ -10,7 +10,6 @@ class HyphenatedPropertyNameTransformerSpec extends Specification {
   def "Converts from property names and back again [#propName <-> #transformed]"() {
     expect:
     transformer.fromPropertyName(propName) == transformed
-    transformer.toPropertyName(transformed) == propName
 
     where:
     propName           | transformed

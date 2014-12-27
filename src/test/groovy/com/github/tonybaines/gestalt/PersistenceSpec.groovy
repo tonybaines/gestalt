@@ -1,6 +1,9 @@
 package com.github.tonybaines.gestalt
 
+import com.github.tonybaines.gestalt.transformers.HyphenatedPropertyNameTransformer
+import com.github.tonybaines.gestalt.transformers.PropertyNameTransformer
 import com.google.common.collect.Lists
+import groovy.util.slurpersupport.GPathResult
 import spock.lang.Specification
 
 class PersistenceSpec extends Specification {
@@ -109,6 +112,38 @@ class PersistenceSpec extends Specification {
     roundTripped.name == "bar"
     roundTripped.level == 42
     roundTripped.enabled == true
+  }
+
+  def "Allowing property names to be customised when round-tripping via Properties"() {
+    given:
+    TestConfig configInstance = aNewConfigInstance()
+    PropertyNameTransformer transformer = new HyphenatedPropertyNameTransformer()
+
+    when:
+    Properties props = Configurations.toProperties(configInstance, TestConfig, transformer)
+    TestConfig roundTripped = Configurations.definedBy(TestConfig).fromProperties(props, transformer).done()
+    println props
+
+    then:
+    props.'double-value' == roundTripped.doubleValue.toString()
+    props.'sub-config.int-value' == roundTripped.subConfig.intValue.toString()
+
+  }
+
+  def "Allowing property names to be customised when round-tripping via XML"() {
+    given:
+    TestConfig configInstance = aNewConfigInstance()
+    PropertyNameTransformer transformer = new HyphenatedPropertyNameTransformer()
+
+    when:
+    String xmlString = Configurations.toXml(configInstance, TestConfig, transformer)
+    TestConfig roundTripped = Configurations.definedBy(TestConfig).fromXml(new ByteArrayInputStream(xmlString.bytes), transformer).done()
+    def xml = new XmlSlurper().parseText(xmlString)
+
+    then:
+    xml.'double-value' == roundTripped.doubleValue.toString()
+    xml.'sub-config'.'int-value' == roundTripped.subConfig.intValue.toString()
+
   }
 
   def "Issue #8: a properties object from an instance with a null value"() {

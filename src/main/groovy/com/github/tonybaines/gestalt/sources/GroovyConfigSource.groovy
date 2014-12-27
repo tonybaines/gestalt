@@ -1,6 +1,7 @@
 package com.github.tonybaines.gestalt.sources
 
 import com.github.tonybaines.gestalt.ConfigSource
+import com.github.tonybaines.gestalt.transformers.PropertyNameTransformer
 import groovy.util.logging.Slf4j
 
 import javax.validation.constraints.NotNull
@@ -8,18 +9,19 @@ import javax.validation.constraints.NotNull
 @Slf4j
 class GroovyConfigSource extends BaseConfigSource {
 
-  GroovyConfigSource(@NotNull InputStream inputStream, constants) {
+  GroovyConfigSource(@NotNull InputStream inputStream, PropertyNameTransformer propertyNameTransformer, constants) {
     super.config = new ConfigSlurper().parse(inputStream.text).values().first()
     super.constants = constants
+    super.propertyNameTransformer = propertyNameTransformer
   }
 
-  private GroovyConfigSource(Object node, constants) {
-    super(node, constants)
+  private GroovyConfigSource(Object node, PropertyNameTransformer propertyNameTransformer, constants) {
+    super(node, propertyNameTransformer, constants)
   }
 
   @Override
   protected ConfigSource newInstanceAround(node, constants) {
-    new GroovyConfigSource(node, constants)
+    new GroovyConfigSource(node, super.propertyNameTransformer, constants)
   }
 
   @Override

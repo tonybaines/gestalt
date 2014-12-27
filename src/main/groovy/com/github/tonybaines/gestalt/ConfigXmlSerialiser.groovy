@@ -1,13 +1,16 @@
 package com.github.tonybaines.gestalt
 
+import com.github.tonybaines.gestalt.transformers.PropertyNameTransformer
 import groovy.xml.MarkupBuilder
 
 import java.beans.Introspector
 
 class ConfigXmlSerialiser {
   def instance
+  private final PropertyNameTransformer propertyNameTransformer
 
-  ConfigXmlSerialiser(instance) {
+  ConfigXmlSerialiser(instance, PropertyNameTransformer propertyNameTransformer) {
+    this.propertyNameTransformer = propertyNameTransformer
     this.instance = instance
   }
 
@@ -25,18 +28,19 @@ class ConfigXmlSerialiser {
     return {
       configInterface.methods.each { method ->
         def propName = Configurations.Utils.fromBeanSpec(method.name)
+        def outputPropName = propertyNameTransformer.fromPropertyName(propName)
 
         def value = object."$propName"
         // Simple values
         if (Configurations.Utils.returnsAValue(method) || method.returnType.enum) {
-          "$propName"(value)
+          "$outputPropName"(value)
         }
         // Lists of values
         else if (Configurations.Utils.isAList(method.genericReturnType)) {
           Class listGenericType = method.genericReturnType.actualTypeArguments[0]
           String listTypeName = "${Introspector.decapitalize(listGenericType.simpleName)}"
 
-          "$propName" {
+          "$outputPropName" {
             value.each { item ->
               if (Configurations.Utils.isAValueType(listGenericType)) {
                 "$listTypeName"(item)
@@ -50,9 +54,9 @@ class ConfigXmlSerialiser {
         // a single sub-type
         else {
           if (value != null) {
-            "$propName"(interfaceToClosure(method.returnType, value))
+            "$outputPropName"(interfaceToClosure(method.returnType, value))
           }
-          else "$propName"()
+          else "$outputPropName"()
         }
       }
     }

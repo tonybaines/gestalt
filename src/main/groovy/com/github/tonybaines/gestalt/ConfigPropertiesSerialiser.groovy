@@ -1,9 +1,13 @@
 package com.github.tonybaines.gestalt
 
+import com.github.tonybaines.gestalt.transformers.PropertyNameTransformer
+
 class ConfigPropertiesSerialiser<T> {
   T instance
+  private final PropertyNameTransformer propertyNameTransformer
 
-  ConfigPropertiesSerialiser(T instance) {
+  ConfigPropertiesSerialiser(T instance, PropertyNameTransformer propertyNameTransformer) {
+    this.propertyNameTransformer = propertyNameTransformer
     this.instance = instance
   }
 
@@ -40,6 +44,6 @@ class ConfigPropertiesSerialiser<T> {
   }
 
   private String fullKey(prefix, propName) {
-    ((prefix != null) ? prefix + '.' : "") + propName
+    ((prefix != null) ? prefix + '.' : "") + propertyNameTransformer.fromPropertyName(propName)
   }
 }

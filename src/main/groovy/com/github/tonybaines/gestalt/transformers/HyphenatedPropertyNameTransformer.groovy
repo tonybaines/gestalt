@@ -5,6 +5,4 @@ import static com.google.common.base.CaseFormat.LOWER_HYPHEN
 
 class HyphenatedPropertyNameTransformer implements PropertyNameTransformer {
   String fromPropertyName(String propertyName) { LOWER_CAMEL.to(LOWER_HYPHEN, propertyName) }
-
-  String toPropertyName(String value) { LOWER_HYPHEN.to(LOWER_CAMEL, value) }
 }
