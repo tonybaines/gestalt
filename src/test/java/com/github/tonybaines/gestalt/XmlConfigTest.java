@@ -37,7 +37,7 @@ public class XmlConfigTest {
 
     @Test
     public void constantsCanBeInjectedFromAPropertiesObject() throws Exception {
-        EnclosingInterface config = Configurations.definedBy(EnclosingInterface.class).fromGroovyConfigResource("simple-config-with-constant-refs.groovy").withConstantsFromResource("constants.properties").done();
+        EnclosingInterface config = Configurations.definedBy(EnclosingInterface.class).fromGroovyConfigResource("simple-config-with-constant-refs.grc").withConstantsFromResource("constants.properties").done();
 
         assertThat(config.getSimpleConfig().getName(), is("bar"));
         assertThat(config.getSimpleConfig().getLevel(), is(11));

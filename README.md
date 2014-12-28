@@ -181,7 +181,7 @@ Multiple sources can be combined from XML, ```.properties``` and [GroovyConfig](
 ThingConfig config = Configurations.definedBy(ThingConfig.class)
                         .fromPropertiesResource("common.properties")
                         .fromXmlResource("common.xml")
-                        .fromGroovyConfigResource("common.groovy")
+                        .fromGroovyConfigResource("common.grc")
                         .fromPropertiesResource(System.getProperty("user.name")+".properties")
                         .done();
 ```

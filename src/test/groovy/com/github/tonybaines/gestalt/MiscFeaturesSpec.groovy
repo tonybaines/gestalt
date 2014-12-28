@@ -23,7 +23,7 @@ class MiscFeaturesSpec extends Specification {
     name     | configuration
     'XML'    | Configurations.definedBy(TestConfig).fromXmlResource('common.xml').done()
     'Props'  | Configurations.definedBy(TestConfig).fromPropertiesResource('common.properties').done()
-    'Groovy' | Configurations.definedBy(TestConfig).fromGroovyConfigResource('common.groovy').done()
+    'Groovy' | Configurations.definedBy(TestConfig).fromGroovyConfigResource('common.grc').done()
   }
 
   @Unroll
@@ -42,7 +42,7 @@ class MiscFeaturesSpec extends Specification {
     name     | configuration
     'XML'    | Configurations.definedBy(TestConfig).fromXmlResource('common.xml').done()
     'Props'  | Configurations.definedBy(TestConfig).fromPropertiesResource('common.properties').done()
-    'Groovy' | Configurations.definedBy(TestConfig).fromGroovyConfigResource('common.groovy').done()
+    'Groovy' | Configurations.definedBy(TestConfig).fromGroovyConfigResource('common.grc').done()
   }
 
   def "Configurations will fall-back until a value is found"() {
@@ -130,7 +130,7 @@ class MiscFeaturesSpec extends Specification {
   def "Loading a missing configuration source is a not a error if it is optional (GroovyConfig)"() {
     when:
     TestConfig config = Configurations.definedBy(TestConfig)
-      .fromGroovyConfigResource('common.groovy')
+      .fromGroovyConfigResource('common.grc')
       .fromGroovyConfigResource('no-such-resource', isOptional)
       .done()
 

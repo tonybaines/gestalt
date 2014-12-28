@@ -29,7 +29,7 @@ class BasicBehaviourSpec extends Specification {
     name     | configuration
     'XML'    | Configurations.definedBy(TestConfig).fromXmlResource('common.xml').done()
     'Props'  | Configurations.definedBy(TestConfig).fromPropertiesResource('common.properties').done()
-    'Groovy' | Configurations.definedBy(TestConfig).fromGroovyConfigResource('common.groovy').done()
+    'Groovy' | Configurations.definedBy(TestConfig).fromGroovyConfigResource('common.grc').done()
   }
 
   @Unroll
@@ -48,7 +48,7 @@ class BasicBehaviourSpec extends Specification {
     name     | configuration
     'XML'    | Configurations.definedBy(TestConfig).fromXmlResource('common.xml').done()
     'Props'  | Configurations.definedBy(TestConfig).fromPropertiesResource('common.properties').done()
-    'Groovy' | Configurations.definedBy(TestConfig).fromGroovyConfigResource('common.groovy').done()
+    'Groovy' | Configurations.definedBy(TestConfig).fromGroovyConfigResource('common.grc').done()
   }
 
   @Unroll
@@ -71,7 +71,7 @@ class BasicBehaviourSpec extends Specification {
     name     | configuration
     'XML'    | Configurations.definedBy(TestConfig).fromXmlResource('common.xml').done()
     'Props'  | Configurations.definedBy(TestConfig).fromPropertiesResource('common.properties').done()
-    'Groovy' | Configurations.definedBy(TestConfig).fromGroovyConfigResource('common.groovy').done()
+    'Groovy' | Configurations.definedBy(TestConfig).fromGroovyConfigResource('common.grc').done()
   }
 
   def "Last-one-wins for multiple config definitions for the same property in a single file (#name)"() {
@@ -84,7 +84,7 @@ class BasicBehaviourSpec extends Specification {
     where:
     name     | configuration
     'Props'  | Configurations.definedBy(TestConfig).fromPropertiesResource('common.properties').done()
-    'Groovy' | Configurations.definedBy(TestConfig).fromGroovyConfigResource('common.groovy').done()
+    'Groovy' | Configurations.definedBy(TestConfig).fromGroovyConfigResource('common.grc').done()
   }
 
   def "Multiple config definitions for the same property are an error (XML)"() {

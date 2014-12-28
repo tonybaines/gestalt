@@ -21,7 +21,7 @@ class ConstantsInjectionSpec extends Specification {
     name           | builder
     'XML'          | Configurations.definedBy(EnclosingInterface).fromXmlResource("simple-config-with-constant-refs.xml")
     'Properties'   | Configurations.definedBy(EnclosingInterface).fromPropertiesResource("simple-config-with-constant-refs.properties")
-    'GroovyConfig' | Configurations.definedBy(EnclosingInterface).fromGroovyConfigResource("simple-config-with-constant-refs.groovy")
+    'GroovyConfig' | Configurations.definedBy(EnclosingInterface).fromGroovyConfigResource("simple-config-with-constant-refs.grc")
 
   }
 

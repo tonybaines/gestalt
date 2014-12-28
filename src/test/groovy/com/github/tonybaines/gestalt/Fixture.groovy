@@ -11,6 +11,6 @@ class Fixture {
     Configurations.definedBy(TestConfig).
       fromPropertiesResource('common.properties').
       fromXmlResource('common.xml').
-      fromGroovyConfigResource('common.groovy')
+      fromGroovyConfigResource('common.grc')
   }
 }
