@@ -25,12 +25,14 @@ public interface TestConfig {
 
     Handed getHandedness();
 
+    @NotNull
     SubConfigLevel1 getSubConfig();
 
     List<String> getStrings();
 
     List<Thing> getThings();
 
+    @Comment("Does not exist")
     Integer getNonExistent();
 
     Integer getDeclaredAsAnIntegerButIsAString();

@@ -10,7 +10,19 @@ import com.github.tonybaines.gestalt.transformers.PropertyNameTransformer
 import groovy.transform.TupleConstructor
 import groovy.util.logging.Slf4j
 
+import javax.validation.constraints.AssertFalse
+import javax.validation.constraints.AssertTrue
+import javax.validation.constraints.DecimalMax
+import javax.validation.constraints.DecimalMin
+import javax.validation.constraints.Digits
+import javax.validation.constraints.Max
+import javax.validation.constraints.Min
+import javax.validation.constraints.NotNull
+import javax.validation.constraints.Null
+import javax.validation.constraints.Pattern
+import javax.validation.constraints.Size
 import java.beans.Introspector
+import java.lang.annotation.Annotation
 import java.lang.reflect.Method
 import java.lang.reflect.ParameterizedType
 
@@ -51,6 +63,39 @@ class Configurations<T> {
 
         default: return false
       }
+    }
+
+    static def annotationInfo(Method method) {
+      def info = []
+      method.declaredAnnotations.each { Annotation a ->
+        Class type = a.annotationType()
+
+        if (type.name.contains(Comment.class.name)) {
+          def comment = a.h.memberValues['value']
+          info << "${comment}"
+        }
+        if (type.name.contains(Default.class.name)) {
+          def defaultValue = a.h.memberValues['value']
+          info << "default: ${defaultValue}"
+        }
+
+        if (type.canonicalName.startsWith('javax.validation.constraints')) {
+          switch (type) {
+            case Size: info << "[Size: min=${a.min()}, max=${a.max()}]"; break
+            case AssertTrue: info << "[Always true]"; break
+            case AssertFalse: info << "[Always false]"; break
+            case DecimalMin: info << "[Decimal min=${a.value()}]"; break
+            case DecimalMax: info << "[Decimal max=${a.value()}]"; break
+            case Digits: info << "[Digits integer-digits=${a.integer()}, fraction-digits=${a.fraction()}]"; break
+            case Min: info << "[Min ${a.value()}]"; break
+            case Max: info << "[Max ${a.value()}]"; break
+            case NotNull: info << "[Not Null]"; break
+            case Null: info << "[Always Null]"; break
+            case Pattern: info << "[Pattern ${a.regexp()}]"; break
+          }
+        }
+      }
+      info
     }
   }
 

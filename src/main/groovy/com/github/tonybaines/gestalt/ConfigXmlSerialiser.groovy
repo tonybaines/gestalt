@@ -23,7 +23,6 @@ class ConfigXmlSerialiser {
   /* The method is a little large, but simple 'extract method' refactorings don't
    * seem to work when dealing with the closures expected by MarkupBuilder
    */
-
   def interfaceToClosure(Class configInterface, object) {
     return {
       configInterface.methods.each { method ->
@@ -34,6 +33,7 @@ class ConfigXmlSerialiser {
         // Simple values
         if (Configurations.Utils.returnsAValue(method) || method.returnType.enum) {
           "$outputPropName"(value)
+          comments(outputPropName, method, getMkp())
         }
         // Lists of values
         else if (Configurations.Utils.isAList(method.genericReturnType)) {
@@ -44,9 +44,11 @@ class ConfigXmlSerialiser {
             value.each { item ->
               if (Configurations.Utils.isAValueType(listGenericType)) {
                 "$listTypeName"(item)
+                comments(outputPropName, method, getMkp())
               } else {
                 // A list of sub-types
                 "$listTypeName"(interfaceToClosure(listGenericType, item))
+                comments(outputPropName, method, getMkp())
               }
             }
           }
@@ -55,10 +57,19 @@ class ConfigXmlSerialiser {
         else {
           if (value != null) {
             "$outputPropName"(interfaceToClosure(method.returnType, value))
+            comments(outputPropName, method, getMkp())
           }
-          else "$outputPropName"()
+          else {
+            "$outputPropName"()
+            comments(outputPropName, method, getMkp())
+          }
         }
       }
     }
+  }
+
+  private def comments(name, method, mkp) {
+      def annotationInfo = Configurations.Utils.annotationInfo(method)
+      if (!annotationInfo.empty) mkp.comment("$name: $annotationInfo")
   }
 }

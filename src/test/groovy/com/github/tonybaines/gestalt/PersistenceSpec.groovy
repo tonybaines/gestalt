@@ -3,7 +3,6 @@ package com.github.tonybaines.gestalt
 import com.github.tonybaines.gestalt.transformers.HyphenatedPropertyNameTransformer
 import com.github.tonybaines.gestalt.transformers.PropertyNameTransformer
 import com.google.common.collect.Lists
-import groovy.util.slurpersupport.GPathResult
 import spock.lang.Specification
 
 class PersistenceSpec extends Specification {
