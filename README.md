@@ -351,6 +351,43 @@ Properties props = Configurations.toProperties(configInstance, SimpleConfig.clas
 SimpleConfig config = Configurations.definedBy(SimpleConfig.class).fromProperties(props, new HyphenatedPropertyNameTransformer())
 ```
 
+## Custom Types
+There may be circumstances where you want to use a concrete type instead of an interface for a property value
+(e.g. [tiny-types](http://darrenhobbs.com/2007/04/11/tiny-types/)), by following a couple of rules this is possible
+
+**Rule 1:** a factory-method named `fromString` taking a single `String` argument e.g.
+
+```java
+public class MyClass {
+  ...
+  public static MyClass fromString(String stringValue) { ... }
+  ...
+}
+```
+
+> **NOTE** there's no need to implement a specific interface, which isn't possible with static methods anyway, since
+> **Gestalt** uses Groovy duck-typing to make the call.
+
+**Rule 2:** override `toString()` to return a suitable `String` serialisation of your type
+
+Careful readers will spot that this means that `fromString(...)` and `toString()` need to be symmetric otherwise there
+will be problems if you read-in/write-out configuration instances.
+
+### An Example Custom Type - ```ObfuscatedString```
+As an example of how to write a custom type, see [`ObfuscatedString`](src/main/java/com/github/tonybaines/gestalt/ObfuscatedString.java)
+and it's [tests](src/test/groovy/com/github/tonybaines/gestalt/ObfuscatedStringSpec.groovy)
+
+Use it in the same way as any other config property as part of an enclosing `interface`
+
+```java
+public interface ConfigWithObfuscatedString {
+  ObfuscatedString getS3cret();
+}
+```
+
+To read the plaintext version in your application, the `ObfuscatedString` type has a method `toPlainTextString()`.
+
+
 ## See the specifications for more
 
 The features described above (and more) were developed from the specifications in [src/test/groovy/com/github/tonybaines/gestalt](src/test/groovy/com/github/tonybaines/gestalt/) , using the example config sources in [src/test/resources](src/test/resources).
