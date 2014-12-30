@@ -9,6 +9,8 @@ import groovy.util.logging.Slf4j
 
 import java.lang.reflect.Method
 
+import static com.github.tonybaines.gestalt.Configurations.Utils.declaresMethod
+
 @Slf4j
 abstract class BaseConfigSource implements ConfigSource {
   public static final CONSTANT_REF_REGEX = /%\{(.+)\}/
@@ -33,6 +35,10 @@ abstract class BaseConfigSource implements ConfigSource {
       if (method.returnType.enum) {
         def stringValue = constantAwareValueOf(node)
         return (stringValue != null) ? method.returnType.valueOf(stringValue) : null
+      }
+      if (declaresMethod(method.returnType, 'fromString', String)) {
+        def stringValue = constantAwareValueOf(node)
+        return method.returnType.fromString(stringValue)
       }
       if (Configurations.Utils.isAList(method.genericReturnType)) {
         def list = handleList(node, method)

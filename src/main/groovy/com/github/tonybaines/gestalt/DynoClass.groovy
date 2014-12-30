@@ -1,5 +1,7 @@
 package com.github.tonybaines.gestalt
 
+import static com.github.tonybaines.gestalt.Configurations.Utils.declaresMethod
+
 class DynoClass<T> {
   def source
 
@@ -14,7 +16,9 @@ class DynoClass<T> {
         def propName = Configurations.Utils.fromBeanSpec(method.name)
         if (Configurations.Utils.returnsAValue(method)
           || Configurations.Utils.isAList(method.genericReturnType)
-          || method.returnType.enum) return source.lookup(prefix + propName, method)
+          || method.returnType.enum
+          || declaresMethod(method.returnType, 'fromString', String))
+          return source.lookup(prefix + propName, method)
         else return new DynoClass(source).getMapAsInterface(method.returnType, prefix + propName)
       }
     }

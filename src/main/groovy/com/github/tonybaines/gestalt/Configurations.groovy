@@ -65,6 +65,10 @@ class Configurations<T> {
       }
     }
 
+    static boolean declaresMethod(Class clazz, String name, Class... params) {
+      clazz.declaredMethods.any {it.name == name && it.parameterTypes == params}
+    }
+
     static def annotationInfo(Method method) {
       def info = []
       method.declaredAnnotations.each { Annotation a ->

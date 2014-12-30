@@ -2,6 +2,8 @@ package com.github.tonybaines.gestalt
 
 import com.github.tonybaines.gestalt.transformers.PropertyNameTransformer
 
+import static com.github.tonybaines.gestalt.Configurations.Utils.declaresMethod
+
 class ConfigPropertiesSerialiser<T> {
   T instance
   private final PropertyNameTransformer propertyNameTransformer
@@ -22,7 +24,7 @@ class ConfigPropertiesSerialiser<T> {
 
       if (object != null) {
         def value = object."$propName"
-        if (Configurations.Utils.returnsAValue(method) || method.returnType.enum) {
+        if (Configurations.Utils.returnsAValue(method) || method.returnType.enum || declaresMethod(method.returnType, 'fromString', String)) {
           if (value != null) props[fullKey(prefix, propName)] = value.toString()
         } else if (Configurations.Utils.isAList(method.genericReturnType)) {
           Class listGenericType = method.genericReturnType.actualTypeArguments[0]

@@ -5,6 +5,8 @@ import groovy.xml.MarkupBuilder
 
 import java.beans.Introspector
 
+import static com.github.tonybaines.gestalt.Configurations.Utils.declaresMethod
+
 class ConfigXmlSerialiser {
   def instance
   private final PropertyNameTransformer propertyNameTransformer
@@ -31,7 +33,7 @@ class ConfigXmlSerialiser {
 
         def value = object."$propName"
         // Simple values
-        if (Configurations.Utils.returnsAValue(method) || method.returnType.enum) {
+        if (Configurations.Utils.returnsAValue(method) || method.returnType.enum || declaresMethod(method.returnType, 'fromString', String)) {
           "$outputPropName"(value)
           comments(outputPropName, method, getMkp())
         }
