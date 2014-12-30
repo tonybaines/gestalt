@@ -14,7 +14,6 @@ class ConcreteTypeSpec extends Specification {
 
     then:
     configInstance.getConcrete().toString() == 'foo'
-
   }
 
   def "Can serialise a config instance with a concrete type to Properties"() {
@@ -28,7 +27,6 @@ class ConcreteTypeSpec extends Specification {
 
     then:
     serialisedProps.'concrete' == 'foo'
-
   }
 
   def "Can serialise a config instance with a concrete type to XML"() {
@@ -43,7 +41,23 @@ class ConcreteTypeSpec extends Specification {
 
     then:
     xml.concrete == 'foo'
+  }
 
+  def "Works with the ObfuscatedString concrete type"() {
+    given:
+    Properties props = new Properties()
+    props.'s3cret' = 'password123'
+
+    when:
+    ConfigWithObfuscatedString configInstance = Configurations.definedBy(ConfigWithObfuscatedString).fromProperties(props).done()
+
+    then:
+    configInstance.getS3cret().toString() == '{rot13}cnffjbeq123'
+    configInstance.getS3cret().toPlainTextString() == 'password123'
+  }
+
+  interface ConfigWithObfuscatedString {
+    ObfuscatedString getS3cret()
   }
 
   interface ConfigWithAConcreteType {
