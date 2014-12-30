@@ -43,6 +43,20 @@ class ConcreteTypeSpec extends Specification {
     xml.concrete == 'foo'
   }
 
+  def "When a concrete type doesn't define fromString(...) accessing the instance fails"() {
+    given:
+    Properties props = new Properties()
+    props.'concrete' = 'foo'
+
+    when:
+    ConfigWithABadConcreteType configInstance = Configurations.definedBy(ConfigWithABadConcreteType).fromProperties(props).done()
+    configInstance.getConcrete()
+
+    then:
+    def e = thrown(ConfigurationException)
+    e.message.startsWith("Can't handle non-interface types that don't declare a fromString() factory method")
+  }
+
   def "Works with the ObfuscatedString concrete type"() {
     given:
     Properties props = new Properties()
@@ -64,6 +78,13 @@ class ConcreteTypeSpec extends Specification {
     ConcreteType getConcrete()
   }
 
+  interface ConfigWithABadConcreteType {
+    BadConcreteType getConcrete()
+  }
+
+  static class BadConcreteType {
+  }
+
   static class ConcreteType {
     private String value
 
@@ -72,13 +93,7 @@ class ConcreteTypeSpec extends Specification {
       return new ConcreteType(value)
     }
 
-    private ConcreteType(String value) {
-      this.value = value
-    }
-
-    @Override
-    String toString() {
-      value
-    }
+    private ConcreteType(String value) { this.value = value }
+    @Override String toString() { value }
   }
 }

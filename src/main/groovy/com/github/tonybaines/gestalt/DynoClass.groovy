@@ -19,7 +19,12 @@ class DynoClass<T> {
           || method.returnType.enum
           || declaresMethod(method.returnType, 'fromString', String))
           return source.lookup(prefix + propName, method)
-        else return new DynoClass(source).getMapAsInterface(method.returnType, prefix + propName)
+        else if (method.returnType.isInterface()) {
+          return new DynoClass(source).getMapAsInterface(method.returnType, prefix + propName)
+        }
+        else {
+          throw new ConfigurationException("Can't handle non-interface types that don't declare a fromString() factory method [${configInterface.canonicalName}.${method.name}: ${method.returnType.name}]")
+        }
       }
     }
     map."toString" = { "Proxy for ${configInterface.simpleName}" }

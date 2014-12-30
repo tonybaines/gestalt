@@ -1,4 +1,6 @@
 # [0.8.4](PENDING)
+* Issue #15: Support for Custom Types
+* Issue #4: Obfuscation Support
 * Issue #3: Support for mapping camel case to dashes
 * Issue #12: NPE when accessing unassigned primitive values (fixed in README.md)
 * Issue #10: NPE when serialising a config instance with null/missing values to a Properties instance
