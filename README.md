@@ -289,7 +289,7 @@ The switchable features are
 An existing instance of the config-interface can be turned into the appropriate XML-string (ready to be persisted through the mechanism of your choice)
 
 ```java
-Configurations.toXml(configInstance, SimpleConfig.class);
+Configurations.serialise(configInstance, SimpleConfig.class).toXml();
 ```
 
 would produce something like
@@ -301,10 +301,10 @@ would produce something like
 </SimpleConfig>
 ```
 
-A ```Properties``` instance can also be used for persistence
+A `String` in the correct format for saving to a `Properties` file instance can also be used for persistence
 
 ```java
-Properties props = Configurations.toProperties(configInstance, SimpleConfig.class);
+String propsString = Configurations.serialise(configInstance, SimpleConfig.class).toProperties();
 ```
 
 ... and a ```Properties``` instance can be used to build a Configuration instance
@@ -315,13 +315,40 @@ Properties props = Configurations.toProperties(configInstance, SimpleConfig.clas
 
 One use-case for this would be to load/save ```Properties``` instances from/to a database, thereby allowing a Configuration instance to be stored and retrieved.
 
-Java ```Properties``` are backed by a ```Hashtable``` which doesn't allow ```null``` values, if you'd like the serialised ```Properties``` to include these keys
-then the serialisation can set their value to 'UNDEFINED'
-
+#### Persistence with Comments
+Both XML and Properties serialisations allow comments to be added
 
 ```java
-Properties props = Configurations.toProperties(configInstance, SimpleConfig.class, PropertiesSerialiserFeatures.MissingValuesAsUndefined);
+String xmlString = Configurations.serialise(configInstance, SimpleConfig.class).withComments().toXml()
 ```
+
+Might produce
+
+```xml
+<SimpleConfig>
+  <level>42</level><!-- level: [[Size: min=5, max=100], default 42] -->
+  <enabled>true</enabled>
+  <name>bar</name><!-- name: [What's in a a name?, Not Null] -->
+</SimpleConfig>
+```
+
+```java
+String propsString = Configurations.serialise(configInstance, SimpleConfig.class).withComments().toProperties()
+```
+
+Might produce
+
+```properties
+# this.subLevel.name: [The name of the sub-level]
+thing.subLevel.name='foo'
+# thing.aDifferentSection.size: [[Size: min=5, max=100], default 42]
+thing.aDifferentSection.size=7
+```
+
+The comments are generated from annotations in the `interface` where available
+* A specific `@Comment`
+* Any validation constraint
+* A `@Default`
 
 #### Persistence with Customised Naming
 When serialising to/from XML or Properties files it may be more idiomatic to generate and read e.g. ```Properties``` files of the form
@@ -346,7 +373,7 @@ By specifying a ```PropertyNameTransformer``` implementation (just a single meth
 E.g. Using the supplied ```HyphenatedPropertyNameTransformer```
 
 ```java
-Properties props = Configurations.toProperties(configInstance, SimpleConfig.class, new HyphenatedPropertyNameTransformer())
+Properties props = Configurations.serialise(configInstance, SimpleConfig.class).using(new HyphenatedPropertyNameTransformer()).toProperties()
 ...
 SimpleConfig config = Configurations.definedBy(SimpleConfig.class).fromProperties(props, new HyphenatedPropertyNameTransformer())
 ```

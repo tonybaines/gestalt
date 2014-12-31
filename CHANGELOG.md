@@ -1,4 +1,5 @@
-# [0.8.4](PENDING)
+# [0.8.4]((http://central.maven.org/maven2/com/github/tonybaines/gestalt/0.8.4) (2014-12-31)
+* Issue #13: Support for Comments
 * Issue #15: Support for Custom Types
 * Issue #4: Obfuscation Support
 * Issue #3: Support for mapping camel case to dashes
