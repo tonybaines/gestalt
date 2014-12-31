@@ -23,7 +23,7 @@ class ConcreteTypeSpec extends Specification {
     ConfigWithAConcreteType configInstance = Configurations.definedBy(ConfigWithAConcreteType).fromProperties(props).done()
 
     when:
-    Properties serialisedProps = Configurations.toProperties(configInstance, ConfigWithAConcreteType)
+    Properties serialisedProps = Configurations.serialise(configInstance, ConfigWithAConcreteType).toProperties()
 
     then:
     serialisedProps.'concrete' == 'foo'
@@ -36,7 +36,7 @@ class ConcreteTypeSpec extends Specification {
     ConfigWithAConcreteType configInstance = Configurations.definedBy(ConfigWithAConcreteType).fromProperties(props).done()
 
     when:
-    String xmlString = Configurations.toXml(configInstance, ConfigWithAConcreteType)
+    String xmlString = Configurations.serialise(configInstance, ConfigWithAConcreteType).toXml()
     def xml = new XmlSlurper().parseText(xmlString)
 
     then:

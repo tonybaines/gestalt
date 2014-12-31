@@ -12,7 +12,7 @@ class PersistenceSpec extends Specification {
     TestConfig configInstance = aNewConfigInstance()
 
     when:
-    def xmlString = Configurations.toXml(configInstance, TestConfig)
+    def xmlString = Configurations.serialise(configInstance, TestConfig).toXml()
     println xmlString
     def xml = new XmlSlurper().parseText(xmlString)
 
@@ -35,7 +35,7 @@ class PersistenceSpec extends Specification {
     SimpleConfig fromString = Configurations.definedBy(SimpleConfig).fromXml(new ByteArrayInputStream(STATIC_XML.bytes)).done()
 
     when: "it's turned into a String and re-parsed"
-    def xmlString = Configurations.toXml(fromString, SimpleConfig)
+    def xmlString = Configurations.serialise(fromString, SimpleConfig).toXml()
     println xmlString
     SimpleConfig roundTripped = Configurations.definedBy(SimpleConfig).fromXml(new ByteArrayInputStream(xmlString.bytes)).done()
 
@@ -51,7 +51,7 @@ class PersistenceSpec extends Specification {
     SimpleConfig propsFromFile = Configurations.definedBy(SimpleConfig).fromPropertiesResource('simple-config-with-constant-refs.properties').done()
 
     when: "it's turned into a String and re-parsed"
-    def props = Configurations.toProperties(propsFromFile, SimpleConfig)
+    def props = Configurations.serialise(propsFromFile, SimpleConfig).toProperties()
     println props
     SimpleConfig roundTripped = Configurations.definedBy(SimpleConfig).fromProperties(props).done()
 
@@ -70,7 +70,7 @@ class PersistenceSpec extends Specification {
     config.setEnabled(true)
 
     when:
-    def xmlString = Configurations.toXml(config, SimpleConfig)
+    def xmlString = Configurations.serialise(config, SimpleConfig).toXml()
     def xml = new XmlSlurper().parseText(xmlString)
 
     then:
@@ -84,7 +84,7 @@ class PersistenceSpec extends Specification {
     TestConfig configInstance = aNewConfigInstance()
 
     when:
-    Properties props = Configurations.toProperties(configInstance, TestConfig)
+    Properties props = Configurations.serialise(configInstance, TestConfig).toProperties()
 
     then:
     props.intValue == '1'
@@ -104,7 +104,7 @@ class PersistenceSpec extends Specification {
     SimpleConfig fromString = Configurations.definedBy(SimpleConfig).fromXml(new ByteArrayInputStream(STATIC_XML.bytes)).done()
 
     when: "it's turned into a String and re-parsed"
-    def props = Configurations.toProperties(fromString, SimpleConfig)
+    def props = Configurations.serialise(fromString, SimpleConfig).toProperties()
     def roundTripped = Configurations.definedBy(SimpleConfig).fromProperties(props).done()
 
     then:
@@ -119,7 +119,7 @@ class PersistenceSpec extends Specification {
     PropertyNameTransformer transformer = new HyphenatedPropertyNameTransformer()
 
     when:
-    Properties props = Configurations.toProperties(configInstance, TestConfig, transformer)
+    Properties props = Configurations.serialise(configInstance, TestConfig, transformer).toProperties()
     TestConfig roundTripped = Configurations.definedBy(TestConfig).fromProperties(props, transformer).done()
     println props
 
@@ -135,7 +135,7 @@ class PersistenceSpec extends Specification {
     PropertyNameTransformer transformer = new HyphenatedPropertyNameTransformer()
 
     when:
-    String xmlString = Configurations.toXml(configInstance, TestConfig, transformer)
+    String xmlString = Configurations.serialise(configInstance, TestConfig, transformer).toXml()
     TestConfig roundTripped = Configurations.definedBy(TestConfig).fromXml(new ByteArrayInputStream(xmlString.bytes), transformer).done()
     def xml = new XmlSlurper().parseText(xmlString)
 
@@ -154,7 +154,7 @@ class PersistenceSpec extends Specification {
     String xmlString = Configurations.serialise(configInstance, TestConfig).using(transformer).withComments().toXml()
 
     then:
-    xmlString != null
+    xmlString.contains('<!-- int-value: [[Not Null]] -->')
   }
 
   def "Issue #8: a properties object from an instance with a null value"() {
@@ -167,7 +167,7 @@ class PersistenceSpec extends Specification {
     }
 
     when:
-    Properties roundTripped = Configurations.toProperties(config, SimpleConfig)
+    Properties roundTripped = Configurations.serialise(config, SimpleConfig).toProperties()
 
     then:
     roundTripped.name == null
@@ -184,7 +184,7 @@ class PersistenceSpec extends Specification {
       } }
     }
     when:
-    Properties properties = Configurations.toProperties(configInstance, A)
+    Properties properties = Configurations.serialise(configInstance, A).toProperties()
 
     then:
     properties.'b.c' == null

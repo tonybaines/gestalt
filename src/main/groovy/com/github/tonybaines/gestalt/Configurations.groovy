@@ -103,21 +103,21 @@ class Configurations<T> {
     }
   }
 
-  static <T> SerialisationBuilder serialise(instance, T configInterface) {
+  static <T> SerialisationBuilder serialise(T instance, Class configInterface) {
     new SerialisationBuilder(instance, configInterface)
   }
 
   /**
    * @deprecated use {@see com.github.tonybaines.gestalt.Configurations#serialise(java.lang.Object, java.lang.Object)}
    */
-  static String toXml(instance, Class configInterface, PropertyNameTransformer propertyNameTransformer = new DefaultPropertyNameTransformer()) {
+  static <T> String toXml(T instance, Class configInterface, PropertyNameTransformer propertyNameTransformer = new DefaultPropertyNameTransformer()) {
     serialise(instance, configInterface).using(propertyNameTransformer).toXml()
   }
 
   /**
    * @deprecated use {@see com.github.tonybaines.gestalt.Configurations#serialise(java.lang.Object, java.lang.Object)}
    */
-  static <T> Properties toProperties(instance, T configInterface, PropertyNameTransformer propertyNameTransformer = new DefaultPropertyNameTransformer()) {
+  static <T> Properties toProperties(T instance, Class configInterface, PropertyNameTransformer propertyNameTransformer = new DefaultPropertyNameTransformer()) {
     serialise(instance, configInterface).using(propertyNameTransformer).toProperties()
   }
 
@@ -127,7 +127,7 @@ class Configurations<T> {
     private PropertyNameTransformer propertyNameTransformer
     boolean generatingComments = false
 
-    SerialisationBuilder(instance, T configInterface) {
+    SerialisationBuilder(T instance, Class configInterface) {
       this.configInterface = configInterface
       this.instance = instance
     }
