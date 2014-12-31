@@ -103,12 +103,46 @@ class Configurations<T> {
     }
   }
 
+  static <T> SerialisationBuilder serialise(instance, T configInterface) {
+    new SerialisationBuilder(instance, configInterface)
+  }
+
   static String toXml(instance, Class configInterface, PropertyNameTransformer propertyNameTransformer = new DefaultPropertyNameTransformer()) {
-    new ConfigXmlSerialiser(instance, propertyNameTransformer).toXmlString(configInterface)
+    serialise(instance, configInterface).using(propertyNameTransformer).toXml()
   }
 
   static <T> Properties toProperties(instance, T configInterface, PropertyNameTransformer propertyNameTransformer = new DefaultPropertyNameTransformer()) {
-    new ConfigPropertiesSerialiser(instance, propertyNameTransformer).toProperties(configInterface)
+    serialise(instance, configInterface).using(propertyNameTransformer).toProperties()
+  }
+
+  static class SerialisationBuilder<T> {
+    private final def instance
+    private final T configInterface
+    private PropertyNameTransformer propertyNameTransformer
+    boolean generatingComments = false
+
+    SerialisationBuilder(instance, T configInterface) {
+      this.configInterface = configInterface
+      this.instance = instance
+    }
+
+    public SerialisationBuilder using(PropertyNameTransformer propertyNameTransformer) {
+      this.propertyNameTransformer = propertyNameTransformer
+      this
+    }
+
+    public SerialisationBuilder withComments() {
+      this.generatingComments = true
+      this
+    }
+
+    public String toXml() {
+      new ConfigXmlSerialiser(instance, propertyNameTransformer).toXmlString(configInterface)
+    }
+
+    public Properties toProperties() {
+      new ConfigPropertiesSerialiser(instance, propertyNameTransformer).toProperties(configInterface)
+    }
   }
 
   static enum Feature {

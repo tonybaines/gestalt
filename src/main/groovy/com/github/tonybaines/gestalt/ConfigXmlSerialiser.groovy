@@ -7,8 +7,8 @@ import java.beans.Introspector
 
 import static com.github.tonybaines.gestalt.Configurations.Utils.declaresMethod
 
-class ConfigXmlSerialiser {
-  def instance
+class ConfigXmlSerialiser<T> {
+  T instance
   private final PropertyNameTransformer propertyNameTransformer
 
   ConfigXmlSerialiser(instance, PropertyNameTransformer propertyNameTransformer) {
@@ -16,7 +16,7 @@ class ConfigXmlSerialiser {
     this.instance = instance
   }
 
-  def toXmlString(Class configInterface) {
+  def toXmlString(T configInterface) {
     def writer = new StringWriter()
     new MarkupBuilder(writer)."${configInterface.simpleName}" interfaceToClosure(configInterface, instance)
     writer.toString()

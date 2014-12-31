@@ -145,6 +145,18 @@ class PersistenceSpec extends Specification {
 
   }
 
+  def "Customising serialisation"() {
+    given:
+    TestConfig configInstance = aNewConfigInstance()
+    PropertyNameTransformer transformer = new HyphenatedPropertyNameTransformer()
+
+    when:
+    String xmlString = Configurations.serialise(configInstance, TestConfig).using(transformer).withComments().toXml()
+
+    then:
+    xmlString != null
+  }
+
   def "Issue #8: a properties object from an instance with a null value"() {
     given:
     SimpleConfig config = new SimpleConfig() {
