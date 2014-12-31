@@ -26,6 +26,8 @@ import java.lang.annotation.Annotation
 import java.lang.reflect.Method
 import java.lang.reflect.ParameterizedType
 
+import static com.github.tonybaines.gestalt.Configurations.Utils.propsFromString
+
 @Slf4j
 class Configurations<T> {
   static <T> CompositeConfigurationBuilder<T> definedBy(Class<T> configInterface) {
@@ -71,6 +73,17 @@ class Configurations<T> {
 
     public static boolean hasAFromStringMethod(Class clazz) {
       declaresMethod(clazz, 'fromString', String)
+    }
+
+    public static Properties propsFromString(String propsString) {
+      Properties props = new Properties()
+      propsString.eachLine {
+        if (!it.startsWith('#')) {
+          def (k,v) = it.split(/ = /)
+          props.put(k, v)
+        }
+      }
+      props
     }
 
     static def annotationInfo(Method method) {
@@ -122,7 +135,7 @@ class Configurations<T> {
    * @deprecated use {@see com.github.tonybaines.gestalt.Configurations#serialise(java.lang.Object, java.lang.Object)}
    */
   static <T> Properties toProperties(T instance, Class configInterface, PropertyNameTransformer propertyNameTransformer = new DefaultPropertyNameTransformer()) {
-    serialise(instance, configInterface).using(propertyNameTransformer).toProperties()
+    propsFromString(serialise(instance, configInterface).using(propertyNameTransformer).toProperties())
   }
 
   static class SerialisationBuilder<T> {
@@ -150,7 +163,7 @@ class Configurations<T> {
       new ConfigXmlSerialiser(instance, propertyNameTransformer, generatingComments).toXmlString(configInterface)
     }
 
-    public Properties toProperties() {
+    public String toProperties() {
       new ConfigPropertiesSerialiser(instance, propertyNameTransformer, generatingComments).toProperties(configInterface)
     }
   }

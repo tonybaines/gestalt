@@ -2,6 +2,8 @@ package com.github.tonybaines.gestalt
 
 import spock.lang.Specification
 
+import static com.github.tonybaines.gestalt.Configurations.Utils.propsFromString
+
 class ConcreteTypeSpec extends Specification {
 
   def "Can create a config instance containing a concrete type"() {
@@ -23,7 +25,7 @@ class ConcreteTypeSpec extends Specification {
     ConfigWithAConcreteType configInstance = Configurations.definedBy(ConfigWithAConcreteType).fromProperties(props).done()
 
     when:
-    Properties serialisedProps = Configurations.serialise(configInstance, ConfigWithAConcreteType).toProperties()
+    Properties serialisedProps = propsFromString(Configurations.serialise(configInstance, ConfigWithAConcreteType).toProperties())
 
     then:
     serialisedProps.'concrete' == 'foo'

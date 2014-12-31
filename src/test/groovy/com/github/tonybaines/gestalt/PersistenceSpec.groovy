@@ -6,6 +6,8 @@ import com.google.common.collect.Lists
 import spock.lang.Ignore
 import spock.lang.Specification
 
+import static com.github.tonybaines.gestalt.Configurations.Utils.propsFromString
+
 class PersistenceSpec extends Specification {
 
   def "A config-interface instance can be transformed into an XML string"() {
@@ -52,8 +54,7 @@ class PersistenceSpec extends Specification {
     SimpleConfig propsFromFile = Configurations.definedBy(SimpleConfig).fromPropertiesResource('simple-config-with-constant-refs.properties').done()
 
     when: "it's turned into a String and re-parsed"
-    def props = Configurations.serialise(propsFromFile, SimpleConfig).toProperties()
-    println props
+    def props = propsFromString(Configurations.serialise(propsFromFile, SimpleConfig).toProperties())
     SimpleConfig roundTripped = Configurations.definedBy(SimpleConfig).fromProperties(props).done()
 
     then:
@@ -85,7 +86,7 @@ class PersistenceSpec extends Specification {
     TestConfig configInstance = aNewConfigInstance()
 
     when:
-    Properties props = Configurations.serialise(configInstance, TestConfig).toProperties()
+    Properties props = propsFromString(Configurations.serialise(configInstance, TestConfig).toProperties())
 
     then:
     props.intValue == '1'
@@ -105,7 +106,7 @@ class PersistenceSpec extends Specification {
     SimpleConfig fromString = Configurations.definedBy(SimpleConfig).fromXml(new ByteArrayInputStream(STATIC_XML.bytes)).done()
 
     when: "it's turned into a String and re-parsed"
-    def props = Configurations.serialise(fromString, SimpleConfig).toProperties()
+    def props = propsFromString(Configurations.serialise(fromString, SimpleConfig).toProperties())
     def roundTripped = Configurations.definedBy(SimpleConfig).fromProperties(props).done()
 
     then:
@@ -120,7 +121,7 @@ class PersistenceSpec extends Specification {
     PropertyNameTransformer transformer = new HyphenatedPropertyNameTransformer()
 
     when:
-    Properties props = Configurations.serialise(configInstance, TestConfig).using(transformer).toProperties()
+    Properties props = propsFromString(Configurations.serialise(configInstance, TestConfig).using(transformer).toProperties())
     TestConfig roundTripped = Configurations.definedBy(TestConfig).fromProperties(props, transformer).done()
     println props
 
@@ -157,16 +158,15 @@ class PersistenceSpec extends Specification {
     xmlString.contains('<!-- intValue: [[Not Null]] -->')
   }
 
-  @Ignore
   def "Customising serialisation with comments (Properties)"() {
     given:
     TestConfig configInstance = aNewConfigInstance()
 
     when:
-    String propsString = Configurations.serialise(configInstance, TestConfig).withComments().toPropertiesString()
+    String propsString = Configurations.serialise(configInstance, TestConfig).withComments().toProperties()
 
     then:
-    propsString.contains('# int-value: [[Not Null]]')
+    propsString.contains('# intValue: [[Not Null]]')
   }
 
   def "Issue #8: a properties object from an instance with a null value"() {
@@ -179,7 +179,7 @@ class PersistenceSpec extends Specification {
     }
 
     when:
-    Properties roundTripped = Configurations.serialise(config, SimpleConfig).toProperties()
+    Properties roundTripped = propsFromString(Configurations.serialise(config, SimpleConfig).toProperties())
 
     then:
     roundTripped.name == null
@@ -196,7 +196,7 @@ class PersistenceSpec extends Specification {
       } }
     }
     when:
-    Properties properties = Configurations.serialise(configInstance, A).toProperties()
+    Properties properties = propsFromString(Configurations.serialise(configInstance, A).toProperties())
 
     then:
     properties.'b.c' == null
