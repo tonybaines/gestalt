@@ -107,10 +107,16 @@ class Configurations<T> {
     new SerialisationBuilder(instance, configInterface)
   }
 
+  /**
+   * @deprecated use {@see com.github.tonybaines.gestalt.Configurations#serialise(java.lang.Object, java.lang.Object)}
+   */
   static String toXml(instance, Class configInterface, PropertyNameTransformer propertyNameTransformer = new DefaultPropertyNameTransformer()) {
     serialise(instance, configInterface).using(propertyNameTransformer).toXml()
   }
 
+  /**
+   * @deprecated use {@see com.github.tonybaines.gestalt.Configurations#serialise(java.lang.Object, java.lang.Object)}
+   */
   static <T> Properties toProperties(instance, T configInterface, PropertyNameTransformer propertyNameTransformer = new DefaultPropertyNameTransformer()) {
     serialise(instance, configInterface).using(propertyNameTransformer).toProperties()
   }
