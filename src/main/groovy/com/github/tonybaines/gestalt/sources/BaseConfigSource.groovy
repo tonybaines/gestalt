@@ -9,7 +9,7 @@ import groovy.util.logging.Slf4j
 
 import java.lang.reflect.Method
 
-import static com.github.tonybaines.gestalt.Configurations.Utils.declaresMethod
+import static com.github.tonybaines.gestalt.Configurations.Utils.hasAFromStringMethod
 
 @Slf4j
 abstract class BaseConfigSource implements ConfigSource {
@@ -36,7 +36,7 @@ abstract class BaseConfigSource implements ConfigSource {
         def stringValue = constantAwareValueOf(node)
         return (stringValue != null) ? method.returnType.valueOf(stringValue) : null
       }
-      if (declaresMethod(method.returnType, 'fromString', String)) {
+      if (hasAFromStringMethod(method.returnType)) {
         def stringValue = constantAwareValueOf(node)
         return method.returnType.fromString(stringValue)
       }

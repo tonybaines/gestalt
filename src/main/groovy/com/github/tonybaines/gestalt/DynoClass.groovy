@@ -1,6 +1,6 @@
 package com.github.tonybaines.gestalt
 
-import static com.github.tonybaines.gestalt.Configurations.Utils.declaresMethod
+import static com.github.tonybaines.gestalt.Configurations.Utils.hasAFromStringMethod
 
 class DynoClass<T> {
   def source
@@ -17,7 +17,7 @@ class DynoClass<T> {
         if (Configurations.Utils.returnsAValue(method)
           || Configurations.Utils.isAList(method.genericReturnType)
           || method.returnType.enum
-          || declaresMethod(method.returnType, 'fromString', String))
+          || hasAFromStringMethod(method.returnType))
           return source.lookup(prefix + propName, method)
         else if (method.returnType.isInterface()) {
           return new DynoClass(source).getMapAsInterface(method.returnType, prefix + propName)

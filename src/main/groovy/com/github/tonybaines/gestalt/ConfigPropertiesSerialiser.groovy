@@ -2,18 +2,20 @@ package com.github.tonybaines.gestalt
 
 import com.github.tonybaines.gestalt.transformers.PropertyNameTransformer
 
-import static com.github.tonybaines.gestalt.Configurations.Utils.declaresMethod
+import static com.github.tonybaines.gestalt.Configurations.Utils.hasAFromStringMethod
 
 class ConfigPropertiesSerialiser<T> {
   T instance
   private final PropertyNameTransformer propertyNameTransformer
+  private final boolean generatingComments
 
-  ConfigPropertiesSerialiser(T instance, PropertyNameTransformer propertyNameTransformer) {
+  ConfigPropertiesSerialiser(T instance, PropertyNameTransformer propertyNameTransformer, boolean generatingComments) {
+    this.generatingComments = generatingComments
     this.propertyNameTransformer = propertyNameTransformer
     this.instance = instance
   }
 
-  public <T> Properties toProperties(T configInterface) {
+  public Properties toProperties(Class configInterface) {
     propsFrom(configInterface, instance)
   }
 
@@ -24,7 +26,7 @@ class ConfigPropertiesSerialiser<T> {
 
       if (object != null) {
         def value = object."$propName"
-        if (Configurations.Utils.returnsAValue(method) || method.returnType.enum || declaresMethod(method.returnType, 'fromString', String)) {
+        if (Configurations.Utils.returnsAValue(method) || method.returnType.enum || hasAFromStringMethod(method.returnType)) {
           if (value != null) props[fullKey(prefix, propName)] = value.toString()
         } else if (Configurations.Utils.isAList(method.genericReturnType)) {
           Class listGenericType = method.genericReturnType.actualTypeArguments[0]

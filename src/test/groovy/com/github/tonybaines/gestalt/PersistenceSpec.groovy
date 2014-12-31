@@ -3,6 +3,7 @@ package com.github.tonybaines.gestalt
 import com.github.tonybaines.gestalt.transformers.HyphenatedPropertyNameTransformer
 import com.github.tonybaines.gestalt.transformers.PropertyNameTransformer
 import com.google.common.collect.Lists
+import spock.lang.Ignore
 import spock.lang.Specification
 
 class PersistenceSpec extends Specification {
@@ -119,7 +120,7 @@ class PersistenceSpec extends Specification {
     PropertyNameTransformer transformer = new HyphenatedPropertyNameTransformer()
 
     when:
-    Properties props = Configurations.serialise(configInstance, TestConfig, transformer).toProperties()
+    Properties props = Configurations.serialise(configInstance, TestConfig).using(transformer).toProperties()
     TestConfig roundTripped = Configurations.definedBy(TestConfig).fromProperties(props, transformer).done()
     println props
 
@@ -135,7 +136,7 @@ class PersistenceSpec extends Specification {
     PropertyNameTransformer transformer = new HyphenatedPropertyNameTransformer()
 
     when:
-    String xmlString = Configurations.serialise(configInstance, TestConfig, transformer).toXml()
+    String xmlString = Configurations.serialise(configInstance, TestConfig).using(transformer).toXml()
     TestConfig roundTripped = Configurations.definedBy(TestConfig).fromXml(new ByteArrayInputStream(xmlString.bytes), transformer).done()
     def xml = new XmlSlurper().parseText(xmlString)
 
@@ -145,16 +146,27 @@ class PersistenceSpec extends Specification {
 
   }
 
-  def "Customising serialisation"() {
+  def "Customising serialisation with comments (XML)"() {
     given:
     TestConfig configInstance = aNewConfigInstance()
-    PropertyNameTransformer transformer = new HyphenatedPropertyNameTransformer()
 
     when:
-    String xmlString = Configurations.serialise(configInstance, TestConfig).using(transformer).withComments().toXml()
+    String xmlString = Configurations.serialise(configInstance, TestConfig).withComments().toXml()
 
     then:
-    xmlString.contains('<!-- int-value: [[Not Null]] -->')
+    xmlString.contains('<!-- intValue: [[Not Null]] -->')
+  }
+
+  @Ignore
+  def "Customising serialisation with comments (Properties)"() {
+    given:
+    TestConfig configInstance = aNewConfigInstance()
+
+    when:
+    String propsString = Configurations.serialise(configInstance, TestConfig).withComments().toPropertiesString()
+
+    then:
+    propsString.contains('# int-value: [[Not Null]]')
   }
 
   def "Issue #8: a properties object from an instance with a null value"() {

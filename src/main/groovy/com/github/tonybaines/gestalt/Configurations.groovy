@@ -69,6 +69,10 @@ class Configurations<T> {
       clazz.declaredMethods.any {it.name == name && it.parameterTypes == params}
     }
 
+    public static boolean hasAFromStringMethod(Class clazz) {
+      declaresMethod(clazz, 'fromString', String)
+    }
+
     static def annotationInfo(Method method) {
       def info = []
       method.declaredAnnotations.each { Annotation a ->
@@ -122,9 +126,9 @@ class Configurations<T> {
   }
 
   static class SerialisationBuilder<T> {
-    private final def instance
-    private final T configInterface
-    private PropertyNameTransformer propertyNameTransformer
+    private final T instance
+    private final Class configInterface
+    private PropertyNameTransformer propertyNameTransformer = new DefaultPropertyNameTransformer()
     boolean generatingComments = false
 
     SerialisationBuilder(T instance, Class configInterface) {
@@ -143,11 +147,11 @@ class Configurations<T> {
     }
 
     public String toXml() {
-      new ConfigXmlSerialiser(instance, propertyNameTransformer).toXmlString(configInterface)
+      new ConfigXmlSerialiser(instance, propertyNameTransformer, generatingComments).toXmlString(configInterface)
     }
 
     public Properties toProperties() {
-      new ConfigPropertiesSerialiser(instance, propertyNameTransformer).toProperties(configInterface)
+      new ConfigPropertiesSerialiser(instance, propertyNameTransformer, generatingComments).toProperties(configInterface)
     }
   }
 

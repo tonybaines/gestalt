@@ -5,18 +5,20 @@ import groovy.xml.MarkupBuilder
 
 import java.beans.Introspector
 
-import static com.github.tonybaines.gestalt.Configurations.Utils.declaresMethod
+import static com.github.tonybaines.gestalt.Configurations.Utils.hasAFromStringMethod
 
 class ConfigXmlSerialiser<T> {
   T instance
   private final PropertyNameTransformer propertyNameTransformer
+  private final boolean generatingComments
 
-  ConfigXmlSerialiser(instance, PropertyNameTransformer propertyNameTransformer) {
+  ConfigXmlSerialiser(T instance, PropertyNameTransformer propertyNameTransformer, boolean generatingComments) {
+    this.generatingComments = generatingComments
     this.propertyNameTransformer = propertyNameTransformer
     this.instance = instance
   }
 
-  def toXmlString(T configInterface) {
+  def toXmlString(Class configInterface) {
     def writer = new StringWriter()
     new MarkupBuilder(writer)."${configInterface.simpleName}" interfaceToClosure(configInterface, instance)
     writer.toString()
@@ -33,7 +35,7 @@ class ConfigXmlSerialiser<T> {
 
         def value = object."$propName"
         // Simple values
-        if (Configurations.Utils.returnsAValue(method) || method.returnType.enum || declaresMethod(method.returnType, 'fromString', String)) {
+        if (Configurations.Utils.returnsAValue(method) || method.returnType.enum || hasAFromStringMethod(method.returnType)) {
           "$outputPropName"(value)
           comments(outputPropName, method, getMkp())
         }
@@ -71,7 +73,9 @@ class ConfigXmlSerialiser<T> {
   }
 
   private def comments(name, method, mkp) {
-      def annotationInfo = Configurations.Utils.annotationInfo(method)
-      if (!annotationInfo.empty) mkp.comment("$name: $annotationInfo")
+      if (generatingComments){
+        def annotationInfo = Configurations.Utils.annotationInfo(method)
+        if (!annotationInfo.empty) mkp.comment("$name: $annotationInfo")
+      }
   }
 }
