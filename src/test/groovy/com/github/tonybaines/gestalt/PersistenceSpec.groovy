@@ -169,6 +169,34 @@ class PersistenceSpec extends Specification {
     propsString.contains('# intValue: [[Not Null]]')
   }
 
+  def "Round trip serialisation to a Properties file"() {
+    given:
+    TestConfig configInstance = aNewConfigInstance()
+    File tempFile = File.createTempFile('config', '.properties')
+    String propString = Configurations.serialise(configInstance, TestConfig).withComments().toProperties()
+
+    when:
+    tempFile.text = propString
+    TestConfig configFromPropsFile = Configurations.definedBy(TestConfig).fromProperties(new FileInputStream(tempFile)).done()
+
+    then:
+    configFromPropsFile.intValue == 1
+  }
+
+  def "Round trip serialisation to an XML file"() {
+    given:
+    TestConfig configInstance = aNewConfigInstance()
+    File tempFile = File.createTempFile('config', '.xml')
+    String xmlString = Configurations.serialise(configInstance, TestConfig).withComments().toXml()
+
+    when:
+    tempFile.text = xmlString
+    TestConfig configFromXmlFile = Configurations.definedBy(TestConfig).fromXml(new FileInputStream(tempFile)).done()
+
+    then:
+    configFromXmlFile.intValue == 1
+  }
+
   def "Issue #8: a properties object from an instance with a null value"() {
     given:
     SimpleConfig config = new SimpleConfig() {
