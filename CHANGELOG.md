@@ -1,4 +1,4 @@
-# [0.8.5] PENDING (2015-01-06)
+# [0.8.5](http://central.maven.org/maven2/com/github/tonybaines/gestalt/0.8.5) (2015-01-06)
 * Issue #16: Java client gets exception when calling toString()
 * Compiled for Java 7 again
 * The published POM no longer depends on 'org.slf4j:slf4j-simple:1.6.1', but on the API JAR.  Clients can/should provide their own implementation

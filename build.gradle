@@ -20,7 +20,7 @@ buildscript {
 apply plugin: 'nexus'
 
 group = 'com.github.tonybaines'
-version = '0.8.5'
+version = '0.8.6-SNAPSHOT'
 
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
