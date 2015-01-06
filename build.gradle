@@ -20,7 +20,10 @@ buildscript {
 apply plugin: 'nexus'
 
 group = 'com.github.tonybaines'
-version = '0.8.4'
+version = '0.8.5-SNAPSHOT'
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
 
 repositories {
   mavenCentral()
@@ -29,7 +32,7 @@ dependencies {
   compile([
     'org.codehaus.groovy:groovy-all:2.3.3',
     'com.google.guava:guava:15.0',
-    'org.slf4j:slf4j-simple:1.6.1',
+    'org.slf4j:slf4j-api:1.6.1',
     'org.hibernate:hibernate-validator:5.1.0.CR1',
     'javax.el:javax.el-api:2.2.4',
     'org.glassfish.web:javax.el:2.2.4',
@@ -41,6 +44,7 @@ dependencies {
 
   testRuntime([
     'org.objenesis:objenesis:1.2',
+    'org.slf4j:slf4j-simple:1.6.1',
   ])
   runtime([])
 }
