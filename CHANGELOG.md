@@ -1,4 +1,9 @@
+# [0.8.5] PENDING (2015-01-06)
+* Issue #16: Java client gets exception when calling toString()
+
 # [0.8.4](http://central.maven.org/maven2/com/github/tonybaines/gestalt/0.8.4) (2014-12-31)
+**Compiled for Java 8**
+
 * Issue #13: Support for Comments
 * Issue #15: Support for Custom Types
 * Issue #4: Obfuscation Support

@@ -30,6 +30,12 @@ public class XmlConfigTest {
     }
 
     @Test
+    public void canCallToStringOnAConfigInstance_Issue16() throws Exception {
+        TestConfig testConfig = Configurations.definedBy(TestConfig.class).fromXmlResource("common.xml").done();
+        testConfig.toString();
+    }
+
+    @Test
     public void supplyingAClassInstanceMakesItEasierToLocateResourcesWithARelativePath() throws Exception {
         Configurations.definedBy(SimpleConfig.class).fromXmlResource("com/github/tonybaines/gestalt/config/simple-config.xml").done();
         Configurations.definedBy(SimpleConfig.class).fromXmlResource("config/simple-config.xml", this.getClass()).done();

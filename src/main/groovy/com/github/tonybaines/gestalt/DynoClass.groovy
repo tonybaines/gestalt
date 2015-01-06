@@ -27,7 +27,7 @@ class DynoClass<T> {
         }
       }
     }
-    map."toString" = { "Proxy for ${configInterface.simpleName}" }
+    map."toString" = { "Proxy for ${configInterface.simpleName}".toString() }
     return map.asType(configInterface)
   }
 }
