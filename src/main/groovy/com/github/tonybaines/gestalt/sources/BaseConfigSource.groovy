@@ -45,7 +45,8 @@ abstract class BaseConfigSource implements ConfigSource {
         return list.asImmutable()
       }
 
-      return decoded(node, method.returnType) ?: fallbackLookupStrategy(path, method.returnType)
+      def value = decoded(node, method.returnType)
+      return value != null ? value : fallbackLookupStrategy(path, method.returnType)
     }
     catch (Throwable e) {
       log.warn "Failed to find a definition for ${method.name} in ${this.class.simpleName.replace('ConfigSource', '')}"
