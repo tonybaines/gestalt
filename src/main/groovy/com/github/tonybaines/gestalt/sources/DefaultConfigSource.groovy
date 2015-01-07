@@ -30,7 +30,7 @@ class DefaultConfigSource implements ConfigSource {
       } else {
         return annotationValue
       }
-    } else log.info "Failed to find a default definition for ${method.name}"
+    } else log.info "Failed to find a default definition for ${path.join('.')}"
 
     return null
   }

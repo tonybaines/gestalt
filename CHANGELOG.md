@@ -1,3 +1,6 @@
+# [0.8.6] PENDING
+* When no value is found for a property (including default), log the full path
+
 # [0.8.5](http://central.maven.org/maven2/com/github/tonybaines/gestalt/0.8.5) (2015-01-06)
 * Issue #16: Java client gets exception when calling toString()
 * Compiled for Java 7 again

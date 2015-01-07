@@ -290,6 +290,10 @@ class PersistenceSpec extends Specification {
             String getLevel3Property() {
               return "baz"
             }
+
+            String getNonExistent() {
+              return null
+            }
           } }
         }
       }

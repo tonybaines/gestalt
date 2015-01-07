@@ -92,6 +92,8 @@ public interface TestConfig {
     public static interface SubConfigLevel2 {
         @Default.String("foobar")
         String getLevel3Property();
+
+        String getNonExistent();
     }
 
     public static interface Thing {

@@ -12,7 +12,7 @@ class MiscFeaturesSpec extends Specification {
   def "Undefined values (with no default configured) are an error (#name)"() {
     when:
     TestConfig config = configuration
-    config.getNonExistent()
+    config.getSubConfig().getL2().getNonExistent()
 
     then:
     def e = thrown(ConfigurationException)
