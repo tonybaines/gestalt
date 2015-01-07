@@ -1,4 +1,4 @@
-package com.github.tonybaines.gestalt
+package com.github.tonybaines.gestalt.validation
 
 import groovy.transform.Immutable
 

@@ -1,5 +1,6 @@
 package com.github.tonybaines.gestalt;
 
+import com.github.tonybaines.gestalt.validation.ValidationResult;
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 import org.junit.Test;

@@ -1,5 +1,6 @@
 package com.github.tonybaines.gestalt
 
+import com.github.tonybaines.gestalt.validation.ValidationResult
 import spock.lang.Specification
 import spock.lang.Unroll
 

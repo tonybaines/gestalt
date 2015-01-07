@@ -1,12 +1,15 @@
 package com.github.tonybaines.gestalt
 
+import com.github.tonybaines.gestalt.serialisation.ConfigPropertiesSerialiser
+import com.github.tonybaines.gestalt.serialisation.ConfigXmlSerialiser
 import com.github.tonybaines.gestalt.sources.*
 import com.github.tonybaines.gestalt.sources.features.CachingDecorator
 import com.github.tonybaines.gestalt.sources.features.ExceptionOnNullValueDecorator
 import com.github.tonybaines.gestalt.sources.features.ValidatingDecorator
 import com.github.tonybaines.gestalt.transformers.DefaultPropertyNameTransformer
-import com.github.tonybaines.gestalt.transformers.HyphenatedPropertyNameTransformer
 import com.github.tonybaines.gestalt.transformers.PropertyNameTransformer
+import com.github.tonybaines.gestalt.validation.ReflectionValidator
+import com.github.tonybaines.gestalt.validation.ValidationResult
 import groovy.transform.TupleConstructor
 import groovy.util.logging.Slf4j
 

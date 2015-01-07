@@ -1,5 +1,6 @@
-package com.github.tonybaines.gestalt
+package com.github.tonybaines.gestalt.serialisation
 
+import com.github.tonybaines.gestalt.Configurations
 import com.github.tonybaines.gestalt.transformers.PropertyNameTransformer
 import groovy.xml.MarkupBuilder
 

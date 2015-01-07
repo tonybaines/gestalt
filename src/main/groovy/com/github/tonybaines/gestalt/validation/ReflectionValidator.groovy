@@ -1,4 +1,7 @@
-package com.github.tonybaines.gestalt
+package com.github.tonybaines.gestalt.validation
+
+import com.github.tonybaines.gestalt.ConfigurationException
+import com.github.tonybaines.gestalt.Configurations
 
 class ReflectionValidator {
   private final Object instance
