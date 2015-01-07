@@ -1,4 +1,4 @@
-# [0.8.6] PENDING
+# [0.8.6](http://central.maven.org/maven2/com/github/tonybaines/gestalt/0.8.6) (2015-01-07)
 * When falling back to default, and when no value is found for a property (including default), log the full path rather than just the current property getter
 * Issue #17: False boolean value is treated as not found
 
