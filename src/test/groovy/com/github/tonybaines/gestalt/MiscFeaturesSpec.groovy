@@ -37,6 +37,7 @@ class MiscFeaturesSpec extends Specification {
     config.getNonExistentIntegerWithDefault() == 42
     config.getNonExistentDoubleWithDefault() == 42.5
     config.getNonExistentEnumWithDefault() == Handed.right
+    config.getSubConfig().getL2().getLevel3Property() == 'foobar'
 
     where:
     name     | configuration

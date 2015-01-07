@@ -1,5 +1,5 @@
 # [0.8.6] PENDING
-* When no value is found for a property (including default), log the full path
+* When falling back to default, and when no value is found for a property (including default), log the full path rather than just the current property getter
 
 # [0.8.5](http://central.maven.org/maven2/com/github/tonybaines/gestalt/0.8.5) (2015-01-06)
 * Issue #16: Java client gets exception when calling toString()

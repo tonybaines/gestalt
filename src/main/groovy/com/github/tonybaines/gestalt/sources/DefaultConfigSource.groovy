@@ -16,7 +16,7 @@ class DefaultConfigSource implements ConfigSource {
       it.annotationType().name.contains(Default.class.name)
     }
     if (defaultAnnotation != null) {
-      log.info "Falling back to default definition for ${method.name}"
+      log.info "Falling back to default definition for ${path.join('.')}"
       Class<? extends Annotation> defaultsType = defaultAnnotation.annotationType()
       def annotationValue = method.getAnnotation(defaultsType).value()
 
