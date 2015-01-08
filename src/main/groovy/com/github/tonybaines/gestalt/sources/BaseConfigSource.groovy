@@ -49,7 +49,7 @@ abstract class BaseConfigSource implements ConfigSource {
       return value != null ? value : fallbackLookupStrategy(path, method.returnType)
     }
     catch (Throwable e) {
-      log.warn "Failed to find a definition for ${method.name} in ${this.class.simpleName.replace('ConfigSource', '')}"
+      log.warn "Failed to find a definition for ${method.name} in ${this.class.simpleName.replace('ConfigSource', '')} [$path]"
       throw new ConfigurationException(method, e)
     }
   }

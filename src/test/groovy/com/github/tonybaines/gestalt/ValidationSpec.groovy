@@ -54,9 +54,10 @@ class ValidationSpec extends Specification {
 
     then:
     validationResult.hasFailures()
-    validationResult.any { it.property == 'TestConfig.stringValueWhoseDefaultBreaksValidation' }
-    validationResult.any { it.property == 'TestConfig.integerThatIsTooLarge' }
-    validationResult.any { it.property == 'TestConfig.subConfig.booleanValueWhoseValueBreaksValidation' }
+    validationResult.any { it.property == 'stringValueWhoseDefaultBreaksValidation' }
+    validationResult.any { it.property == 'integerThatIsTooLarge' }
+    validationResult.any { it.property == 'subConfig.booleanValueWhoseValueBreaksValidation'}
+    validationResult.any { it.property == 'subConfig.l2.nonExistent'}
   }
 
   @Unroll

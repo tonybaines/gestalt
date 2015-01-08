@@ -15,7 +15,7 @@ class ReflectionValidator {
 
   ValidationResult validate() {
     failures = new ValidationResult()
-    recursiveValidation(instance, configInterface, configInterface.simpleName)
+    recursiveValidation(instance, configInterface)
     failures
   }
 
@@ -34,17 +34,21 @@ class ReflectionValidator {
 
           if (!Configurations.Utils.isAValueType(listGenericType)) {
             // A list of sub-types
-            value.each { item -> recursiveValidation(item, listGenericType, "${pathSoFar}.${propertyName}") }
+            value.each { item -> recursiveValidation(item, listGenericType, fullPath(pathSoFar, propertyName)) }
           }
         }
         // a single sub-type
         else {
-          if (value != null) recursiveValidation(value, method.returnType, "${pathSoFar}.${propertyName}")
+          if (value != null) recursiveValidation(value, method.returnType, fullPath(pathSoFar, propertyName))
         }
       } catch (ConfigurationException e) {
-        failures << new ValidationResult.Item("${pathSoFar}.${propertyName}", (e?.cause?.message ?: "Is undefined."), Configurations.Utils.annotationInfo(method))
+        failures << new ValidationResult.Item(fullPath(pathSoFar, propertyName), (e?.cause?.message ?: "Is undefined."), Configurations.Utils.annotationInfo(method))
       }
     }
+  }
+
+  private fullPath(pathSoFar, propertyName) {
+    (pathSoFar.isEmpty() ? '' : "${pathSoFar}.") + "${propertyName}"
   }
 
 }
