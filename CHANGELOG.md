@@ -1,5 +1,7 @@
 # [0.8.7-SNAPSHOT] **PENDING**
 * Logging improvements for error handling and validation messages
+* gradle-nexus-plugin updated to 2.2
+* Gradle wrapper updated to 2.2
 
 
 # [0.8.6](http://central.maven.org/maven2/com/github/tonybaines/gestalt/0.8.6) (2015-01-07)
