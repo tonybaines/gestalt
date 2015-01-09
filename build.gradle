@@ -115,3 +115,7 @@ tasks.withType(JDepend) {
     text.enabled = true
   }
 }
+
+task wrapper(type: Wrapper) {
+  gradleVersion = '2.2'
+}
