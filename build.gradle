@@ -30,7 +30,7 @@ repositories {
 }
 dependencies {
   compile([
-    'org.codehaus.groovy:groovy-all:2.3.3',
+    'org.codehaus.groovy:groovy-all:2.4.1',
     'com.google.guava:guava:15.0',
     'org.slf4j:slf4j-api:1.6.1',
     'org.hibernate:hibernate-validator:5.1.0.CR1',
@@ -39,7 +39,7 @@ dependencies {
   ])
 
   testCompile([
-    'org.spockframework:spock-core:0.7-groovy-2.0',
+    'org.spockframework:spock-core:1.0-groovy-2.4',
   ])
 
   testRuntime([
