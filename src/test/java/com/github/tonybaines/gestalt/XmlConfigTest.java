@@ -33,6 +33,7 @@ public class XmlConfigTest {
     @Test
     public void canCallToStringOnAConfigInstance_Issue16() throws Exception {
         TestConfig testConfig = Configurations.definedBy(TestConfig.class).fromXmlResource("common.xml").done();
+        //noinspection ResultOfMethodCallIgnored
         testConfig.toString();
     }
 

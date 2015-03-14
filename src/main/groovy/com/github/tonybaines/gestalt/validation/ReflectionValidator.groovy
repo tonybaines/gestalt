@@ -47,7 +47,7 @@ class ReflectionValidator {
     }
   }
 
-  private fullPath(pathSoFar, propertyName) {
+  private static fullPath(pathSoFar, propertyName) {
     (pathSoFar.isEmpty() ? '' : "${pathSoFar}.") + "${propertyName}"
   }
 

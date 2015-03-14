@@ -1,10 +1,10 @@
 package com.github.tonybaines.gestalt;
 
 public class ObfuscatedString {
-  public static final String PREFIX = "{rot13}";
+  private static final String PREFIX = "{rot13}";
   private final String obfuscated;
 
-  public ObfuscatedString(String string) {
+  private ObfuscatedString(String string) {
     if (string.startsWith(PREFIX)) {
       // Already obfuscated
       this.obfuscated = string.substring(PREFIX.length());

@@ -5,7 +5,7 @@ import groovy.transform.Immutable
 public class ValidationResult implements Iterable<ValidationResult> {
   def items = []
 
-  def leftShift(ValidationResult.Item item) {
+  def leftShift(Item item) {
     items << item
   }
 

@@ -315,8 +315,8 @@ class Configurations<T> {
       else source
     }
 
-    private boolean isOptional(Configurations.Behaviour... behaviours) {
-      behaviours.contains(Configurations.Behaviour.isOptional)
+    private static boolean isOptional(Behaviour... behaviours) {
+      behaviours.contains(Behaviour.isOptional)
     }
 
     private static InputStream resourceAsStream(String path, Class loadingClass) {

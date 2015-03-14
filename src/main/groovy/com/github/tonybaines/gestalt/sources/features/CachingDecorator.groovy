@@ -36,5 +36,5 @@ class CachingDecorator implements ConfigSource {
     }
   }
 
-  String keyFrom(List<String> strings) { strings.join('.') }
+  static String keyFrom(List<String> strings) { strings.join('.') }
 }
