@@ -1,4 +1,5 @@
 # [0.8.7-SNAPSHOT] **PENDING**
+* Issue #18 - default values for concrete types caused a ConfigurationException
 * Logging improvements for error handling and validation messages
 * gradle-nexus-plugin updated to 2.2
 * Gradle wrapper updated to 2.2
