@@ -8,6 +8,8 @@ import groovy.util.logging.Slf4j
 import java.lang.annotation.Annotation
 import java.lang.reflect.Method
 
+import static com.github.tonybaines.gestalt.Configurations.Utils.hasAFromStringMethod
+
 @Slf4j
 class DefaultConfigSource implements ConfigSource {
   @Override
@@ -21,12 +23,14 @@ class DefaultConfigSource implements ConfigSource {
       def annotationValue = method.getAnnotation(defaultsType).value()
 
       if (Default.Enum.class.name.equals(defaultsType.name)) {
-        try {
-          return method.returnType.valueOf(annotationValue)
-        }
-        catch (IllegalArgumentException e) {
-          throw new ConfigurationException(method, e)
-        }
+          try {
+              return method.returnType.valueOf(annotationValue)
+          }
+          catch (IllegalArgumentException e) {
+              throw new ConfigurationException(method, e)
+          }
+      } else if (hasAFromStringMethod(method.returnType)) {
+          return (annotationValue != null) ? method.returnType.fromString(annotationValue) : null
       } else {
         return annotationValue
       }

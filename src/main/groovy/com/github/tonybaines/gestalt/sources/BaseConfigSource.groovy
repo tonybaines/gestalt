@@ -38,7 +38,7 @@ abstract class BaseConfigSource implements ConfigSource {
       }
       if (hasAFromStringMethod(method.returnType)) {
         def stringValue = constantAwareValueOf(node)
-        return method.returnType.fromString(stringValue)
+        return (stringValue != null) ? method.returnType.fromString(stringValue) : null
       }
       if (Configurations.Utils.isAList(method.genericReturnType)) {
         def list = handleList(node, method)

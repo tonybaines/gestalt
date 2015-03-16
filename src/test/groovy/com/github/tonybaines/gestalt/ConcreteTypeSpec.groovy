@@ -72,6 +72,19 @@ class ConcreteTypeSpec extends Specification {
     configInstance.getS3cret().toPlainTextString() == 'password123'
   }
 
+
+  def "Works with a default value for a concrete type"() {
+    given:
+    Properties props = new Properties()
+
+    when:
+    ConfigWithADefaultValueForAConcreteType configInstance = Configurations.definedBy(ConfigWithADefaultValueForAConcreteType).fromProperties(props).done()
+
+    then:
+    configInstance.getConcrete().toString() == 'foo'
+  }
+
+
   interface ConfigWithObfuscatedString {
     ObfuscatedString getS3cret()
   }
@@ -82,6 +95,11 @@ class ConcreteTypeSpec extends Specification {
 
   interface ConfigWithABadConcreteType {
     BadConcreteType getConcrete()
+  }
+
+  interface ConfigWithADefaultValueForAConcreteType {
+    @Default.String("foo")
+    ConcreteType getConcrete()
   }
 
   static class BadConcreteType {
