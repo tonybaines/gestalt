@@ -1,1 +1,10 @@
 language: groovy
+
+env:
+  global:
+  # These aren't used in a travis build
+    - bintrayUser=none
+    - bintrayApiKey=none
+    - signing.password=none
+    - nexusUsername=none
+    - nexusPassword=none
