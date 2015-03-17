@@ -18,11 +18,10 @@ buildscript {
   }
 }
 apply plugin: 'maven-publish'
-apply plugin: 'signing'
 apply plugin: 'com.jfrog.bintray'
 
 group = 'com.github.tonybaines'
-version = '0.8.7'
+version = '0.8.7.1'
 
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
@@ -64,7 +63,7 @@ task sourcesJar(type: Jar, dependsOn: classes) {
   from sourceSets.main.allSource
 }
 task testSourcesJar(type: Jar, dependsOn: classes) {
-  classifier = 'test-sources'
+  classifier = 'tests'
   from sourceSets.test.allSource
 }
 task javadocJar(type: Jar, dependsOn: javadoc) {
@@ -73,13 +72,8 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
 }
 // add javadoc/source/test jar tasks as artifacts
 artifacts {
-  archives sourcesJar, javadocJar
+  archives sourcesJar, javadocJar, testSourcesJar
 }
-
-signing {
-  sign configurations.archives
-}
-bintrayUpload.dependsOn(signArchives)
 
 publishing {
   publications {
@@ -99,7 +93,7 @@ bintray {
   publications = ['mavenJava'] //When uploading Maven-based publication files
 
   dryRun = false //Whether to run this as dry-run, without deploying
-  publish = false//true //If version should be auto published after an upload
+  publish = true //If version should be auto published after an upload
   pkg {
     repo = 'maven'
     name = project.name
@@ -114,6 +108,7 @@ bintray {
     version {
       gpg {
         sign = true //Determines whether to GPG sign the files. The default is false
+        passphrase = project.'signing.password'
       }
       mavenCentralSync {
         sync = true //Optional (true by default). Determines whether to sync the version to Maven Central.
