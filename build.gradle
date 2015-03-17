@@ -86,9 +86,11 @@ publishing {
   }
 }
 
+String safeGetProp(String name) {hasProperty(name) ? getProperty(name) : System.getenv(name)}
+
 bintray {
-  user = bintrayUser
-  key = bintrayApiKey
+  user = safeGetProp('bintrayUser')
+  key = safeGetProp('bintrayApiKey')
 
   publications = ['mavenJava'] //When uploading Maven-based publication files
 
@@ -112,8 +114,8 @@ bintray {
       }
       mavenCentralSync {
         sync = true //Optional (true by default). Determines whether to sync the version to Maven Central.
-        user = nexusUsername //OSS user token
-        password = nexusPassword //OSS user password
+        user = safeGetProp('nexusUsername') //OSS user token
+        password = safeGetProp('nexusPassword') //OSS user password
         close = '1' //Optional property. By default the staging repository is closed and artifacts are released to Maven Central. You can optionally turn this behaviour off (by putting 0 as value) and release the version manually.
       }
     }
