@@ -14,10 +14,12 @@ buildscript {
   }
 
   dependencies {
-    classpath 'com.bmuschko:gradle-nexus-plugin:2.2'
+    classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.0'
   }
 }
-apply plugin:  'com.bmuschko.nexus'
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
+apply plugin: 'com.jfrog.bintray'
 
 group = 'com.github.tonybaines'
 version = '0.8.7'
@@ -26,11 +28,11 @@ sourceCompatibility = 1.7
 targetCompatibility = 1.7
 
 repositories {
-  mavenCentral()
+  jcenter()
 }
 dependencies {
   compile([
-    'org.codehaus.groovy:groovy-all:2.3.3',
+    'org.codehaus.groovy:groovy-all:2.4.1',
     'com.google.guava:guava:15.0',
     'org.slf4j:slf4j-api:1.6.1',
     'org.hibernate:hibernate-validator:5.1.0.CR1',
@@ -39,7 +41,7 @@ dependencies {
   ])
 
   testCompile([
-    'org.spockframework:spock-core:0.7-groovy-2.0',
+    'org.spockframework:spock-core:1.0-groovy-2.4',
   ])
 
   testRuntime([
@@ -56,45 +58,71 @@ distributions {
   }
 }
 
-/* The Nexus plugin */
-modifyPom {
-  project {
-    name 'Gestalt'
-    packaging 'jar'
-    description 'Gestalt is a library for making configuration easier in Java'
-    url 'https://github.com/tonybaines/gestalt'
+// custom tasks for creating source/javadoc jars
+task sourcesJar(type: Jar, dependsOn: classes) {
+  classifier = 'sources'
+  from sourceSets.main.allSource
+}
+task testSourcesJar(type: Jar, dependsOn: classes) {
+  classifier = 'test-sources'
+  from sourceSets.test.allSource
+}
+task javadocJar(type: Jar, dependsOn: javadoc) {
+  classifier = 'javadoc'
+  from javadoc.destinationDir
+}
+// add javadoc/source/test jar tasks as artifacts
+artifacts {
+  archives sourcesJar, javadocJar
+}
 
-    scm {
-      url 'git@github.com:tonybaines/gestalt.git'
-      connection 'scm:git@github.com:tonybaines/gestalt.git'
-      developerConnection 'scm:git@github.com:tonybaines/gestalt.git'
-    }
+signing {
+  sign configurations.archives
+}
+bintrayUpload.dependsOn(signArchives)
 
-    licenses {
-      license {
-        name 'The Apache Software License, Version 2.0'
-        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-        distribution 'repo'
-      }
-    }
-
-    developers {
-      developer {
-        id 'tonybaines'
-        name 'Tony Baines'
-      }
+publishing {
+  publications {
+    mavenJava(MavenPublication) {
+      from components.java
+      artifact sourcesJar
+      artifact testSourcesJar
+      artifact javadocJar
     }
   }
 }
 
-nexus {
-  sign = true
-}
+bintray {
+  user = bintrayUser
+  key = bintrayApiKey
 
-extraArchive {
-  sources = true
-  tests = true
-  javadoc = true
+  publications = ['mavenJava'] //When uploading Maven-based publication files
+
+  dryRun = false //Whether to run this as dry-run, without deploying
+  publish = false//true //If version should be auto published after an upload
+  pkg {
+    repo = 'maven'
+    name = project.name
+    desc = 'A JVM config framework written in Groovy'
+    websiteUrl = 'https://github.com/tonybaines/gestalt'
+    issueTrackerUrl = 'https://github.com/tonybaines/gestalt/issues'
+    vcsUrl = 'https://github.com/tonybaines/gestalt.git'
+    licenses = ['Apache-2.0']
+    labels = ['configuration', 'groovy', 'java']
+    publicDownloadNumbers = true
+     //Optional version descriptor
+    version {
+      gpg {
+        sign = true //Determines whether to GPG sign the files. The default is false
+      }
+      mavenCentralSync {
+        sync = true //Optional (true by default). Determines whether to sync the version to Maven Central.
+        user = nexusUsername //OSS user token
+        password = nexusPassword //OSS user password
+        close = '1' //Optional property. By default the staging repository is closed and artifacts are released to Maven Central. You can optionally turn this behaviour off (by putting 0 as value) and release the version manually.
+      }
+    }
+  }
 }
 
 /* Static Analysis */
