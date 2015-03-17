@@ -1,4 +1,4 @@
-# [0.8.7](http://central.maven.org/maven2/com/github/tonybaines/gestalt/0.8.6) (2015-03-17)
+# [0.8.7](http://central.maven.org/maven2/com/github/tonybaines/gestalt/0.8.7) (2015-03-17)
 * Issue #18 - default values for concrete types caused a ConfigurationException
 * Logging improvements for error handling and validation messages
 * gradle-nexus-plugin updated to 2.2
