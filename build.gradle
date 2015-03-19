@@ -98,7 +98,7 @@ bintray {
   publish = true //If version should be auto published after an upload
   pkg {
     repo = 'maven'
-    name = project.name
+    name = "${project.group}:${project.name}" //com.github.tonybaines:gestalt
     desc = 'A JVM config framework written in Groovy'
     websiteUrl = 'https://github.com/tonybaines/gestalt'
     issueTrackerUrl = 'https://github.com/tonybaines/gestalt/issues'
