@@ -86,6 +86,19 @@ publishing {
   }
 }
 
+// TODO: POM is not well formed so publish to Maven fails, it looks like this in bintray
+/*<?xml version="1.0" encoding="UTF-8"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.github.tonybaines</groupId>
+  <artifactId>gestalt</artifactId>
+  <version>0.8.7.1</version>
+  <dependencies>
+  ...
+  </dependencies>
+</project>*/
+
 String safeGetProp(String name) {hasProperty(name) ? getProperty(name) : System.getenv(name)}
 
 bintray {
