@@ -84,6 +84,7 @@ publishing {
       artifact javadocJar
 
       pom.withXml {
+        asNode().appendNode('name', 'gestalt')
         asNode().appendNode('description', 'Gestalt is a library for making configuration easier in Java')
         asNode().appendNode('url', 'https://github.com/tonybaines/gestalt')
 
