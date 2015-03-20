@@ -21,7 +21,7 @@ apply plugin: 'maven-publish'
 apply plugin: 'com.jfrog.bintray'
 
 group = 'com.github.tonybaines'
-version = '0.8.7.1'
+version = '0.8.8-SNAPSHOT'
 
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
@@ -108,19 +108,6 @@ publishing {
   }
 }
 
-// TODO: POM is not well formed so publish to Maven fails, it looks like this in bintray
-/*<?xml version="1.0" encoding="UTF-8"?>
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
-xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>com.github.tonybaines</groupId>
-  <artifactId>gestalt</artifactId>
-  <version>0.8.7.1</version>
-  <dependencies>
-  ...
-  </dependencies>
-</project>*/
-
 String safeGetProp(String name) {hasProperty(name) ? getProperty(name) : System.getenv(name)}
 
 bintray {
@@ -133,7 +120,7 @@ bintray {
   publish = true //If version should be auto published after an upload
   pkg {
     repo = 'maven'
-    name = "${project.group}:${project.name}" //com.github.tonybaines:gestalt
+    name = "${project.group}:${project.name}"
     desc = 'A JVM config framework written in Groovy'
     websiteUrl = 'https://github.com/tonybaines/gestalt'
     issueTrackerUrl = 'https://github.com/tonybaines/gestalt/issues'

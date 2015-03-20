@@ -1,6 +1,7 @@
-# [0.8.7.1](http://central.maven.org/maven2/com/github/tonybaines/gestalt/0.8.7.1) (2015-03-18)
+# [0.8.8](http://central.maven.org/maven2/com/github/tonybaines/gestalt/0.8.8) (TBA)
 * Publishing via bintray
-* Upgrade to Groovy 2.4.1, Spock 1.0
+* Upgrade to Groovy 2.4.1 <-- updated runtime dependency
+* Upgrade to Spock 1.0
 
 # [0.8.7](http://central.maven.org/maven2/com/github/tonybaines/gestalt/0.8.7) (2015-03-17)
 * Issue #18 - default values for concrete types caused a ConfigurationException
