@@ -1,4 +1,4 @@
-# [0.8.8](http://central.maven.org/maven2/com/github/tonybaines/gestalt/0.8.8) (TBA)
+# [0.8.8](http://central.maven.org/maven2/com/github/tonybaines/gestalt/0.8.8) (2015-03-25)
 * Issue #19: Validation of custom types gives a MissingPropertyException
 * Publishing via bintray
 * Upgrade to Spock 1.0
