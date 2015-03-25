@@ -1,6 +1,6 @@
 # [0.8.8](http://central.maven.org/maven2/com/github/tonybaines/gestalt/0.8.8) (TBA)
+* Issue #19: Validation of custom types gives a MissingPropertyException
 * Publishing via bintray
-* Upgrade to Groovy 2.4.1 <-- updated runtime dependency
 * Upgrade to Spock 1.0
 
 # [0.8.7](http://central.maven.org/maven2/com/github/tonybaines/gestalt/0.8.7) (2015-03-17)

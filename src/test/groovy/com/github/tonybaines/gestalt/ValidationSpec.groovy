@@ -76,6 +76,22 @@ class ValidationSpec extends Specification {
 
   }
 
+  def "Issue 19: Validating a custom type"() {
+    given:
+    CustomType config = Configurations.definedBy(CustomType).fromProperties(new Properties()).done()
+    when:
+    ValidationResult validationResult = Configurations.validate(config, CustomType)
+
+    then:
+    !validationResult.hasFailures()
+  }
+
+  interface CustomType {
+    @Default.String("foo")
+    @NotNull
+    ObfuscatedString getObfuscatedString()
+  }
+
   interface Wrapper {
     public ValidatingANullMandatoryValue getSubLevel()
   }

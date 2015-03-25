@@ -3,6 +3,8 @@ package com.github.tonybaines.gestalt.validation
 import com.github.tonybaines.gestalt.ConfigurationException
 import com.github.tonybaines.gestalt.Configurations
 
+import static com.github.tonybaines.gestalt.Configurations.Utils.hasAFromStringMethod
+
 class ReflectionValidator {
   private final Object instance
   private final Class configInterface
@@ -25,8 +27,8 @@ class ReflectionValidator {
       try {
         def value = object."${propertyName}"
 
-        // Simple values
-        if (Configurations.Utils.returnsAValue(method) || method.returnType.enum) return
+        // Simple values, enums and custom types
+        if (Configurations.Utils.returnsAValue(method) || method.returnType.enum || hasAFromStringMethod(method.returnType) ) return
 
         // Lists of values
         if (Configurations.Utils.isAList(method.genericReturnType)) {
