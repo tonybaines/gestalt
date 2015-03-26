@@ -43,7 +43,7 @@ class Configurations<T> {
 
   static class Utils {
     static String fromBeanSpec(String methodName) {
-      Introspector.decapitalize(methodName.replaceFirst(/(get|is)/, ''))
+      Introspector.decapitalize(methodName.replaceFirst(/(get|is)/, '')) // TODO: replace at start only
     }
 
     static isAList(type) {
