@@ -1,3 +1,6 @@
+# [0.8.9](http://central.maven.org/maven2/com/github/tonybaines/gestalt/0.8.9) (2015-03-26)
+* Fix for the scope of all dependencies being set to 'runtime' in the generated POM
+
 # [0.8.8](http://central.maven.org/maven2/com/github/tonybaines/gestalt/0.8.8) (2015-03-25)
 * Issue #19: Validation of custom types gives a MissingPropertyException
 * Publishing via bintray

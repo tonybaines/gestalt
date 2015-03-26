@@ -21,7 +21,7 @@ apply plugin: 'maven-publish'
 apply plugin: 'com.jfrog.bintray'
 
 group = 'com.github.tonybaines'
-version = '0.8.8'
+version = '0.8.9'
 
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
@@ -103,12 +103,22 @@ publishing {
           .appendNode('developer')
         dev.appendNode('id', 'tonybaines')
         dev.appendNode('name', 'Tony Baines')
+
+        // Workaround for the maven-publish-plugin marking all deps as runtime scope
+        // http://forums.gradle.org/gradle/topics/maven_publish_plugin_generated_pom_making_dependency_scope_runtime
+        asNode().dependencies.'*'.findAll() {
+          it.scope.text() == 'runtime' && project.configurations.compile.allDependencies.find { dep ->
+            dep.name == it.artifactId.text()
+          }
+        }.each() {
+          it.scope*.value = 'compile'
+        }
       }
     }
   }
 }
 
-String safeGetProp(String name) {hasProperty(name) ? getProperty(name) : System.getenv(name)}
+String safeGetProp(String name) { hasProperty(name) ? getProperty(name) : System.getenv(name) }
 
 bintray {
   user = safeGetProp('bintrayUser')
@@ -128,7 +138,7 @@ bintray {
     licenses = ['Apache-2.0']
     labels = ['configuration', 'groovy', 'java']
     publicDownloadNumbers = true
-     //Optional version descriptor
+    //Optional version descriptor
     version {
       gpg {
         sign = true //Determines whether to GPG sign the files. The default is false
@@ -138,7 +148,8 @@ bintray {
         sync = true //Optional (true by default). Determines whether to sync the version to Maven Central.
         user = safeGetProp('nexusUsername') //OSS user token
         password = safeGetProp('nexusPassword') //OSS user password
-        close = '1' //Optional property. By default the staging repository is closed and artifacts are released to Maven Central. You can optionally turn this behaviour off (by putting 0 as value) and release the version manually.
+        close = '1'
+        //Optional property. By default the staging repository is closed and artifacts are released to Maven Central. You can optionally turn this behaviour off (by putting 0 as value) and release the version manually.
       }
     }
   }
@@ -164,5 +175,5 @@ tasks.withType(JDepend) {
 }
 
 task wrapper(type: Wrapper) {
-  gradleVersion = '2.2'
+  gradleVersion = '2.3'
 }
