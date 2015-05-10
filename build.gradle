@@ -14,7 +14,7 @@ buildscript {
   }
 
   dependencies {
-    classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.0'
+    classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.2'
   }
 }
 apply plugin: 'maven-publish'
@@ -175,5 +175,5 @@ tasks.withType(JDepend) {
 }
 
 task wrapper(type: Wrapper) {
-  gradleVersion = '2.3'
+  gradleVersion = '2.4'
 }
