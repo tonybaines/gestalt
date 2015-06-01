@@ -175,7 +175,7 @@ SimpleConfig config = Configurations.definedBy(SimpleConfig.class)
 
 ### Multiple sources
 
-Multiple sources can be combined from XML, ```.properties``` and [GroovyConfig](http://groovy.codehaus.org/gapi/groovy/util/ConfigSlurper.html) (last definition wins)
+Multiple sources can be combined from XML, ```.properties``` and [GroovyConfig](http://groovy.codehaus.org/gapi/groovy/util/ConfigSlurper.html) (the __first__ definition found wins)
 
 ```java
 ThingConfig config = Configurations.definedBy(ThingConfig.class)
