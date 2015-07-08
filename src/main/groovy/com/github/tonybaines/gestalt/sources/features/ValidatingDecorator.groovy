@@ -6,7 +6,7 @@ import com.github.tonybaines.gestalt.DynoClass
 import groovy.util.logging.Slf4j
 
 import javax.validation.Validation
-import javax.validation.executable.ExecutableValidator
+import javax.validation.Validator
 import java.lang.reflect.Method
 
 @Slf4j
@@ -27,11 +27,11 @@ class ValidatingDecorator<T> implements ConfigSource {
   }
 
   def validate(Method method, value) {
-    ExecutableValidator validator = Validation.buildDefaultValidatorFactory().validator.forExecutables()
-    def validationResults = validator.validateReturnValue(new DynoClass<>(configSource).getMapAsInterface(method.declaringClass), method, value)
+    Validator validator = Validation.buildDefaultValidatorFactory().getValidator()
+    def validationResults = validator.validateValue(method.declaringClass, Configurations.Utils.fromBeanSpec(method.name), value)
     if (!validationResults.empty) {
       validationResults.each {
-        log.warn "Validation failed for ${it.propertyPath.first()}: ${it.interpolatedMessage} (was $value)"
+        log.warn "Validation failed for ${it.propertyPath.first()}: ${it.message} (was $value)"
       }
       return null
     }

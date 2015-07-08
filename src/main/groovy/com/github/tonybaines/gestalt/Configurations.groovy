@@ -246,8 +246,14 @@ class Configurations<T> {
         c.call(filePath)
       }
       catch (Throwable e) {
-        if (isOptional(behaviours)) log.warn("Could not load the configuration from '$filePath', but it is optional so continuing", e)
-        else throw new ConfigurationException('Could not load the configuration', e)
+        if (isOptional(behaviours)) log.warn("Could not load an optional configuration: ${e.message}", e)
+        else {
+          log.error("Could not load from a required configuration source: ${e.message}", e)
+
+          def ex = new ConfigurationException("Could not load from a required configuration source: ${e.message}")
+          ex.setStackTrace([] as StackTraceElement[])
+          throw ex
+        }
       }
     }
 

@@ -21,7 +21,7 @@ public interface TestConfig {
     @NotNull
     long getLongValue();
 
-    Boolean isBooleanValue();
+    Boolean getBooleanValue();
 
     Handed getHandedness();
 

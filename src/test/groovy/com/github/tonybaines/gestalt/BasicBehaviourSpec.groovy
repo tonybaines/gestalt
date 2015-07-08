@@ -14,7 +14,7 @@ class BasicBehaviourSpec extends Specification {
     config.getIntValue() == 5
     config.getStringValue() == "Five"
     config.getDoubleValue() == 5.0
-    config.isBooleanValue() == true
+    config.getBooleanValue() == true
     config.getSubConfig().getIntValue() == 6
     config.getStrings()[0] == 'A'
     config.getStrings()[1] == 'B'
@@ -61,7 +61,7 @@ class BasicBehaviourSpec extends Specification {
     config.getIntValue() instanceof Integer
     config.getDoubleValue() instanceof Double
     config.getLongValue() instanceof Long
-    config.isBooleanValue() instanceof Boolean
+    config.getBooleanValue() instanceof Boolean
     config.getHandedness() instanceof Handed
     config.getSubConfig() instanceof TestConfig.SubConfigLevel1
     config.getSubConfig().getIntValue() instanceof Integer

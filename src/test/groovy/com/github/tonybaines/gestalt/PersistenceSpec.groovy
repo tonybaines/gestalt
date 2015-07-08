@@ -274,7 +274,7 @@ class PersistenceSpec extends Specification {
 
       long getLongValue() { 42000000000 }
 
-      Boolean isBooleanValue() { false }
+      Boolean getBooleanValue() { false }
 
       Handed getHandedness() { Handed.left }
 

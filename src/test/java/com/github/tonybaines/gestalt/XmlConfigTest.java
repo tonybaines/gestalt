@@ -16,7 +16,7 @@ public class XmlConfigTest {
         assertThat(testConfig.getIntValue(), is(5));
         assertThat(testConfig.getStringValue(), is("Five"));
         assertThat(testConfig.getDoubleValue(), is(5.0));
-        assertThat(testConfig.isBooleanValue(), is(true));
+        assertThat(testConfig.getBooleanValue(), is(true));
         assertThat(testConfig.getSubConfig().getIntValue(), is(6));
         assertThat(testConfig.getStrings().get(0), is("A"));
         assertThat(testConfig.getStrings().get(1), is("B"));
