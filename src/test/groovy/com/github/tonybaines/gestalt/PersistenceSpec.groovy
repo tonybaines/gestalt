@@ -202,7 +202,7 @@ class PersistenceSpec extends Specification {
     SimpleConfig config = new SimpleConfig() {
       String name = null
       Integer level = null
-      Boolean enabled = null
+      Boolean isEnabled(){null}
       String defaultOnly = null
     }
 
@@ -248,7 +248,7 @@ class PersistenceSpec extends Specification {
     void setLevel(int level) { this.level = level }
 
     @Override
-    Boolean getEnabled() { this.enabled }
+    Boolean isEnabled() { this.enabled }
 
     void setEnabled(boolean enabled) { this.enabled = enabled }
 

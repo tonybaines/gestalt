@@ -49,7 +49,7 @@ public class XmlConfigTest {
 
         assertThat(config.getSimpleConfig().getName(), is("bar"));
         assertThat(config.getSimpleConfig().getLevel(), is(11));
-      assertThat(config.getSimpleConfig().getEnabled(), is(true));
+      assertThat(config.getSimpleConfig().isEnabled(), is(true));
     }
 
     @Test
@@ -70,7 +70,7 @@ public class XmlConfigTest {
                 return 0;
             }
 
-          public Boolean getEnabled() {
+          public Boolean isEnabled() {
                 return false;
             }
 

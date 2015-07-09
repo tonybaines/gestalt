@@ -15,4 +15,33 @@ class ErrorBehaviourSpec extends Specification {
     e.stackTrace.length == 0
   }
 
+  def "Missing values without defaults"() {
+    given:
+    Properties brokenProps = new Properties()
+    def config = Configurations.definedBy(TestConfig).fromProperties(brokenProps).done()
+
+    when:
+    config.doubleValue
+
+    then:
+    def e = thrown(ConfigurationException)
+    e.message.contains('getDoubleValue')
+    e.stackTrace.length == 0
+  }
+
+  def "Property values failing JSR-303 validation"() {
+    given:
+    Properties brokenProps = new Properties()
+    brokenProps['stringValueWhoseDefaultBreaksValidation'] = 'foo'
+    def config = Configurations.definedBy(TestConfig).fromProperties(brokenProps).done()
+
+    when:
+    config.stringValueWhoseDefaultBreaksValidation
+
+    then:
+    def e = thrown(ConfigurationException)
+    e.message.contains('getStringValueWhoseDefaultBreaksValidation')
+    e.stackTrace.length == 0
+  }
+
 }

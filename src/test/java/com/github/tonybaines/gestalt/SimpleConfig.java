@@ -12,7 +12,7 @@ public interface SimpleConfig {
     Integer getLevel();
 
     @Default.Boolean(false)
-    Boolean getEnabled();
+    Boolean isEnabled();
 
     @Default.String("defaulted")
     String getDefaultOnly();

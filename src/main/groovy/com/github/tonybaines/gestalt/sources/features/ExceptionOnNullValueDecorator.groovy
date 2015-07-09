@@ -15,7 +15,11 @@ class ExceptionOnNullValueDecorator implements ConfigSource {
   @Override
   def lookup(List<String> path, Method method) {
     def value = delegate.lookup(path, method)
-    if (value == null) throw new ConfigurationException(method.name, "not found in any source")
+    if (value == null) {
+      def e = new ConfigurationException(method.name, "not found in any source")
+      e.setStackTrace([] as StackTraceElement[])
+      throw e
+    }
     else value
   }
 }
