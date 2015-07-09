@@ -237,10 +237,9 @@ public interface ThingConfig {
   @Default.Integer(42)
   Integer getSize();
 
-  // N.B. The Apache BVal implementation of JSR-303 doesn't seem to cope with `is` prefixes 
   // for `Boolean` properties (although it works with `boolean`) 
   @Default.Boolean(false)
-  Boolean getEnabled();
+  Boolean isEnabled();
 }
 ```
 
