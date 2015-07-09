@@ -248,8 +248,6 @@ class Configurations<T> {
       catch (Throwable e) {
         if (isOptional(behaviours)) log.warn("Could not load an optional configuration: ${e.message}", e)
         else {
-          log.error("Could not load from a required configuration source: ${e.message}", e)
-
           def ex = new ConfigurationException("Could not load from a required configuration source: ${e.message}")
           ex.setStackTrace([] as StackTraceElement[])
           throw ex
@@ -328,7 +326,7 @@ class Configurations<T> {
     private static InputStream resourceAsStream(String path, Class loadingClass) {
       def loader = loadingClass != null ? loadingClass : Configurations.class.classLoader
       def resourceStream = loader.getResourceAsStream(path)
-      if (resourceStream == null) throw new ConfigurationException("Could not load the configuration from '$path'")
+      if (resourceStream == null) throw new ConfigurationException("Could not load the configuration resource from '$path'")
       resourceStream
     }
 

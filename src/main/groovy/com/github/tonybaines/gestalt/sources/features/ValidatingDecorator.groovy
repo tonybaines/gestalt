@@ -6,8 +6,6 @@ import groovy.util.logging.Slf4j
 
 import javax.validation.Validation
 import javax.validation.Validator
-import javax.validation.metadata.BeanDescriptor
-import java.beans.PropertyDescriptor
 import java.lang.reflect.Method
 
 @Slf4j
