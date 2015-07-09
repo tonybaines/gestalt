@@ -1,3 +1,9 @@
+# [1.0.0](TBA) (TBA)
+* *N.B.* Potentially breaking changes from updated dependencies
+* Switch to Apache bval for JSR-303 validation to reduce the risk of dependency clashes (vs. Hibernate)
+* Reduce the verbosity of error logging and exceptions
+* Switch to Groovy 2.4.3
+
 # [0.8.9](http://central.maven.org/maven2/com/github/tonybaines/gestalt/0.8.9) (2015-03-26)
 * Fix for the scope of all dependencies being set to 'runtime' in the generated POM
 

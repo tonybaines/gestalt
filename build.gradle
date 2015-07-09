@@ -21,7 +21,7 @@ apply plugin: 'maven-publish'
 apply plugin: 'com.jfrog.bintray'
 
 group = 'com.github.tonybaines'
-version = '0.9.0-SNAPSHOT'
+version = '1.0.0-SNAPSHOT'
 
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
@@ -31,7 +31,7 @@ repositories {
 }
 dependencies {
   compile([
-    'org.codehaus.groovy:groovy-all:2.3.10',
+    'org.codehaus.groovy:groovy-all:2.4.3',
     'com.google.guava:guava:15.0',
     'org.slf4j:slf4j-api:1.6.1',
     'org.apache.bval:org.apache.bval.bundle:0.5',
@@ -42,7 +42,7 @@ dependencies {
   ])
 
   testCompile([
-    'org.spockframework:spock-core:1.0-groovy-2.3',
+    'org.spockframework:spock-core:1.0-groovy-2.4',
   ])
 
   testRuntime([
