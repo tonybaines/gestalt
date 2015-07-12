@@ -1,3 +1,6 @@
+# [1.0.1](http://central.maven.org/maven2/com/github/tonybaines/gestalt/1.0.1) (2015-07-12)
+* Relax the dependency constraints on Guava and SLF4J, remove unused dependencies
+
 # [1.0.0](http://central.maven.org/maven2/com/github/tonybaines/gestalt/1.0.0) (2015-07-12)
 * *N.B.* Potentially breaking changes from updated dependencies
 * Switch to Apache bval for JSR-303 validation to reduce the risk of dependency clashes (vs. Hibernate)
