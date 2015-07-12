@@ -1,4 +1,4 @@
-# [1.0.0](TBA) (TBA)
+# [1.0.0](http://central.maven.org/maven2/com/github/tonybaines/gestalt/1.0.0) (2015-07-12)
 * *N.B.* Potentially breaking changes from updated dependencies
 * Switch to Apache bval for JSR-303 validation to reduce the risk of dependency clashes (vs. Hibernate)
 * Reduce the verbosity of error logging and exceptions
