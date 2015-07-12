@@ -249,7 +249,7 @@ class Configurations<T> {
         if (isOptional(behaviours)) log.warn("Could not load an optional configuration: ${e.message}", e)
         else {
           def ex = new ConfigurationException("Could not load from a required configuration source: ${e.message}")
-          ex.setStackTrace([] as StackTraceElement[])
+          ex.printStackTrace()
           throw ex
         }
       }

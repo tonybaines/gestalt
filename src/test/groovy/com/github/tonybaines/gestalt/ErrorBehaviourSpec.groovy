@@ -12,7 +12,6 @@ class ErrorBehaviourSpec extends Specification {
     then:
     def e = thrown(ConfigurationException)
     e.message.contains(missingResourceName)
-    e.stackTrace.length == 0
   }
 
   def "Missing values without defaults"() {
