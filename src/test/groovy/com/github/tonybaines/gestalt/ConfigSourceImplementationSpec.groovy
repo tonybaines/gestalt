@@ -2,9 +2,7 @@ package com.github.tonybaines.gestalt
 
 import spock.lang.Specification
 
-import javax.validation.Configuration
 import java.lang.reflect.Method
-
 
 /*============================================================================*
  * - COPYRIGHT NOTICE -

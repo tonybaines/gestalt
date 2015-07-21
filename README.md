@@ -237,7 +237,7 @@ public interface ThingConfig {
   @Default.Integer(42)
   Integer getSize();
 
-  // for `Boolean` properties (although it works with `boolean`) 
+  // for `Boolean` properties (although it works with `boolean`)
   @Default.Boolean(false)
   Boolean isEnabled();
 }
@@ -415,6 +415,16 @@ public interface ConfigWithObfuscatedString {
 
 To read the plaintext version in your application, the `ObfuscatedString` type has a method `toPlainTextString()`.
 
+## Custom `ConfigSource` implementations
+
+To add support for a source of configuration property values from a custom back-end (e.g. a database), supply an
+instance of an implementation of [`ConfigSource`](src/main/java/com/github/tonybaines/gestalt/ConfigSource.java)
+
+```java
+Configurations.from(customConfigSource).done();
+```
+
+A very simple example implementation is in [the test](src/test/groovy/com/github/tonybaines/gestalt/ConfigSourceImplementationSpec.groovy)
 
 ## See the specifications for more
 
