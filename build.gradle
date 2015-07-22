@@ -32,7 +32,7 @@ repositories {
 }
 dependencies {
   compile([
-    'org.codehaus.groovy:groovy-all:2.4.3',
+    'org.codehaus.groovy:groovy-all:2.4.4',
     'com.google.guava:guava:[13.0,)',
     'org.slf4j:slf4j-api:[1.6.1,)',
     'org.apache.bval:org.apache.bval.bundle:0.5',
