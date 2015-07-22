@@ -1,3 +1,7 @@
+# [1.0.2](http://central.maven.org/maven2/com/github/tonybaines/gestalt/1.0.2) (2015-07-22)
+* Upgrade to depend on [Groovy 2.4.4](http://groovy-lang.org/security.html)
+* Support for custom `ConfigSource` implementations to supply property values
+
 # [1.0.1](http://central.maven.org/maven2/com/github/tonybaines/gestalt/1.0.1) (2015-07-12)
 * Relax the dependency constraints on Guava and SLF4J, remove unused dependencies
 
