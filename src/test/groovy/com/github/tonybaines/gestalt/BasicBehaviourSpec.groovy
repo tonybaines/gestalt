@@ -122,10 +122,29 @@ class BasicBehaviourSpec extends Specification {
   def "Issue 20: missing list types should be treated as null when reading from properties"() {
     when:
     def properties = new Properties()
-    ListConfig configInstance = Configurations.definedBy(ListConfig).fromProperties(properties).done()
+    ListConfig configInstance = Configurations
+      .definedBy(ListConfig)
+      .fromProperties(properties).done()
+
+    configInstance.ints
 
     then:
-    configInstance.ints == null
+    def e = thrown(ConfigurationException)
+    e.message.contains 'Failed to handle getInts'
+  }
+
+  def "Issue 20: missing list types should be treated as null when reading from XML"() {
+    when:
+    def xml = '<x></x>'
+    ListConfig configInstance = Configurations
+      .definedBy(ListConfig)
+      .fromXml(new ByteArrayInputStream(xml.bytes)).done()
+
+    configInstance.ints
+
+    then:
+    def e = thrown(ConfigurationException)
+    e.message.contains 'Failed to handle getInts'
   }
 
 }

@@ -63,7 +63,6 @@ class PersistenceSpec extends Specification {
     roundTripped.doubleValue == 42.5
     roundTripped.booleanValue == false
     roundTripped.subConfig.intValue == 42
-    roundTripped.allTheThings == null
     roundTripped.allTheThings[0].id == "123abc"
     roundTripped.allTheThings[0].stringValue == "foo"
     roundTripped.strings[0] == "foo"
