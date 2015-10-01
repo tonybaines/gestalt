@@ -30,7 +30,7 @@ public interface TestConfig {
 
     List<String> getStrings();
 
-    List<Thing> getAllTheThings();
+    List<SomeThing> getAllTheThings();
 
     @Comment("Does not exist")
     Integer getNonExistent();
@@ -96,7 +96,7 @@ public interface TestConfig {
         String getNonExistent();
     }
 
-    public static interface Thing {
+    public static interface SomeThing {
         String getId();
 
         String getStringValue();

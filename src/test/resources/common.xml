@@ -17,16 +17,16 @@
     </strings>
     <allTheThings>
         <!-- For an XML source, either a child node (default) or an attribute (fall-back) can be used to match e.g. getId() -->
-        <thing id="alpha">
+        <someThing id="alpha">
             <stringValue>A</stringValue>
-        </thing>
-        <thing id="bravo">
+        </someThing>
+        <someThing id="bravo">
             <stringValue>B</stringValue>
-        </thing>
-        <thing>
+        </someThing>
+        <someThing>
             <id>charlie</id>
             <stringValue>C</stringValue>
-        </thing>
+        </someThing>
     </allTheThings>
     <propertyDefinedAllConfigSources>from-xml</propertyDefinedAllConfigSources>
     <declaredAsAnIntegerButIsAString>Whoops!</declaredAsAnIntegerButIsAString>

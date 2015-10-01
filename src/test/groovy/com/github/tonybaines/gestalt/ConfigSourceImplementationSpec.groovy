@@ -6,8 +6,8 @@ import java.lang.reflect.Method
 
 class ConfigSourceImplementationSpec extends Specification {
 
-  public static final TestConfig.Thing THING_1 = ['id': '1', 'stringValue': 'thing 1'] as TestConfig.Thing
-  public static final TestConfig.Thing THING_2 = ['id': '2', 'stringValue': 'thing 2'] as TestConfig.Thing
+  public static final TestConfig.SomeThing THING_1 = ['id': '1', 'stringValue': 'thing 1'] as TestConfig.SomeThing
+  public static final TestConfig.SomeThing THING_2 = ['id': '2', 'stringValue': 'thing 2'] as TestConfig.SomeThing
 
   def "Consuming a simple externally implemented config source" ( ) {
     given:

@@ -3,7 +3,6 @@ package com.github.tonybaines.gestalt
 import com.github.tonybaines.gestalt.transformers.HyphenatedPropertyNameTransformer
 import com.github.tonybaines.gestalt.transformers.PropertyNameTransformer
 import com.google.common.collect.Lists
-import spock.lang.Ignore
 import spock.lang.Specification
 
 import static com.github.tonybaines.gestalt.Configurations.Utils.propsFromString
@@ -312,9 +311,9 @@ class PersistenceSpec extends Specification {
 
       List<String> getStrings() { Lists.newArrayList("foo", "bar") }
 
-      List<TestConfig.Thing> getAllTheThings() {
+      List<TestConfig.SomeThing> getAllTheThings() {
         Lists.newArrayList(
-          new TestConfig.Thing() {
+          new TestConfig.SomeThing() {
             String getId() { "123abc" }
 
             String getStringValue() { "foo" }

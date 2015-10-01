@@ -43,7 +43,7 @@ class ConfigXmlSerialiser<T> {
         // Lists of values
         else if (Configurations.Utils.isAList(method.genericReturnType)) {
           Class listGenericType = method.genericReturnType.actualTypeArguments[0]
-          String listTypeName = "${Introspector.decapitalize(listGenericType.simpleName)}"
+          String listTypeName = propertyNameTransformer.fromPropertyName("${Introspector.decapitalize(listGenericType.simpleName)}")
 
           "$outputPropName" {
             value.each { item ->
