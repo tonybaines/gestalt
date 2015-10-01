@@ -22,7 +22,7 @@ apply plugin: 'maven-publish'
 apply plugin: 'com.jfrog.bintray'
 
 group = 'com.github.tonybaines'
-version = '1.0.3'
+version = '1.0.4-SNAPSHOT'
 
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
