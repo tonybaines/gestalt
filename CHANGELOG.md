@@ -1,3 +1,7 @@
+
+# [1.0.3](http://central.maven.org/maven2/com/github/tonybaines/gestalt/1.0.3) (2015-10-01)
+* Issue #20: Missing properties for list types in config sources treated as empty lists
+
 # [1.0.2](http://central.maven.org/maven2/com/github/tonybaines/gestalt/1.0.2) (2015-07-22)
 * Upgrade to depend on [Groovy 2.4.4](http://groovy-lang.org/security.html)
 * Support for custom `ConfigSource` implementations to supply property values
