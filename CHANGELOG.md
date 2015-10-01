@@ -1,4 +1,7 @@
 
+# [1.0.4](http://central.maven.org/maven2/com/github/tonybaines/gestalt/1.0.4) (2015-10-01)
+* Issue #21: Cosmetic fix when serialising list types to XML with property-name transformers
+
 # [1.0.3](http://central.maven.org/maven2/com/github/tonybaines/gestalt/1.0.3) (2015-10-01)
 * Issue #20: Missing properties for list types in config sources treated as empty lists
 

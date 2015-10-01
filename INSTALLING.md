@@ -3,7 +3,7 @@ To install and use *Gestalt*, just point your dependency-management system of ch
 
 #### [Gradle](http://gradle.org)
 ```groovy
-'com.github.tonybaines:gestalt:1.0.3'
+'com.github.tonybaines:gestalt:1.0.4'
 ```
 
 
@@ -12,13 +12,13 @@ To install and use *Gestalt*, just point your dependency-management system of ch
 <dependency>
     <groupId>com.github.tonybaines</groupId>
     <artifactId>gestalt</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
 </dependency>
 ```
 
 #### [Ivy](https://ant.apache.org/ivy/)
 ```xml
-<dependency org="com.github.tonybaines" name="gestalt" rev="1.0.3"/>
+<dependency org="com.github.tonybaines" name="gestalt" rev="1.0.4"/>
 ```
 
 #### Manual installation
