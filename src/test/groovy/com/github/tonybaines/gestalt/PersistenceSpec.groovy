@@ -51,16 +51,24 @@ class PersistenceSpec extends Specification {
 
   def "An instance created from an external source can be persisted [Properties]"() {
     given: 'a config instance'
-    SimpleConfig propsFromFile = Configurations.definedBy(SimpleConfig).fromPropertiesResource('simple-config-with-constant-refs.properties').done()
+    TestConfig configInstance = aNewConfigInstance()
 
     when: "it's turned into a String and re-parsed"
-    def props = propsFromString(Configurations.serialise(propsFromFile, SimpleConfig).toProperties())
-    SimpleConfig roundTripped = Configurations.definedBy(SimpleConfig).fromProperties(props).done()
+    def props = propsFromString(Configurations.serialise(configInstance, TestConfig).toProperties())
+    TestConfig roundTripped = Configurations.definedBy(TestConfig).fromProperties(props).done()
 
     then:
-    propsFromFile.name == roundTripped.name
-    propsFromFile.level == roundTripped.level
-    propsFromFile.enabled == roundTripped.enabled
+    roundTripped.intValue == 1
+    roundTripped.handedness == Handed.left
+    roundTripped.doubleValue == 42.5
+    roundTripped.booleanValue == false
+    roundTripped.subConfig.intValue == 42
+    roundTripped.allTheThings == null
+    roundTripped.allTheThings[0].id == "123abc"
+    roundTripped.allTheThings[0].stringValue == "foo"
+    roundTripped.strings[0] == "foo"
+    roundTripped.strings[1] == "bar"
+    roundTripped.subConfig.l2.level3Property == 'baz'
 
   }
 
@@ -113,6 +121,7 @@ class PersistenceSpec extends Specification {
     roundTripped.name == "bar"
     roundTripped.level == 42
     roundTripped.enabled == true
+
   }
 
   def "Allowing property names to be customised when round-tripping via Properties"() {
@@ -138,13 +147,16 @@ class PersistenceSpec extends Specification {
 
     when:
     String xmlString = Configurations.serialise(configInstance, TestConfig).using(transformer).toXml()
-    println xmlString
     TestConfig roundTripped = Configurations.definedBy(TestConfig).fromXml(new ByteArrayInputStream(xmlString.bytes), transformer).done()
     def xml = new XmlSlurper().parseText(xmlString)
 
     then:
     xml.'double-value' == roundTripped.doubleValue.toString()
     xml.'sub-config'.'int-value' == roundTripped.subConfig.intValue.toString()
+    xml.'all-the-things'.children().any { thing ->
+      thing.id == "123abc" &&
+        thing.'string-value' == "foo"
+    }
 
   }
 

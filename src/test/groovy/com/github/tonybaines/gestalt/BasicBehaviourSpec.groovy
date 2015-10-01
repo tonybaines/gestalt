@@ -115,4 +115,17 @@ class BasicBehaviourSpec extends Specification {
 
   }
 
+  interface ListConfig {
+    List<Integer> getInts()
+  }
+
+  def "Issue 20: missing list types should be treated as null when reading from properties"() {
+    when:
+    def properties = new Properties()
+    ListConfig configInstance = Configurations.definedBy(ListConfig).fromProperties(properties).done()
+
+    then:
+    configInstance.ints == null
+  }
+
 }
