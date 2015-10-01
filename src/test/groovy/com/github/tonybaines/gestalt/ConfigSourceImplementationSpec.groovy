@@ -5,6 +5,10 @@ import spock.lang.Specification
 import java.lang.reflect.Method
 
 class ConfigSourceImplementationSpec extends Specification {
+
+  public static final TestConfig.Thing THING_1 = ['id': '1', 'stringValue': 'thing 1'] as TestConfig.Thing
+  public static final TestConfig.Thing THING_2 = ['id': '2', 'stringValue': 'thing 2'] as TestConfig.Thing
+
   def "Consuming a simple externally implemented config source" ( ) {
     given:
     ConfigSource mySource = new ConfigSource() {
@@ -13,6 +17,7 @@ class ConfigSourceImplementationSpec extends Specification {
         switch(path.join('.')) {
           case 'name': return 'myConfigSource'
           case 'level': return 11
+          case 'strings': return ['foo', 'bar', 'baz']
         }
       }
     }
@@ -23,6 +28,27 @@ class ConfigSourceImplementationSpec extends Specification {
     then: ""
     config.name == 'myConfigSource'
     config.level == 11
+  }
+
+  def "Consuming a simple externally implemented config source for a list type" ( ) {
+    given:
+    ConfigSource mySource = new ConfigSource() {
+      @Override
+      def lookup(List<String> path, Method method) {
+        switch(path.join('.')) {
+          case 'strings': return ['foo', 'bar', 'baz']
+          case 'things': return [THING_1, THING_2]
+        }
+      }
+    }
+
+    when: ""
+    TestConfig config = Configurations.definedBy(TestConfig).from(mySource).done()
+
+    then: ""
+    config.strings.contains('foo')
+    config.things.contains(THING_1)
+    config.things.contains(THING_2)
   }
 
   def "Consuming a complicated externally implemented config source"() {
