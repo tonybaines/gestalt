@@ -30,7 +30,7 @@ public interface TestConfig {
 
     List<String> getStrings();
 
-    List<Thing> getThings();
+    List<Thing> getAllTheThings();
 
     @Comment("Does not exist")
     Integer getNonExistent();

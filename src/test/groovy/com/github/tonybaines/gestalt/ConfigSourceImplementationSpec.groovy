@@ -37,7 +37,7 @@ class ConfigSourceImplementationSpec extends Specification {
       def lookup(List<String> path, Method method) {
         switch(path.join('.')) {
           case 'strings': return ['foo', 'bar', 'baz']
-          case 'things': return [THING_1, THING_2]
+          case 'allTheThings': return [THING_1, THING_2]
         }
       }
     }
@@ -47,8 +47,8 @@ class ConfigSourceImplementationSpec extends Specification {
 
     then: ""
     config.strings.contains('foo')
-    config.things.contains(THING_1)
-    config.things.contains(THING_2)
+    config.allTheThings.contains(THING_1)
+    config.allTheThings.contains(THING_2)
   }
 
   def "Consuming a complicated externally implemented config source"() {

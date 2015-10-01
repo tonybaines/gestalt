@@ -24,7 +24,7 @@ class PersistenceSpec extends Specification {
     xml.handedness == 'left'
     xml.doubleValue == 42.5
     xml.booleanValue == false
-    xml.things.children().any { thing ->
+    xml.allTheThings.children().any { thing ->
       thing.id == "123abc" &&
         thing.stringValue == "foo"
     }
@@ -94,8 +94,8 @@ class PersistenceSpec extends Specification {
     props.doubleValue == '42.5'
     props.booleanValue == 'false'
     props.'subConfig.intValue' == '42'
-    props.'things.0.id' == "123abc"
-    props.'things.0.stringValue' == "foo"
+    props.'allTheThings.0.id' == "123abc"
+    props.'allTheThings.0.stringValue' == "foo"
     props.'strings.0' == "foo"
     props.'strings.1' == "bar"
     props.'subConfig.l2.level3Property' == 'baz'
@@ -138,6 +138,7 @@ class PersistenceSpec extends Specification {
 
     when:
     String xmlString = Configurations.serialise(configInstance, TestConfig).using(transformer).toXml()
+    println xmlString
     TestConfig roundTripped = Configurations.definedBy(TestConfig).fromXml(new ByteArrayInputStream(xmlString.bytes), transformer).done()
     def xml = new XmlSlurper().parseText(xmlString)
 
@@ -300,7 +301,7 @@ class PersistenceSpec extends Specification {
 
       List<String> getStrings() { Lists.newArrayList("foo", "bar") }
 
-      List<TestConfig.Thing> getThings() {
+      List<TestConfig.Thing> getAllTheThings() {
         Lists.newArrayList(
           new TestConfig.Thing() {
             String getId() { "123abc" }

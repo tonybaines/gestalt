@@ -23,7 +23,7 @@ public class XmlConfigTest {
         assertThat(testConfig.getStrings().get(2), is("C"));
         assertThat(testConfig.getHandedness(), is(Handed.left));
         assertThat(testConfig.getNonExistentDoubleWithDefault(), is(42.5));
-        FluentIterable.from(testConfig.getThings()).anyMatch(new Predicate<TestConfig.Thing>() {
+        FluentIterable.from(testConfig.getAllTheThings()).anyMatch(new Predicate<TestConfig.Thing>() {
             public boolean apply(TestConfig.Thing thing) {
                 return thing.getId().equals("alpha");
             }

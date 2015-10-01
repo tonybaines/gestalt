@@ -20,10 +20,10 @@ class BasicBehaviourSpec extends Specification {
     config.getStrings()[1] == 'B'
     config.getStrings()[2] == 'C'
     config.getHandedness() == Handed.left
-    config.getThings().size() == 3
-    config.getThings()[0].getId() == 'alpha'
-    config.getThings()[1].getId() == 'bravo'
-    config.getThings()[2].getId() == 'charlie'
+    config.getAllTheThings().size() == 3
+    config.getAllTheThings()[0].getId() == 'alpha'
+    config.getAllTheThings()[1].getId() == 'bravo'
+    config.getAllTheThings()[2].getId() == 'charlie'
 
     where:
     name     | configuration
