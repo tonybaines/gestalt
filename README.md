@@ -131,10 +131,15 @@ public interface ThingConfig {
 
   @Default.Boolean(false)
   Boolean getEnabled();
+
+  @Default.EmptyList
+  List<String> getMissing();
 }
 ```
 
 So a lookup to ```config.getSize()``` when the value isn't explicitly defined will return ```42```
+
+Properties defined as a ```List``` can only be defaulted to an empty list.
 
 ### Constants
 Sometimes it's useful to able to declare and reuse constant values multiple times in a configuration, perhaps
