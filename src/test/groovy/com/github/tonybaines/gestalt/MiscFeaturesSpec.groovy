@@ -46,6 +46,24 @@ class MiscFeaturesSpec extends Specification {
     'Groovy' | Configurations.definedBy(TestConfig).fromGroovyConfigResource('common.grc').done()
   }
 
+  public interface ListWithDefaults {
+    @Default.EmptyList
+    List<String> getMissing()
+  }
+
+  def "Missing list properties can default to being empty"() {
+    when:
+    ListWithDefaults config = Configurations.definedBy(ListWithDefaults).fromProperties(new Properties()).done()
+
+    println Configurations.serialise(config, ListWithDefaults).toProperties()
+
+    then:
+    config.missing != null
+    config.missing instanceof List
+    config.missing.isEmpty()
+
+  }
+
   def "Configurations will fall-back until a value is found"() {
     given:
     def configuration = newCompositeConfiguration()

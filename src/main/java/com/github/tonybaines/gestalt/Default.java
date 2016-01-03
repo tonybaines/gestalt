@@ -5,6 +5,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
+import java.util.List;
 
 public interface Default {
     @Target({ METHOD })
@@ -41,5 +42,10 @@ public interface Default {
     @Retention(RUNTIME)
     public @interface Enum {
         java.lang.String value();
+    }
+
+    @Target({ METHOD })
+    @Retention(RUNTIME)
+    public @interface EmptyList {
     }
 }

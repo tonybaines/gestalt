@@ -289,6 +289,8 @@ class PersistenceSpec extends Specification {
 
       Handed getHandedness() { Handed.left }
 
+      List<String> getMissing() { null }
+
       TestConfig.SubConfigLevel1 getSubConfig() {
         new TestConfig.SubConfigLevel1() {
           Integer getIntValue() { 42 }

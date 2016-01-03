@@ -32,6 +32,9 @@ public interface TestConfig {
 
     List<SomeThing> getAllTheThings();
 
+    @Default.EmptyList
+    List<String> getMissing();
+
     @Comment("Does not exist")
     Integer getNonExistent();
 

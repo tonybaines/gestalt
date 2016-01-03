@@ -2,6 +2,7 @@ package com.github.tonybaines.gestalt.sources
 
 import com.github.tonybaines.gestalt.ConfigSource
 import com.github.tonybaines.gestalt.ConfigurationException
+import com.github.tonybaines.gestalt.Configurations
 import com.github.tonybaines.gestalt.Default
 import groovy.util.logging.Slf4j
 
@@ -18,8 +19,14 @@ class DefaultConfigSource implements ConfigSource {
       it.annotationType().name.contains(Default.class.name)
     }
     if (defaultAnnotation != null) {
-      log.info "Falling back to default definition for ${path.join('.')}"
+      log.info "Falling back to default definition for property '${path.join('.')}'"
       Class<? extends Annotation> defaultsType = defaultAnnotation.annotationType()
+
+      if (Configurations.Utils.isAList(method.genericReturnType) &&
+                Default.EmptyList.class.name.equals(defaultsType.name)) {
+        return new ArrayList()
+      }
+
       def annotationValue = method.getAnnotation(defaultsType).value()
 
       if (Default.Enum.class.name.equals(defaultsType.name)) {
@@ -34,7 +41,7 @@ class DefaultConfigSource implements ConfigSource {
       } else {
         return annotationValue
       }
-    } else log.info "Failed to find a default definition for ${path.join('.')}"
+    } else log.info "Failed to find a default definition for property '${path.join('.')}'"
 
     return null
   }
