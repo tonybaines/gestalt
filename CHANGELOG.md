@@ -1,5 +1,5 @@
 # [2.0.0](http://central.maven.org/maven2/com/github/tonybaines/gestalt/2.0.0) (2016-03-29)
-* *BREAKING CHANGE**: Recompiled with Java 8
+* *BREAKING CHANGE*: Recompiled with Java 8
 * Verified to work with default methods defined in interfaces
 * Workaround for JaCoCo '$jacoco' properties appearing in Java 8
 
