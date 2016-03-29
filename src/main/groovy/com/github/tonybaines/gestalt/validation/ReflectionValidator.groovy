@@ -3,6 +3,7 @@ package com.github.tonybaines.gestalt.validation
 import com.github.tonybaines.gestalt.ConfigurationException
 import com.github.tonybaines.gestalt.Configurations
 
+import static com.github.tonybaines.gestalt.Configurations.Utils.declaredMethodsOf
 import static com.github.tonybaines.gestalt.Configurations.Utils.hasAFromStringMethod
 
 class ReflectionValidator {
@@ -22,7 +23,7 @@ class ReflectionValidator {
   }
 
   private def recursiveValidation(object, configInterface, pathSoFar = "") {
-    configInterface.declaredMethods.each { method ->
+    declaredMethodsOf(configInterface).each { method ->
       String propertyName = Configurations.Utils.fromBeanSpec(method.name)
       try {
         def value = object."${propertyName}"

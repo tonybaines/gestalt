@@ -3,6 +3,7 @@ package com.github.tonybaines.gestalt.serialisation
 import com.github.tonybaines.gestalt.Configurations
 import com.github.tonybaines.gestalt.transformers.PropertyNameTransformer
 
+import static com.github.tonybaines.gestalt.Configurations.Utils.declaredMethodsOf
 import static com.github.tonybaines.gestalt.Configurations.Utils.hasAFromStringMethod
 
 class ConfigPropertiesSerialiser<T> {
@@ -22,7 +23,7 @@ class ConfigPropertiesSerialiser<T> {
 
   def propsFrom(Class configInterface, def object, prefix = null) {
     def props = []
-    configInterface.declaredMethods.each { method ->
+    declaredMethodsOf(configInterface).each { method ->
       def propName = Configurations.Utils.fromBeanSpec(method.name)
 
       if (object != null) {

@@ -66,11 +66,11 @@ public class XmlConfigTest {
                 return null;
             }
 
-          public Integer getLevel() {
+            public Integer getLevel() {
                 return 0;
             }
 
-          public Boolean isEnabled() {
+            public Boolean isEnabled() {
                 return false;
             }
 

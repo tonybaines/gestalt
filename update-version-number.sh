@@ -22,6 +22,5 @@ echo "Releasing $RELEASE_V"
 # Update files
 sed -i  "s/version = '$CURRENT_V'/version = '$RELEASE_V'/" build.gradle
 sed -i  "s/$PREV_V/$RELEASE_V/" INSTALLING.md
-sed -i  "s/$PREV_V/$RELEASE_V/" CHANGELOG.md
 
 git commit -a -m "Releasing $RELEASE_V"

@@ -13,8 +13,11 @@ public interface SimpleConfig {
 
     @Default.Boolean(false)
     Boolean isEnabled();
-
     @Default.String("defaulted")
     String getDefaultOnly();
+
+    default String getNotAProperty() {
+        return "Not a property";
+    }
 
 }

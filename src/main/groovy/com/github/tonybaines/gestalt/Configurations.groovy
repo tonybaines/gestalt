@@ -71,7 +71,11 @@ class Configurations<T> {
     }
 
     static boolean declaresMethod(Class clazz, String name, Class... params) {
-      clazz.declaredMethods.any {it.name == name && it.parameterTypes == params}
+      declaredMethodsOf(clazz).any {it.name == name && it.parameterTypes == params}
+    }
+
+    static Iterable declaredMethodsOf(configInterface) {
+      configInterface.declaredMethods.grep { !it.name.startsWith('\$') }
     }
 
     public static boolean hasAFromStringMethod(Class clazz) {
