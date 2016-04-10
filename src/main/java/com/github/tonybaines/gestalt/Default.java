@@ -10,42 +10,42 @@ import java.util.List;
 public interface Default {
     @Target({ METHOD })
     @Retention(RUNTIME)
-    public @interface String {
+    @interface String {
         java.lang.String value();
     }
 
     @Target({ METHOD })
     @Retention(RUNTIME)
-    public @interface Integer {
+    @interface Integer {
         int value();
     }
 
     @Target({ METHOD })
     @Retention(RUNTIME)
-    public @interface Boolean {
+    @interface Boolean {
         boolean value();
     }
 
     @Target({ METHOD })
     @Retention(RUNTIME)
-    public @interface Double {
+    @interface Double {
         double value();
     }
 
     @Target({ METHOD })
     @Retention(RUNTIME)
-    public @interface Long {
+    @interface Long {
         long value();
     }
 
     @Target({ METHOD })
     @Retention(RUNTIME)
-    public @interface Enum {
+    @interface Enum {
         java.lang.String value();
     }
 
     @Target({ METHOD })
     @Retention(RUNTIME)
-    public @interface EmptyList {
+    @interface EmptyList {
     }
 }
