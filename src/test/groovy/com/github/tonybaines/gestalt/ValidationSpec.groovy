@@ -1,6 +1,7 @@
 package com.github.tonybaines.gestalt
 
 import com.github.tonybaines.gestalt.validation.ValidationResult
+import com.google.common.collect.Lists
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -86,6 +87,17 @@ class ValidationSpec extends Specification {
     !validationResult.hasFailures()
   }
 
+  def "Validating with a custom validator"() {
+    given:
+    CustomValidationConfig config = Configurations.definedBy(CustomValidationConfig).fromProperties(new Properties()).done()
+    when:
+    ValidationResult validationResult = Configurations.validate(config, CustomValidationConfig)
+
+    then:
+    validationResult.hasFailures()
+    validationResult.items.size() == 2
+  }
+
   interface CustomType {
     @Default.String("foo")
     @NotNull
@@ -100,4 +112,6 @@ class ValidationSpec extends Specification {
     @NotNull
     public Integer getPort()
   }
+
+
 }

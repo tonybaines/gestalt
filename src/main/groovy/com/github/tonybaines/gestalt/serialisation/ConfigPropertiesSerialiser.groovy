@@ -26,6 +26,8 @@ class ConfigPropertiesSerialiser<T> {
     declaredMethodsOf(configInterface).each { method ->
       def propName = Configurations.Utils.fromBeanSpec(method.name)
 
+      if (!object.hasProperty(propName)) return
+
       if (object != null) {
         def value = object."$propName"
         if (Configurations.Utils.returnsAValue(method) || method.returnType.enum || hasAFromStringMethod(method.returnType)) {

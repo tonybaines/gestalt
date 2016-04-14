@@ -5,8 +5,16 @@ import groovy.transform.Immutable
 public class ValidationResult implements Iterable<ValidationResult> {
   def items = []
 
+  def add(Item item) {
+    leftShift(item)
+  }
+  
   def leftShift(Item item) {
     items << item
+  }
+  
+  def leftShift(ValidationResult result) {
+    items.addAll(result.items)
   }
 
   @Override

@@ -34,6 +34,8 @@ class ConfigXmlSerialiser<T> {
         def propName = Configurations.Utils.fromBeanSpec(method.name)
         def outputPropName = propertyNameTransformer.fromPropertyName(propName)
 
+        if (!object.hasProperty(propName)) return
+
         def value = object."$propName"
         // Simple values
         if (Configurations.Utils.returnsAValue(method) || method.returnType.enum || hasAFromStringMethod(method.returnType)) {

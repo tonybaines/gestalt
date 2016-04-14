@@ -1,5 +1,8 @@
 package com.github.tonybaines.gestalt;
 
+import com.github.tonybaines.gestalt.validation.ValidationResult;
+import com.google.common.collect.Lists;
+
 import javax.validation.constraints.NotNull;
 
 public interface SimpleConfig {
@@ -16,7 +19,7 @@ public interface SimpleConfig {
     @Default.String("defaulted")
     String getDefaultOnly();
 
-    default String getNotAProperty() {
+    default String notAProperty() {
         return "Not a property";
     }
 

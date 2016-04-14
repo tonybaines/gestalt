@@ -26,6 +26,14 @@ class ReflectionValidator {
     declaredMethodsOf(configInterface).each { method ->
       String propertyName = Configurations.Utils.fromBeanSpec(method.name)
       try {
+
+        if (method.returnType.equals(ValidationResult.class) || method.returnType.equals(ValidationResult.Item.class)) {
+          failures << object.invokeMethod(method.name, null)
+          return
+        }
+        
+        if (!object.hasProperty(propertyName)) return
+
         def value = object."${propertyName}"
 
         // Simple values, enums and custom types
