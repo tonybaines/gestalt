@@ -1,3 +1,7 @@
+# [2.0.1]()
+* `@Optional` annotation
+* Custom validation via default methods in config interfaces
+
 # [2.0.0](http://central.maven.org/maven2/com/github/tonybaines/gestalt/2.0.0) (2016-03-29)
 * *BREAKING CHANGE*: Recompiled with Java 8
 * Verified to work with default methods defined in interfaces

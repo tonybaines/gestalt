@@ -431,6 +431,8 @@ Configurations.from(customConfigSource).done();
 
 A very simple example implementation is in [the test](src/test/groovy/com/github/tonybaines/gestalt/ConfigSourceImplementationSpec.groovy)
 
+## Custom Validation
+
 ## See the specifications for more
 
 The features described above (and more) were developed from the specifications in [src/test/groovy/com/github/tonybaines/gestalt](src/test/groovy/com/github/tonybaines/gestalt/) , using the example config sources in [src/test/resources](src/test/resources).

@@ -88,14 +88,18 @@ class ValidationSpec extends Specification {
   }
 
   def "Validating with a custom validator"() {
+    def properties = new Properties()
+    properties.put('foo', 'foo')
+    properties.put('bar', 'bar')
     given:
-    CustomValidationConfig config = Configurations.definedBy(CustomValidationConfig).fromProperties(new Properties()).done()
+    CustomValidationConfig config = Configurations.definedBy(CustomValidationConfig).fromProperties(properties).done()
     when:
     ValidationResult validationResult = Configurations.validate(config, CustomValidationConfig)
 
     then:
     validationResult.hasFailures()
     validationResult.items.size() == 2
+    validationResult.items[0].toString().contains('Only Foo *or* Bar should be defined')
   }
 
   interface CustomType {

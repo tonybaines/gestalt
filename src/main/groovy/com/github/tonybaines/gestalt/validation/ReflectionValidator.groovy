@@ -5,6 +5,9 @@ import com.github.tonybaines.gestalt.Configurations
 
 import static com.github.tonybaines.gestalt.Configurations.Utils.declaredMethodsOf
 import static com.github.tonybaines.gestalt.Configurations.Utils.hasAFromStringMethod
+import static com.github.tonybaines.gestalt.Configurations.Utils.optional
+import static com.github.tonybaines.gestalt.Configurations.Utils.returnsAValue
+import static com.github.tonybaines.gestalt.Configurations.Utils.returnsValidationResults
 
 class ReflectionValidator {
   private final Object instance
@@ -27,17 +30,22 @@ class ReflectionValidator {
       String propertyName = Configurations.Utils.fromBeanSpec(method.name)
       try {
 
-        if (method.returnType.equals(ValidationResult.class) || method.returnType.equals(ValidationResult.Item.class)) {
-          failures << object.invokeMethod(method.name, null)
+        if (returnsValidationResults(method)) {
+          try {
+            def validationResults = object.invokeMethod(method.name, object)
+            failures << validationResults
+          } catch (ConfigurationException ignored) {
+            // Ignore config exceptions thrown during custom validation
+          }
           return
         }
-        
+
         if (!object.hasProperty(propertyName)) return
 
         def value = object."${propertyName}"
 
         // Simple values, enums and custom types
-        if (Configurations.Utils.returnsAValue(method) || method.returnType.enum || hasAFromStringMethod(method.returnType) ) return
+        if (returnsAValue(method) || method.returnType.enum || hasAFromStringMethod(method.returnType) ) return
 
         // Lists of values
         if (Configurations.Utils.isAList(method.genericReturnType)) {
@@ -53,10 +61,13 @@ class ReflectionValidator {
           if (value != null) recursiveValidation(value, method.returnType, fullPath(pathSoFar, propertyName))
         }
       } catch (ConfigurationException e) {
-        failures << new ValidationResult.Item(fullPath(pathSoFar, propertyName), (e?.cause?.message ?: "Is undefined."), Configurations.Utils.annotationInfo(method))
+        if (!optional(method)) {
+          failures << new ValidationResult.Item(fullPath(pathSoFar, propertyName), (e?.cause?.message ?: "Is undefined."), Configurations.Utils.annotationInfo(method))
+        }
       }
     }
   }
+
 
   private static fullPath(pathSoFar, propertyName) {
     (pathSoFar.isEmpty() ? '' : "${pathSoFar}.") + "${propertyName}"

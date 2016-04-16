@@ -1,16 +1,34 @@
 package com.github.tonybaines.gestalt;
 
 import com.github.tonybaines.gestalt.validation.ValidationResult;
-import com.google.common.collect.Lists;
+
 
 public interface CustomValidationConfig {
+  @Optional
+  String getBar();
 
-  default ValidationResult validateMany() {
+  @Optional
+  String getFoo();
+
+  @Optional
+  String getBaz();
+
+  default ValidationResult validateNotFooAndBar(CustomValidationConfig instance) {
     ValidationResult result = new ValidationResult();
-    result.add(new ValidationResult.Item("test-many", "all OK", Lists.newArrayList()));
+
+    if (instance.getFoo() != null && instance.getBar() != null) {
+      result.add(ValidationResult.item("foo", "Only Foo *or* Bar should be defined"));
+      result.add(ValidationResult.item("bar", "Only Foo *or* Bar should be defined"));
+    }
+
     return result;
   }
-  default ValidationResult.Item validateOne() {
-    return new ValidationResult.Item("test-one", "all OK", Lists.newArrayList());
+
+
+  default ValidationResult.Item validateFoo(CustomValidationConfig instance) {
+    if ("baz".equals(instance.getFoo()) && "baz".equals(instance.getBaz())) {
+      return ValidationResult.item("foo", "foo cannot be 'baz' if baz is also baz");
+    }
+    return null;
   }
 }

@@ -82,6 +82,14 @@ class Configurations<T> {
       declaresMethod(clazz, 'fromString', String)
     }
 
+    public static boolean returnsValidationResults(method) {
+      method.returnType.equals(ValidationResult.class) || method.returnType.equals(ValidationResult.Item.class)
+    }
+
+    public static boolean optional(Method method) {
+      method.declaredAnnotations.any{it instanceof Optional}
+    }
+
     public static Properties propsFromString(String propsString) {
       Properties props = new Properties()
       propsString.eachLine {

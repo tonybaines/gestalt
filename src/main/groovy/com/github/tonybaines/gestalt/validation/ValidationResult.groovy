@@ -1,5 +1,6 @@
 package com.github.tonybaines.gestalt.validation
 
+import com.google.common.collect.Lists
 import groovy.transform.Immutable
 
 public class ValidationResult implements Iterable<ValidationResult> {
@@ -8,13 +9,16 @@ public class ValidationResult implements Iterable<ValidationResult> {
   def add(Item item) {
     leftShift(item)
   }
-  
-  def leftShift(Item item) {
-    items << item
-  }
-  
-  def leftShift(ValidationResult result) {
-    items.addAll(result.items)
+
+  def leftShift(result) {
+    if (result != null) {
+      if (result instanceof Item) {
+        items << result
+      }
+      else if(result instanceof ValidationResult)  {
+        items.addAll(result.items.grep{it != null})
+      }
+    }
   }
 
   @Override
@@ -29,6 +33,10 @@ public class ValidationResult implements Iterable<ValidationResult> {
   @Override
   String toString() {
     items.join('\n')
+  }
+
+  public static Item item(String property, String message) {
+    return new Item(property, message, Lists.newArrayList())
   }
 
   @Immutable
