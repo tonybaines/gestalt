@@ -248,6 +248,8 @@ public interface ThingConfig {
 }
 ```
 
+There's also a Gestalt-specific `@Optional` annotation which suppresses the exception for a property with no value defined (useful for complex either/or custom validation)
+
 Any config source that defines a value which breaks the constraints has that property ignored, and *Gestalt* falls-back to the next available definition
 
 #### Whole-instance Validation Report
@@ -432,6 +434,30 @@ Configurations.from(customConfigSource).done();
 A very simple example implementation is in [the test](src/test/groovy/com/github/tonybaines/gestalt/ConfigSourceImplementationSpec.groovy)
 
 ## Custom Validation
+Any `default` methods found in a config interface which returns `ValidationResult` or `ValidationResult.Item` will be
+called during validation with the configuration object (the same type that the method is defined in).  This gives the
+opportunity to access properties at the same level and lower in order to check complex rules that require multiple
+values.
+
+```java
+default ValidationResult validateNotFooAndBar(CustomValidationConfig instance) {
+    ValidationResult result = new ValidationResult();
+
+    if (instance.getFoo() != null && instance.getBar() != null) {
+      result.add(ValidationResult.item("foo", "Only Foo *or* Bar should be defined"));
+      result.add(ValidationResult.item("bar", "Only Foo *or* Bar should be defined"));
+    }
+
+    return result;
+  }
+
+  default ValidationResult.Item validateFoo(CustomValidationConfig instance) {
+    if ("baz".equals(instance.getFoo()) && "baz".equals(instance.getBaz())) {
+      return ValidationResult.item("foo", "foo cannot be 'baz' if baz is also 'baz'");
+    }
+    return null;
+  }
+```
 
 ## See the specifications for more
 

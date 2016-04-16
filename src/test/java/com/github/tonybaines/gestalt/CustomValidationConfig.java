@@ -27,7 +27,7 @@ public interface CustomValidationConfig {
 
   default ValidationResult.Item validateFoo(CustomValidationConfig instance) {
     if ("baz".equals(instance.getFoo()) && "baz".equals(instance.getBaz())) {
-      return ValidationResult.item("foo", "foo cannot be 'baz' if baz is also baz");
+      return ValidationResult.item("foo", "foo cannot be 'baz' if baz is also 'baz'");
     }
     return null;
   }

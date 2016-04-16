@@ -59,6 +59,7 @@ class ValidationSpec extends Specification {
     validationResult.any { it.property == 'integerThatIsTooLarge' }
     validationResult.any { it.property == 'subConfig.booleanValueWhoseValueBreaksValidation'}
     validationResult.any { it.property == 'subConfig.l2.nonExistent'}
+    validationResult.any { it.property == 'custom-validation' && it.message == 'foobar'}
   }
 
   @Unroll
@@ -87,7 +88,7 @@ class ValidationSpec extends Specification {
     !validationResult.hasFailures()
   }
 
-  def "Validating with a custom validator"() {
+  def "Validating with a custom validator (multiple validations)"() {
     def properties = new Properties()
     properties.put('foo', 'foo')
     properties.put('bar', 'bar')
@@ -100,6 +101,21 @@ class ValidationSpec extends Specification {
     validationResult.hasFailures()
     validationResult.items.size() == 2
     validationResult.items[0].toString().contains('Only Foo *or* Bar should be defined')
+  }
+
+  def "Validating with a custom validator (single validation)"() {
+    def properties = new Properties()
+    properties.put('foo', 'baz')
+    properties.put('baz', 'baz')
+    given:
+    CustomValidationConfig config = Configurations.definedBy(CustomValidationConfig).fromProperties(properties).done()
+    when:
+    ValidationResult validationResult = Configurations.validate(config, CustomValidationConfig)
+
+    then:
+    validationResult.hasFailures()
+    validationResult.items.size() == 1
+    validationResult.items[0].toString().contains("foo cannot be 'baz' if baz is also 'baz'")
   }
 
   interface CustomType {

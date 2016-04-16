@@ -7,7 +7,7 @@ import static com.github.tonybaines.gestalt.Configurations.Utils.declaredMethods
 import static com.github.tonybaines.gestalt.Configurations.Utils.hasAFromStringMethod
 import static com.github.tonybaines.gestalt.Configurations.Utils.optional
 import static com.github.tonybaines.gestalt.Configurations.Utils.returnsAValue
-import static com.github.tonybaines.gestalt.Configurations.Utils.returnsValidationResults
+import static com.github.tonybaines.gestalt.Configurations.Utils.isDefaultReturningValidationResults
 
 class ReflectionValidator {
   private final Object instance
@@ -30,7 +30,7 @@ class ReflectionValidator {
       String propertyName = Configurations.Utils.fromBeanSpec(method.name)
       try {
 
-        if (returnsValidationResults(method)) {
+        if (isDefaultReturningValidationResults(method)) {
           try {
             def validationResults = object.invokeMethod(method.name, object)
             failures << validationResults

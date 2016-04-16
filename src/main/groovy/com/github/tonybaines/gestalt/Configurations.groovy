@@ -82,8 +82,8 @@ class Configurations<T> {
       declaresMethod(clazz, 'fromString', String)
     }
 
-    public static boolean returnsValidationResults(method) {
-      method.returnType.equals(ValidationResult.class) || method.returnType.equals(ValidationResult.Item.class)
+    public static boolean isDefaultReturningValidationResults(Method method) {
+      method.isDefault() && method.returnType.equals(ValidationResult.class) || method.returnType.equals(ValidationResult.Item.class)
     }
 
     public static boolean optional(Method method) {

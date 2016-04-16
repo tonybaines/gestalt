@@ -1,6 +1,8 @@
 package com.github.tonybaines.gestalt;
 
 
+import com.github.tonybaines.gestalt.validation.ValidationResult;
+
 import java.util.List;
 
 import javax.validation.constraints.AssertTrue;
@@ -103,5 +105,10 @@ public interface TestConfig {
         String getId();
 
         String getStringValue();
+    }
+
+    default ValidationResult.Item complexValidationWhichAlwaysFails(TestConfig instance) {
+        String l3 = instance.getSubConfig().getL2().getLevel3Property();
+        return ValidationResult.item("custom-validation", l3);
     }
 }
