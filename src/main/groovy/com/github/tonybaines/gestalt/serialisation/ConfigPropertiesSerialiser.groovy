@@ -5,6 +5,7 @@ import com.github.tonybaines.gestalt.transformers.PropertyNameTransformer
 
 import static com.github.tonybaines.gestalt.Configurations.Utils.declaredMethodsOf
 import static com.github.tonybaines.gestalt.Configurations.Utils.hasAFromStringMethod
+import static com.github.tonybaines.gestalt.Configurations.Utils.isNotAProperty
 
 class ConfigPropertiesSerialiser<T> {
   T instance
@@ -26,7 +27,7 @@ class ConfigPropertiesSerialiser<T> {
     declaredMethodsOf(configInterface).each { method ->
       def propName = Configurations.Utils.fromBeanSpec(method.name)
 
-      if (!object.hasProperty(propName)) return
+      if (isNotAProperty(object, propName)) return
 
       if (object != null) {
         def value = object."$propName"

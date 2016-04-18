@@ -6,6 +6,7 @@ import groovy.util.logging.Slf4j
 
 import static com.github.tonybaines.gestalt.Configurations.Utils.declaredMethodsOf
 import static com.github.tonybaines.gestalt.Configurations.Utils.hasAFromStringMethod
+import static com.github.tonybaines.gestalt.Configurations.Utils.isNotAProperty
 import static com.github.tonybaines.gestalt.Configurations.Utils.optional
 import static com.github.tonybaines.gestalt.Configurations.Utils.returnsAValue
 import static com.github.tonybaines.gestalt.Configurations.Utils.isDefaultReturningValidationResults
@@ -43,7 +44,7 @@ class ReflectionValidator {
           return
         }
 
-        if (!object.hasProperty(propertyName)) return
+        if (isNotAProperty(object, propertyName)) return
 
         def value = object."${propertyName}"
 

@@ -133,6 +133,10 @@ class Configurations<T> {
       }
       info
     }
+
+    public static isNotAProperty(Object obj, String propertyName) {
+      !obj.hasProperty(propertyName)
+    }
   }
 
   static <T> SerialisationBuilder serialise(T instance, Class configInterface) {

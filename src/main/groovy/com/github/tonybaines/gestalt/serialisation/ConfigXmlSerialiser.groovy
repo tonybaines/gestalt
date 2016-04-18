@@ -7,6 +7,7 @@ import groovy.xml.MarkupBuilder
 import java.beans.Introspector
 
 import static com.github.tonybaines.gestalt.Configurations.Utils.hasAFromStringMethod
+import static com.github.tonybaines.gestalt.Configurations.Utils.isNotAProperty
 
 class ConfigXmlSerialiser<T> {
   T instance
@@ -34,7 +35,7 @@ class ConfigXmlSerialiser<T> {
         def propName = Configurations.Utils.fromBeanSpec(method.name)
         def outputPropName = propertyNameTransformer.fromPropertyName(propName)
 
-        if (!object.hasProperty(propName)) return
+        if (isNotAProperty(object, propName)) return
 
         def value = object."$propName"
         // Simple values
