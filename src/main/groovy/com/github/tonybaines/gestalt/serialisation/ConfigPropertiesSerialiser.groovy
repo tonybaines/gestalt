@@ -3,9 +3,11 @@ package com.github.tonybaines.gestalt.serialisation
 import com.github.tonybaines.gestalt.Configurations
 import com.github.tonybaines.gestalt.transformers.PropertyNameTransformer
 
+import static com.github.tonybaines.gestalt.Configurations.Utils.annotationInfo
 import static com.github.tonybaines.gestalt.Configurations.Utils.declaredMethodsOf
 import static com.github.tonybaines.gestalt.Configurations.Utils.hasAFromStringMethod
 import static com.github.tonybaines.gestalt.Configurations.Utils.isNotAProperty
+import static com.github.tonybaines.gestalt.Configurations.Utils.returnsAValue
 
 class ConfigPropertiesSerialiser<T> {
   T instance
@@ -31,7 +33,7 @@ class ConfigPropertiesSerialiser<T> {
 
       if (object != null) {
         def value = object."$propName"
-        if (Configurations.Utils.returnsAValue(method) || method.returnType.enum || hasAFromStringMethod(method.returnType)) {
+        if (returnsAValue(method) || method.returnType.enum || hasAFromStringMethod(method.returnType)) {
           if (value != null) {
             comments(fullKey(prefix, propName), method, props)
             props << "${fullKey(prefix, propName)} = ${value.toString()}"
@@ -66,7 +68,7 @@ class ConfigPropertiesSerialiser<T> {
 
   private def comments(name, method, props) {
     if (generatingComments){
-      def annotationInfo = Configurations.Utils.annotationInfo(method)
+      def annotationInfo = annotationInfo(method)
       if (!annotationInfo.empty) props << "# ${name}: $annotationInfo"
     }
   }

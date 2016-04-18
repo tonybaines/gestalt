@@ -6,8 +6,10 @@ import groovy.xml.MarkupBuilder
 
 import java.beans.Introspector
 
+import static com.github.tonybaines.gestalt.Configurations.Utils.annotationInfo
 import static com.github.tonybaines.gestalt.Configurations.Utils.hasAFromStringMethod
 import static com.github.tonybaines.gestalt.Configurations.Utils.isNotAProperty
+import static com.github.tonybaines.gestalt.Configurations.Utils.returnsAValue
 
 class ConfigXmlSerialiser<T> {
   T instance
@@ -39,7 +41,7 @@ class ConfigXmlSerialiser<T> {
 
         def value = object."$propName"
         // Simple values
-        if (Configurations.Utils.returnsAValue(method) || method.returnType.enum || hasAFromStringMethod(method.returnType)) {
+        if (returnsAValue(method) || method.returnType.enum || hasAFromStringMethod(method.returnType)) {
           "$outputPropName"(value)
           comments(outputPropName, method, getMkp())
         }
@@ -78,7 +80,7 @@ class ConfigXmlSerialiser<T> {
 
   private def comments(name, method, mkp) {
       if (generatingComments){
-        def annotationInfo = Configurations.Utils.annotationInfo(method)
+        def annotationInfo = annotationInfo(method)
         if (!annotationInfo.empty) mkp.comment("$name: $annotationInfo")
       }
   }
