@@ -2,6 +2,7 @@ package com.github.tonybaines.gestalt.validation
 
 import com.github.tonybaines.gestalt.ConfigurationException
 import com.github.tonybaines.gestalt.Configurations
+import groovy.util.logging.Slf4j
 
 import static com.github.tonybaines.gestalt.Configurations.Utils.declaredMethodsOf
 import static com.github.tonybaines.gestalt.Configurations.Utils.hasAFromStringMethod
@@ -9,6 +10,7 @@ import static com.github.tonybaines.gestalt.Configurations.Utils.optional
 import static com.github.tonybaines.gestalt.Configurations.Utils.returnsAValue
 import static com.github.tonybaines.gestalt.Configurations.Utils.isDefaultReturningValidationResults
 
+@Slf4j
 class ReflectionValidator {
   private final Object instance
   private final Class configInterface
@@ -36,6 +38,7 @@ class ReflectionValidator {
             failures << validationResults
           } catch (ConfigurationException ignored) {
             // Ignore config exceptions thrown during custom validation
+            log.warn("While running custom validation ${configInterface.name}#${method.name}: ${ignored.getMessage()}")
           }
           return
         }
