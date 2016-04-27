@@ -1,3 +1,6 @@
+# [2.0.2](http://central.maven.org/maven2/com/github/tonybaines/gestalt/2.0.2)
+* Fix for XML Serialisation issue
+
 # [2.0.1](http://central.maven.org/maven2/com/github/tonybaines/gestalt/2.0.1) (2016-04-16)
 * `@Optional` annotation for properties which need not be defined
 * Issue #5: Custom validation (via default methods in config interfaces)
