@@ -13,3 +13,5 @@ gradle clean bintrayUpload
 4. Update to next SNAPSHOT version
 
 Sync with Central every ~2h
+
+5. Update the version in build.gradle to the next SNAPSHOT
