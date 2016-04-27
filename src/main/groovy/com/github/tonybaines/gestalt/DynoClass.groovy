@@ -1,5 +1,6 @@
 package com.github.tonybaines.gestalt
 
+import static com.github.tonybaines.gestalt.Configurations.Utils.declaredMethodsOf
 import static com.github.tonybaines.gestalt.Configurations.Utils.hasAFromStringMethod
 
 class DynoClass<T> {
@@ -11,7 +12,7 @@ class DynoClass<T> {
 
   T getMapAsInterface(Class configInterface, prefix = []) {
     def map = [:]
-    configInterface.methods.each() { method ->
+    declaredMethodsOf(configInterface).each() { method ->
       map."$method.name" = { Object[] args ->
         def propName = Configurations.Utils.fromBeanSpec(method.name)
         if (Configurations.Utils.returnsAValue(method)

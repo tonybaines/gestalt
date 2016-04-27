@@ -7,6 +7,7 @@ import groovy.xml.MarkupBuilder
 import java.beans.Introspector
 
 import static com.github.tonybaines.gestalt.Configurations.Utils.annotationInfo
+import static com.github.tonybaines.gestalt.Configurations.Utils.declaredMethodsOf
 import static com.github.tonybaines.gestalt.Configurations.Utils.hasAFromStringMethod
 import static com.github.tonybaines.gestalt.Configurations.Utils.isNotAProperty
 import static com.github.tonybaines.gestalt.Configurations.Utils.returnsAValue
@@ -33,7 +34,7 @@ class ConfigXmlSerialiser<T> {
    */
   def interfaceToClosure(Class configInterface, object) {
     return {
-      configInterface.methods.each { method ->
+      declaredMethodsOf(configInterface).each { method ->
         def propName = Configurations.Utils.fromBeanSpec(method.name)
         def outputPropName = propertyNameTransformer.fromPropertyName(propName)
 
