@@ -1,3 +1,6 @@
+# [2.0.3](http://central.maven.org/maven2/com/github/tonybaines/gestalt/2.0.3)
+* Pegging dependency versions for slf4j-api and Guava
+
 # [2.0.2](http://central.maven.org/maven2/com/github/tonybaines/gestalt/2.0.2)
 * Fix for XML Serialisation issue
 
