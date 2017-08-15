@@ -449,7 +449,7 @@ back-ends.
 Configurations.fromConfigInstance(configInstance).done();
 ```
 
-*N.B.*
+**N.B.**
 * If Validation is enabled the implementation will be called during startup
 * The complete interface must be implemented, returning null if a property isn't available through that source
 
@@ -479,6 +479,66 @@ default ValidationResult validateNotFooAndBar(CustomValidationConfig instance) {
     return null;
   }
 ```
+
+## Dynamic Properties
+It may be useful for certain configuration values to be dynamic at runtime, rather than
+static for the duration of the program e.g. modifying the size of a DB or thread
+pool based on metrics such as throughput or machine capacity, or adjusting time-outs
+based on an estimate of how much work needs to happen.
+
+The features to support this are 
+* Configuration Interface Instance as a Source, or Custom `ConfigSource` implementations
+* The `@NoCache` annotation
+
+```java
+@NoCache
+public interface DynamicConfig {
+    Long getServiceAHttpTimeout();
+    //...
+}
+```
+
+Custom `ConfigSource`, useful where there are a few dynamic properties in a 
+larger interface. **Not type-safe**
+```java
+ConfigSource custom = new ConfigSource() {
+    @Override
+    public Object lookup(List<String> path, Method method) {
+        //... do something clever, return null for unsupported properties
+    }
+}
+
+Configurations.definedBy(DynamicConfig.class)
+    .from(custom)
+    .fromPropertiesResource("default-config.properties")
+    .done();
+```
+
+Configuration Interface as a source, useful when there are a number of dynamic 
+properties collected into a single (sub)interface.
+```java
+DynamicConfig configInstance = new DynamicConfig() {
+    @Override
+    Long getServiceAHttpTimeout() {
+        //... do something clever
+    }
+    
+    // return null for any unsupported methods
+}
+
+Configurations.definedBy(DynamicConfig.class)
+    .fromConfigInstance(configInstance)
+    .fromPropertiesResource("default-config.properties")
+    .done();
+```
+
+The custom implementation can add extra features as required (e.g. logging changing
+values or providing vetoable-changes support).
+
+**N.B.**
+The property lookup will happen during startup if validation is enabled, remember to
+ensure that any expensive or delayed-availability properties can return safe defaults, 
+(or null with a file-based config fallback), until they are ready. 
 
 ## See the specifications for more
 
