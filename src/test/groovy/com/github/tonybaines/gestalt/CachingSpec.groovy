@@ -8,7 +8,7 @@ import java.lang.reflect.Method
 class CachingSpec extends Specification {
   def "A caching decorator will keep and reuse previous requests"() {
     given:
-    Method method = GroovyStub()
+    def method = Object.getMethod("toString")
     ConfigSource realSource = Mock()
     ConfigSource cachingSource = new CachingDecorator(realSource)
 
@@ -21,7 +21,7 @@ class CachingSpec extends Specification {
 
   def "A caching decorator won't cache null values"() {
     given:
-    Method method = GroovyStub()
+    def method = Object.getMethod("toString")
     ConfigSource realSource = Mock()
     ConfigSource cachingSource = new CachingDecorator(realSource)
 
@@ -34,7 +34,7 @@ class CachingSpec extends Specification {
 
   def "A caching decorator will rethrow any exception"() {
     given:
-    Method method = GroovyStub()
+    def method = Object.getMethod("toString")
     ConfigSource realSource = Mock()
     ConfigSource cachingSource = new CachingDecorator(realSource)
 
