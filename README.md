@@ -433,6 +433,21 @@ Configurations.from(customConfigSource).done();
 
 A very simple example implementation is in [the test](src/test/groovy/com/github/tonybaines/gestalt/ConfigSourceImplementationSpec.groovy)
 
+## Configuration Interface Instance as a Source
+
+Allows creating or reusing an instance of the config interface as a source in the chain of sources, use-cases
+might include; dynamic values (remember to disable caching!), replicated configuration or custom 
+back-ends.
+
+```java
+Configurations.fromConfigInstance(configInstance).done();
+```
+
+*N.B.*
+* If Validation is enabled the implementation will be called during startup
+* The complete interface must be implemented, returning null if a property isn't available through that source
+
+
 ## Custom Validation
 Any `default` methods found in a config interface which returns `ValidationResult` or `ValidationResult.Item` will be
 called during validation with the configuration object (the same type that the method is defined in).  This gives the

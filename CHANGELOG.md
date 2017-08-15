@@ -1,3 +1,6 @@
+# [2.0.4](http://central.maven.org/maven2/com/github/tonybaines/gestalt/2.0.4)
+* Issue #22 Provide a config source that accepts an existing config instance
+
 # [2.0.3](http://central.maven.org/maven2/com/github/tonybaines/gestalt/2.0.3)
 * Pegging dependency versions for slf4j-api and Guava
 
