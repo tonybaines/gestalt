@@ -27,6 +27,7 @@ public class SpikeDynamicConfigValuesTest {
         put("someTimeVaryingValue", "0");
     }};
 
+    @NoCache // Caching breaks the dynamic lookup
     static interface SomeConfig {
         long getSomeTimeVaryingValue();
     }
@@ -55,7 +56,6 @@ public class SpikeDynamicConfigValuesTest {
         };
 
         SomeConfig config = Configurations.definedBy(SomeConfig.class)
-                .without(Configurations.Feature.Caching) // Caching breaks the dynamic lookup
                 .from(dynamicSource) // This has higher priority
                 .fromProperties(CONSTANTS)
                 .done();

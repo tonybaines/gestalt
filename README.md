@@ -292,6 +292,12 @@ The switchable features are
 >
 > Workarounds include switching to the object wrappers (e.g. boolean -> Boolean) and defining defaults
 
+#### Disabling Caching for a specific interface or property
+If a custom source of dynamic property values is used it may be helpful to disable 
+caching in a more specific way (rather than globaly).
+
+Simply add the `@NoCache` annotation to an interface or method to disable caching. 
+
 ### Persisting
 
 An existing instance of the config-interface can be turned into the appropriate XML-string (ready to be persisted through the mechanism of your choice)

@@ -1,6 +1,7 @@
 package com.github.tonybaines.gestalt.sources.features
 
 import com.github.tonybaines.gestalt.ConfigSource
+import com.github.tonybaines.gestalt.NoCache
 import com.google.common.cache.Cache
 import com.google.common.cache.CacheBuilder
 import com.google.common.cache.CacheLoader
@@ -21,11 +22,15 @@ class CachingDecorator implements ConfigSource {
   @Override
   def lookup(List<String> path, Method method) {
     try {
-      return cache.get(keyFrom(path), new Callable<Object>() {
-        Object call() throws Exception {
-          delegate.lookup(path, method)
-        }
-      })
+      if (method.declaringClass.isAnnotationPresent(NoCache) || method.isAnnotationPresent(NoCache)) {
+        return delegate.lookup(path, method)
+      } else {
+        return cache.get(keyFrom(path), new Callable<Object>() {
+          Object call() throws Exception {
+            delegate.lookup(path, method)
+          }
+        })
+      }
     }
     catch (CacheLoader.InvalidCacheLoadException e) {
       if (e.message.contains('CacheLoader returned null for key')) return null
