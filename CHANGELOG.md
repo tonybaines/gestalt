@@ -1,11 +1,11 @@
-# [2.0.4](http://central.maven.org/maven2/com/github/tonybaines/gestalt/2.0.4)
+# [2.0.4](http://central.maven.org/maven2/com/github/tonybaines/gestalt/2.0.4) (2017-08-15)
 * Issue #22 Provide a config source that accepts an existing config instance
 * Introduced the `@NoCache` anotation to disable caching in a targeted way
 
 # [2.0.3](http://central.maven.org/maven2/com/github/tonybaines/gestalt/2.0.3)
 * Pegging dependency versions for slf4j-api and Guava
 
-# [2.0.2](http://central.maven.org/maven2/com/github/tonybaines/gestalt/2.0.2)
+# [2.0.2](http://central.maven.org/maven2/com/github/tonybaines/gestalt/2.0.2) (2016-04-27)
 * Fix for XML Serialisation issue
 
 # [2.0.1](http://central.maven.org/maven2/com/github/tonybaines/gestalt/2.0.1) (2016-04-16)
