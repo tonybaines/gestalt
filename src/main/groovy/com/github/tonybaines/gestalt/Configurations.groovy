@@ -204,7 +204,7 @@ class Configurations<T> {
     @TupleConstructor
     private static final class Source {
       public enum SourceType {
-        XMLStream, GroovyStream, PropertiesStream, Properties, ConfigSource
+        XMLStream, GroovyStream, PropertiesStream, Properties, ConfigSource, ConfigInstance
       }
 
       final SourceType type
@@ -296,6 +296,11 @@ class Configurations<T> {
       this
     }
 
+    public CompositeConfigurationBuilder<T> fromConfigInstance(T configInstance) {
+      streams << new Source(Source.SourceType.ConfigInstance, configInstance, null)
+      this
+    }
+
     public CompositeConfigurationBuilder<T> without(Feature... feature) {
       feature.each { enabledFeatures.remove(it) }
       this
@@ -316,6 +321,7 @@ class Configurations<T> {
     private loadAllSources() {
       streams.each { source ->
         switch (source.type) {
+          case Source.SourceType.ConfigInstance: sources << new InstanceConfigSource(source.source); break
           case Source.SourceType.ConfigSource: sources << source.source; break
           case Source.SourceType.XMLStream: sources << new XmlConfigSource(source.source, source.propNameTxformer, constants); break
           case Source.SourceType.PropertiesStream: sources << new PropertiesConfigSource(source.source, source.propNameTxformer, constants); break

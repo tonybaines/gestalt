@@ -5,6 +5,8 @@ import spock.lang.Unroll
 
 
 class BasicBehaviourSpec extends Specification {
+  static TestConfig configInstance = Configurations.definedBy(TestConfig).fromPropertiesResource('common.properties').done()
+
   @Unroll
   def "Configurations can be queried (#name)"() {
     when:
@@ -30,6 +32,7 @@ class BasicBehaviourSpec extends Specification {
     'XML'    | Configurations.definedBy(TestConfig).fromXmlResource('common.xml').done()
     'Props'  | Configurations.definedBy(TestConfig).fromPropertiesResource('common.properties').done()
     'Groovy' | Configurations.definedBy(TestConfig).fromGroovyConfigResource('common.grc').done()
+    'Instance' | Configurations.definedBy(TestConfig).fromConfigInstance(configInstance).done()
   }
 
   @Unroll
