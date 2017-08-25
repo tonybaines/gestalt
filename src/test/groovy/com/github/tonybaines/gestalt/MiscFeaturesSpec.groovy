@@ -167,7 +167,7 @@ class MiscFeaturesSpec extends Specification {
 
     then:
     def e = thrown(ConfigurationException)
-    e.message.contains('No valid sources configured')
+    e.message.contains('No valid sources available')
   }
 
 

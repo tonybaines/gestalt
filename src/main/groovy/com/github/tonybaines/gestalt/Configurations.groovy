@@ -309,13 +309,25 @@ class Configurations<T> {
     public T done() {
       loadAllSources()
 
-      if (sources.isEmpty()) throw new ConfigurationException("No valid sources configured!")
+      if (sources.isEmpty()) tryToLoadDefaultSource(configInterface)
       if (enabledFeatures.contains(Feature.Defaults)) sources << new DefaultConfigSource()
 
       new DynoClass<T>(
         withExceptionOnNullValue(withCaching(new CompositeConfigSource(sources
           .collect { withValidation(it) }
         )))).getMapAsInterface(configInterface)
+    }
+
+    private tryToLoadDefaultSource(Class clazz) {
+      // Fall-back to loading a file <class-name>.properties from the current directory
+      def fallbackSource = new File("${clazz.simpleName}.properties")
+      log.warn("No valid sources configured.  Falling back to: ${fallbackSource.absolutePath}")
+      try {
+        def fallbackSourceStream = fallbackSource.newInputStream()
+        sources << new PropertiesConfigSource(fallbackSourceStream, new DefaultPropertyNameTransformer(), constants)
+      } catch (Exception ignored) {
+        throw new ConfigurationException("No valid sources available!")
+      }
     }
 
     private loadAllSources() {

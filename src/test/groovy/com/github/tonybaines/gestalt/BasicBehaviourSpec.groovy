@@ -150,4 +150,12 @@ class BasicBehaviourSpec extends Specification {
     e.message.contains 'Failed to handle getInts'
   }
 
+  def "Falling back to a default configuration when none configured"() {
+    when:
+    def config = Configurations.definedBy(SimpleConfig).done()
+
+    then:
+    config.name == "default-props"
+  }
+
 }

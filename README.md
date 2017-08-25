@@ -226,6 +226,11 @@ Configurations
   .done();
 ```
 
+#### Fallback Configuration File
+If there are no (valid) configuration sources defined, before failing, *Gestalt* will attempt to load from
+a file `config-class.properties` in the current working directory.  No attempt is made to load other formats
+or from other locations.
+
 ### Validation
 
 Validation can be defined for one or more properties using the [JSR-303 Bean Validation annotations](http://docs.oracle.com/javaee/6/api/javax/validation/constraints/package-summary.html)  e.g.
@@ -293,10 +298,10 @@ The switchable features are
 > Workarounds include switching to the object wrappers (e.g. boolean -> Boolean) and defining defaults
 
 #### Disabling Caching for a specific interface or property
-If a custom source of dynamic property values is used it may be helpful to disable 
+If a custom source of dynamic property values is used it may be helpful to disable
 caching in a more specific way (rather than globaly).
 
-Simply add the `@NoCache` annotation to an interface or method to disable caching. 
+Simply add the `@NoCache` annotation to an interface or method to disable caching.
 
 ### Persisting
 
@@ -442,7 +447,7 @@ A very simple example implementation is in [the test](src/test/groovy/com/github
 ## Configuration Interface Instance as a Source
 
 Allows creating or reusing an instance of the config interface as a source in the chain of sources, use-cases
-might include; dynamic values (remember to disable caching!), replicated configuration or custom 
+might include; dynamic values (remember to disable caching!), replicated configuration or custom
 back-ends.
 
 ```java
@@ -486,7 +491,7 @@ static for the duration of the program e.g. modifying the size of a DB or thread
 pool based on metrics such as throughput or machine capacity, or adjusting time-outs
 based on an estimate of how much work needs to happen.
 
-The features to support this are 
+The features to support this are
 * Configuration Interface Instance as a Source, or Custom `ConfigSource` implementations
 * The `@NoCache` annotation
 
@@ -498,7 +503,7 @@ public interface DynamicConfig {
 }
 ```
 
-Custom `ConfigSource`, useful where there are a few dynamic properties in a 
+Custom `ConfigSource`, useful where there are a few dynamic properties in a
 larger interface. **Not type-safe**
 ```java
 ConfigSource custom = new ConfigSource() {
@@ -514,7 +519,7 @@ Configurations.definedBy(DynamicConfig.class)
     .done();
 ```
 
-Configuration Interface as a source, useful when there are a number of dynamic 
+Configuration Interface as a source, useful when there are a number of dynamic
 properties collected into a single (sub)interface.
 ```java
 DynamicConfig configInstance = new DynamicConfig() {
@@ -522,7 +527,7 @@ DynamicConfig configInstance = new DynamicConfig() {
     Long getServiceAHttpTimeout() {
         //... do something clever
     }
-    
+
     // return null for any unsupported methods
 }
 
@@ -537,8 +542,8 @@ values or providing vetoable-changes support).
 
 **N.B.**
 The property lookup will happen during startup if validation is enabled, remember to
-ensure that any expensive or delayed-availability properties can return safe defaults, 
-(or null with a file-based config fallback), until they are ready. 
+ensure that any expensive or delayed-availability properties can return safe defaults,
+(or null with a file-based config fallback), until they are ready.
 
 ## See the specifications for more
 
