@@ -1,3 +1,6 @@
+# [2.0.5](http://central.maven.org/maven2/com/github/tonybaines/gestalt/2.0.5) (2017-08-25)
+* Issue #23 Fallback config source
+
 # [2.0.4](http://central.maven.org/maven2/com/github/tonybaines/gestalt/2.0.4) (2017-08-15)
 * Issue #22 Provide a config source that accepts an existing config instance
 * Introduced the `@NoCache` anotation to disable caching in a targeted way
