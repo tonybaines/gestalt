@@ -16,7 +16,7 @@ apply plugin: 'maven'
 apply plugin: 'maven-publish'
 
 group = 'com.github.tonybaines'
-version = '2.0.4-SNAPSHOT'
+version = '2.0.6-SNAPSHOT'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -169,5 +169,5 @@ tasks.withType(JDepend) {
 }
 
 task wrapper(type: Wrapper) {
-  gradleVersion = '4.0.1'
+  gradleVersion = '4.1'
 }

@@ -204,7 +204,7 @@ class Configurations<T> {
     @TupleConstructor
     private static final class Source {
       public enum SourceType {
-        XMLStream, GroovyStream, PropertiesStream, Properties, ConfigSource
+        XMLStream, GroovyStream, PropertiesStream, Properties, ConfigSource, ConfigInstance
       }
 
       final SourceType type
@@ -296,6 +296,11 @@ class Configurations<T> {
       this
     }
 
+    public CompositeConfigurationBuilder<T> fromConfigInstance(T configInstance) {
+      streams << new Source(Source.SourceType.ConfigInstance, configInstance, null)
+      this
+    }
+
     public CompositeConfigurationBuilder<T> without(Feature... feature) {
       feature.each { enabledFeatures.remove(it) }
       this
@@ -304,7 +309,7 @@ class Configurations<T> {
     public T done() {
       loadAllSources()
 
-      if (sources.isEmpty()) throw new ConfigurationException("No valid sources configured!")
+      if (sources.isEmpty()) tryToLoadDefaultSource(configInterface)
       if (enabledFeatures.contains(Feature.Defaults)) sources << new DefaultConfigSource()
 
       new DynoClass<T>(
@@ -313,9 +318,22 @@ class Configurations<T> {
         )))).getMapAsInterface(configInterface)
     }
 
+    private tryToLoadDefaultSource(Class clazz) {
+      // Fall-back to loading a file <class-name>.properties from the current directory
+      def fallbackSource = new File("${clazz.simpleName}.properties")
+      log.warn("No valid sources configured.  Falling back to: ${fallbackSource.absolutePath}")
+      try {
+        def fallbackSourceStream = fallbackSource.newInputStream()
+        sources << new PropertiesConfigSource(fallbackSourceStream, new DefaultPropertyNameTransformer(), constants)
+      } catch (Exception ignored) {
+        throw new ConfigurationException("No valid sources available!")
+      }
+    }
+
     private loadAllSources() {
       streams.each { source ->
         switch (source.type) {
+          case Source.SourceType.ConfigInstance: sources << new InstanceConfigSource(source.source); break
           case Source.SourceType.ConfigSource: sources << source.source; break
           case Source.SourceType.XMLStream: sources << new XmlConfigSource(source.source, source.propNameTxformer, constants); break
           case Source.SourceType.PropertiesStream: sources << new PropertiesConfigSource(source.source, source.propNameTxformer, constants); break

@@ -43,4 +43,13 @@ class ErrorBehaviourSpec extends Specification {
     e.stackTrace.length == 0
   }
 
+  def "No configured sources is a failure"() {
+    when:
+    Configurations.definedBy(TestConfig).done()
+
+    then:
+    def e = thrown(ConfigurationException)
+    e.message.contains('No valid sources available')
+  }
+
 }
