@@ -196,20 +196,27 @@ class MiscFeaturesSpec extends Specification {
     static InetAddress makeInetAddress(String s) {
       InetAddress.getByName(s)
     }
+
+    static String trimString(String s) {
+      s.trim()
+    }
   }
   interface InternetAddressConfig {
     @Default.String("192.168.0.2")
     InetAddress getAddress()
+
+    String getMultiline()
   }
 
   def "Property value transformation with a provided function"() {
         when:
         InternetAddressConfig config = Configurations.definedBy(InternetAddressConfig)
                 .withPropertyTransformer(CustomTransformations.class)
-                .fromProperties(['address': '192.168.0.1'] as Properties)
+                .fromProperties(['address': '192.168.0.1', 'multiline': 'foo\nbar\n'] as Properties)
                 .done()
         then:
         config.getAddress() != null
+        config.getMultiline() == 'foo\nbar'
     }
 
     def "Property value transformation with a provided function and default value"() {
