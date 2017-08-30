@@ -171,7 +171,7 @@ class MiscFeaturesSpec extends Specification {
   }
 
 
-  public interface Eventing {
+  interface Eventing {
     MetricsConfig getMetrics()
   }
   interface MetricsConfig {
@@ -192,5 +192,45 @@ class MiscFeaturesSpec extends Specification {
     thrown(NullPointerException)
   }
 
+  static class CustomTransformations {
+    static InetAddress makeInetAddress(String s) {
+      InetAddress.getByName(s)
+    }
+  }
+  interface InternetAddressConfig {
+    @Default.String("192.168.0.2")
+    InetAddress getAddress()
+  }
+
+  def "Property value transformation with a provided function"() {
+        when:
+        InternetAddressConfig config = Configurations.definedBy(InternetAddressConfig)
+                .withPropertyTransformer(CustomTransformations.class)
+                .fromProperties(['address': '192.168.0.1'] as Properties)
+                .done()
+        then:
+        config.getAddress() != null
+    }
+
+    def "Property value transformation with a provided function and default value"() {
+        when:
+        InternetAddressConfig config = Configurations.definedBy(InternetAddressConfig)
+                .withPropertyTransformer(CustomTransformations.class)
+                .fromProperties([:] as Properties)
+                .done()
+        then:
+        config.getAddress() != null
+    }
+
+    def "Property value transformation with a provided function and constant value"() {
+        when:
+        InternetAddressConfig config = Configurations.definedBy(InternetAddressConfig)
+                .withPropertyTransformer(CustomTransformations.class)
+                .withConstants(['LOCAL_IP': '192.168.0.3'])
+                .fromProperties(['address': '%{LOCAL_IP}'] as Properties)
+                .done()
+        then:
+        config.getAddress() != null
+    }
 
 }

@@ -8,6 +8,7 @@ import com.github.tonybaines.gestalt.sources.features.ExceptionOnNullValueDecora
 import com.github.tonybaines.gestalt.sources.features.ValidatingDecorator
 import com.github.tonybaines.gestalt.transformers.DefaultPropertyNameTransformer
 import com.github.tonybaines.gestalt.transformers.PropertyNameTransformer
+import com.github.tonybaines.gestalt.transformers.PropertyTypeTransformer
 import com.github.tonybaines.gestalt.validation.ReflectionValidator
 import com.github.tonybaines.gestalt.validation.ValidationResult
 import groovy.transform.TupleConstructor
@@ -199,6 +200,7 @@ class Configurations<T> {
     private Class configInterface
     private Map<String, String> constants = [:]
     private List<Source> streams = []
+    private PropertyTypeTransformer propertyTransformer = PropertyTypeTransformer.NULL
 
 
     @TupleConstructor
@@ -256,6 +258,11 @@ class Configurations<T> {
       withConstants(props)
     }
 
+    public CompositeConfigurationBuilder<T> withPropertyTransformer(Class clazz) {
+      this.propertyTransformer = PropertyTypeTransformer.from(clazz)
+      this
+    }
+
 
     private def tryToLoadWith(behaviours, filePath, Closure c) {
       try {
@@ -310,12 +317,12 @@ class Configurations<T> {
       loadAllSources()
 
       if (sources.isEmpty()) tryToLoadDefaultSource(configInterface)
-      if (enabledFeatures.contains(Feature.Defaults)) sources << new DefaultConfigSource()
+      if (enabledFeatures.contains(Feature.Defaults)) sources << new DefaultConfigSource(propertyTransformer)
 
       new DynoClass<T>(
         withExceptionOnNullValue(withCaching(new CompositeConfigSource(sources
           .collect { withValidation(it) }
-        )))).getMapAsInterface(configInterface)
+        ))), propertyTransformer).getMapAsInterface(configInterface)
     }
 
     private tryToLoadDefaultSource(Class clazz) {
@@ -324,7 +331,7 @@ class Configurations<T> {
       log.warn("No valid sources configured.  Falling back to: ${fallbackSource.absolutePath}")
       try {
         def fallbackSourceStream = fallbackSource.newInputStream()
-        sources << new PropertiesConfigSource(fallbackSourceStream, new DefaultPropertyNameTransformer(), constants)
+        sources << new PropertiesConfigSource(fallbackSourceStream, new DefaultPropertyNameTransformer(), PropertyTypeTransformer.NULL, constants)
       } catch (Exception ignored) {
         throw new ConfigurationException("No valid sources available!")
       }
@@ -335,10 +342,10 @@ class Configurations<T> {
         switch (source.type) {
           case Source.SourceType.ConfigInstance: sources << new InstanceConfigSource(source.source); break
           case Source.SourceType.ConfigSource: sources << source.source; break
-          case Source.SourceType.XMLStream: sources << new XmlConfigSource(source.source, source.propNameTxformer, constants); break
-          case Source.SourceType.PropertiesStream: sources << new PropertiesConfigSource(source.source, source.propNameTxformer, constants); break
-          case Source.SourceType.Properties: sources << new PropertiesConfigSource(source.source, source.propNameTxformer, constants); break
-          case Source.SourceType.GroovyStream: sources << new GroovyConfigSource(source.source, source.propNameTxformer, constants); break
+          case Source.SourceType.XMLStream: sources << new XmlConfigSource(source.source, source.propNameTxformer, propertyTransformer, constants); break
+          case Source.SourceType.PropertiesStream: sources << new PropertiesConfigSource(source.source, source.propNameTxformer, propertyTransformer, constants); break
+          case Source.SourceType.Properties: sources << new PropertiesConfigSource(source.source, source.propNameTxformer, propertyTransformer, constants); break
+          case Source.SourceType.GroovyStream: sources << new GroovyConfigSource(source.source, source.propNameTxformer, propertyTransformer, constants); break
         }
       }
     }

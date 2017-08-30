@@ -5,6 +5,7 @@ import com.github.tonybaines.gestalt.ConfigurationException
 import com.github.tonybaines.gestalt.Configurations
 import com.github.tonybaines.gestalt.DynoClass
 import com.github.tonybaines.gestalt.transformers.PropertyNameTransformer
+import com.github.tonybaines.gestalt.transformers.PropertyTypeTransformer
 import groovy.util.logging.Slf4j
 
 import java.lang.reflect.Method
@@ -17,12 +18,14 @@ abstract class BaseConfigSource implements ConfigSource {
   protected def config
   protected Map<String, String> constants = [:]
   protected PropertyNameTransformer propertyNameTransformer
+  protected PropertyTypeTransformer propertyTransformer
 
   protected BaseConfigSource() {}
 
-  BaseConfigSource(config, PropertyNameTransformer propertyNameTransformer, constants) {
+  BaseConfigSource(config, PropertyNameTransformer propertyNameTransformer, PropertyTypeTransformer propertyTransformer, constants) {
     this.config = config
     this.propertyNameTransformer = propertyNameTransformer
+    this.propertyTransformer = propertyTransformer
     this.constants = constants
   }
 
@@ -32,12 +35,18 @@ abstract class BaseConfigSource implements ConfigSource {
           acc."${propertyNameTransformer.fromPropertyName(val)}"
       }
       handleMultipleNodes(node, method)
+      // TODO: refactor to chain of responsibility
+
+      def stringValue = constantAwareValueOf(node)
+
+      if (propertyTransformer.hasTransformationTo(method.returnType)) {
+        return (stringValue != null) ? propertyTransformer.fromString(stringValue, method.returnType) : null
+      }
+
       if (method.returnType.enum) {
-        def stringValue = constantAwareValueOf(node)
         return (stringValue != null) ? method.returnType.valueOf(stringValue) : null
       }
       if (hasAFromStringMethod(method.returnType)) {
-        def stringValue = constantAwareValueOf(node)
         return (stringValue != null) ? method.returnType.fromString(stringValue) : null
       }
       if (Configurations.Utils.isAList(method.genericReturnType)) {
@@ -82,7 +91,7 @@ abstract class BaseConfigSource implements ConfigSource {
       case Boolean: return constantAwareValueOf(node)?.toBoolean()
       case boolean: return constantAwareValueOf(node)?.toBoolean()
 
-      default: new DynoClass(newInstanceAround(node, constants)).getMapAsInterface(returnType)
+      default: new DynoClass(newInstanceAround(node, constants), propertyTransformer).getMapAsInterface(returnType)
     }
   }
 

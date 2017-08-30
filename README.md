@@ -399,7 +399,10 @@ SimpleConfig config = Configurations.definedBy(SimpleConfig.class).fromPropertie
 
 ## Custom Types
 There may be circumstances where you want to use a concrete type instead of an interface for a property value
-(e.g. [tiny-types](http://darrenhobbs.com/2007/04/11/tiny-types/)), by following a couple of rules this is possible
+(e.g. [tiny-types](http://darrenhobbs.com/2007/04/11/tiny-types/)),
+
+### Custom Types That You Control
+If you have access to the source for a type, following a couple of rules makes this possible
 
 **Rule 1:** a factory-method named `fromString` taking a single `String` argument e.g.
 
@@ -419,7 +422,7 @@ public class MyClass {
 Careful readers will spot that this means that `fromString(...)` and `toString()` need to be symmetric otherwise there
 will be problems if you read-in/write-out configuration instances.
 
-### An Example Custom Type - ```ObfuscatedString```
+#### An Example Custom Type - ```ObfuscatedString```
 As an example of how to write a custom type, see [`ObfuscatedString`](src/main/java/com/github/tonybaines/gestalt/ObfuscatedString.java)
 and it's [tests](src/test/groovy/com/github/tonybaines/gestalt/ObfuscatedStringSpec.groovy)
 
@@ -432,6 +435,40 @@ public interface ConfigWithObfuscatedString {
 ```
 
 To read the plaintext version in your application, the `ObfuscatedString` type has a method `toPlainTextString()`.
+
+### Types You Don't Control
+
+You may want to return a type in your configuration interface that you don't control the source for, e.g. a
+`java.net.InetAddress`
+
+```java
+interface InternetAddressConfig {
+    InetAddress getAddress()
+}
+```
+
+Register a source of custom transformations using the `withPropertyTransformer(Class tx)` method
+```java
+ InternetAddressConfig config = Configurations.definedBy(InternetAddressConfig.class)
+                .withPropertyTransformer(CustomTransformations.class)
+                .fromProperties(...)
+                .done();
+```
+
+The custom transformations must be statoc methods which take a `String` and return the required type, the name
+of the method is not significant.
+```java
+public class CustomTransformations {
+    public static InetAddress makeInetAddress(String s) {
+        return InetAddress.getByName(s);
+    }
+}
+```
+
+This mechanism works with default values and constants, any exceptions from the transformation are rethrown.
+
+#### Persisting Values
+This is not supported yet unless the custom transformation function can parse the result of the `toString()`.
 
 ## Custom `ConfigSource` implementations
 

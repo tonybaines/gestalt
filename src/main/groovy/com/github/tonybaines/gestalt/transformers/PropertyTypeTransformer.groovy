@@ -8,7 +8,9 @@ import java.lang.reflect.Modifier
 
 @Slf4j
 class PropertyTypeTransformer {
-    Map<Class, Method> transformations
+    Map<Class, Method> fromStringTransformations = [:]
+
+    static PropertyTypeTransformer NULL = new PropertyTypeTransformer()
 
     static PropertyTypeTransformer from(Class transformerClass) {
         def tx = new PropertyTypeTransformer()
@@ -16,7 +18,7 @@ class PropertyTypeTransformer {
         tx
     }
 
-    def loadTransformationFunctions(Class transformerClass) {
+    private def loadTransformationFunctions(Class transformerClass) {
         Map<Class, List<Method>> transformationCandidates =
                 transformerClass
                         .declaredMethods
@@ -36,7 +38,7 @@ class PropertyTypeTransformer {
             log.warn("Ignoring duplicate transformation functions to ${type}: ${methods.collect { it.toString() }}")
         }
 
-        this.transformations = transformationCandidates
+        this.fromStringTransformations = transformationCandidates
                 .findAll { singleMethodDefined(it) }
                 .collectEntries { [it.key, it.value.first()] }
     }
@@ -44,13 +46,17 @@ class PropertyTypeTransformer {
     private PropertyTypeTransformer() {
     }
 
-    def transform(String s, Class destClass) {
-        def transform = transformations[destClass]
+    def fromString(String s, Class destClass) {
+        def transform = fromStringTransformations[destClass]
         try {
             transform?.invoke(null, s)
         } catch (InvocationTargetException e) {
             // Unwrap to rethrow the actual exception
             throw e.cause
         }
+    }
+
+    boolean hasTransformationTo(Class destinationType) {
+        fromStringTransformations.containsKey(destinationType)
     }
 }

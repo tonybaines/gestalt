@@ -4,6 +4,7 @@ import com.github.tonybaines.gestalt.ConfigSource
 import com.github.tonybaines.gestalt.ConfigurationException
 import com.github.tonybaines.gestalt.Configurations
 import com.github.tonybaines.gestalt.Default
+import com.github.tonybaines.gestalt.transformers.PropertyTypeTransformer
 import groovy.util.logging.Slf4j
 
 import java.lang.annotation.Annotation
@@ -13,7 +14,13 @@ import static com.github.tonybaines.gestalt.Configurations.Utils.hasAFromStringM
 
 @Slf4j
 class DefaultConfigSource implements ConfigSource {
-  @Override
+    private final PropertyTypeTransformer propertyTransformer
+
+    DefaultConfigSource(PropertyTypeTransformer propertyTransformer) {
+        this.propertyTransformer = propertyTransformer
+    }
+
+    @Override
   def lookup(List<String> path, Method method) {
     Annotation defaultAnnotation = method.declaredAnnotations.find {
       it.annotationType().name.contains(Default.class.name)
@@ -38,6 +45,8 @@ class DefaultConfigSource implements ConfigSource {
           }
       } else if (hasAFromStringMethod(method.returnType)) {
           return (annotationValue != null) ? method.returnType.fromString(annotationValue) : null
+      } else if (propertyTransformer.hasTransformationTo(method.returnType)) {
+          return (annotationValue != null) ? propertyTransformer.fromString(annotationValue, method.returnType) : null
       } else {
         return annotationValue
       }

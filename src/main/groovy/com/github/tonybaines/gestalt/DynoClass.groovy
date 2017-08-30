@@ -1,13 +1,17 @@
 package com.github.tonybaines.gestalt
 
+import com.github.tonybaines.gestalt.transformers.PropertyTypeTransformer
+
 import static com.github.tonybaines.gestalt.Configurations.Utils.declaredMethodsOf
 import static com.github.tonybaines.gestalt.Configurations.Utils.hasAFromStringMethod
 
 class DynoClass<T> {
   def source
+  private final PropertyTypeTransformer propertyTransformer
 
-  DynoClass(source) {
+  DynoClass(source, PropertyTypeTransformer propertyTransformer) {
     this.source = source
+    this.propertyTransformer = propertyTransformer
   }
 
   T getMapAsInterface(Class configInterface, prefix = []) {
@@ -18,13 +22,14 @@ class DynoClass<T> {
         if (Configurations.Utils.returnsAValue(method)
           || Configurations.Utils.isAList(method.genericReturnType)
           || method.returnType.enum
-          || hasAFromStringMethod(method.returnType))
+          || hasAFromStringMethod(method.returnType)
+          || propertyTransformer.hasTransformationTo(method.returnType))
           return source.lookup(prefix + propName, method)
         else if (method.returnType.isInterface()) {
-          return new DynoClass(source).getMapAsInterface(method.returnType, prefix + propName)
+          return new DynoClass(source, propertyTransformer).getMapAsInterface(method.returnType, prefix + propName)
         }
         else {
-          throw new ConfigurationException("Can't handle non-interface types that don't declare a fromString() factory method [${configInterface.canonicalName}.${method.name}: ${method.returnType.name}]")
+          throw new ConfigurationException("Can't handle non-interface types that don't declare a fromString() factory method, or have a custom transformation function [${configInterface.canonicalName}.${method.name}: ${method.returnType.name}]")
         }
       }
     }

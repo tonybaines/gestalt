@@ -1,6 +1,5 @@
 package com.github.tonybaines.gestalt.transformers
 
-import spock.lang.Ignore
 import spock.lang.Shared
 import spock.lang.Specification
 
@@ -16,8 +15,8 @@ class PropertyTypeTransformerSpec extends Specification {
 
     def "Can find and use a static transformation function by destination type"() {
         when:
-        Foo foo = this.tx.transform("foo", Foo.class)
-        Path path = this.tx.transform("/tmp", Path.class)
+        Foo foo = this.tx.fromString("foo", Foo.class)
+        Path path = this.tx.fromString("/tmp", Path.class)
 
         then:
         foo != null
@@ -26,21 +25,21 @@ class PropertyTypeTransformerSpec extends Specification {
 
     def "A type without a transformation function yields a 'null' value"() {
         expect:
-        this.tx.transform("bar", Bar.class) == null
+        this.tx.fromString("bar", Bar.class) == null
     }
 
     def "Ignores any transformation with more than one candidate function"() {
         expect:
         PropertyTypeTransformer
                 .from(Duplicates.class)
-                .transform("1970-01-01T00:00:00", Instant.class) == null
+                .fromString("1970-01-01T00:00:00", Instant.class) == null
     }
 
     def "Rethrows any exception raised during transformation"() {
         when:
         PropertyTypeTransformer
                 .from(Broken.class)
-                .transform("foobar", Integer.class)
+                .fromString("foobar", Integer.class)
 
         then:
         thrown(NumberFormatException)
@@ -50,7 +49,7 @@ class PropertyTypeTransformerSpec extends Specification {
         expect:
         PropertyTypeTransformer
                 .from(InstanceMethod.class)
-                .transform("foobar", Integer.class) == null
+                .fromString("foobar", Integer.class) == null
 
     }
 
@@ -59,7 +58,7 @@ class PropertyTypeTransformerSpec extends Specification {
         expect:
         PropertyTypeTransformer
                 .from(MultipleParams.class)
-                .transform("foobar", Integer.class) == null
+                .fromString("foobar", Integer.class) == null
 
     }
 }
