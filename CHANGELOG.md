@@ -1,3 +1,6 @@
+# [2.0.6](http://central.maven.org/maven2/com/github/tonybaines/gestalt/2.0.6) (2017-08-30)
+* Issue #25 Custom transformation functions from String values to/from other types
+
 # [2.0.5](http://central.maven.org/maven2/com/github/tonybaines/gestalt/2.0.5) (2017-08-25)
 * Issue #23 Fallback config source
 
