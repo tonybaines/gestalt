@@ -9,14 +9,18 @@ import java.lang.reflect.Modifier
 @Slf4j
 class PropertyTypeTransformer {
     Map<Class, Method> fromStringTransformations = [:]
+    Map<Class, Method> toStringTransformations = [:]
 
     static PropertyTypeTransformer NULL = new PropertyTypeTransformer()
 
     static PropertyTypeTransformer from(Class transformerClass) {
         def tx = new PropertyTypeTransformer()
         tx.loadTransformationFunctions(transformerClass)
+        tx.loadSerialisationFunctions(transformerClass)
         tx
     }
+
+    private def singleMethodDefined = { it.value.size() == 1 }
 
     private def loadTransformationFunctions(Class transformerClass) {
         Map<Class, List<Method>> transformationCandidates =
@@ -29,8 +33,6 @@ class PropertyTypeTransformer {
                 }
                 .groupBy { it.returnType }
 
-        def singleMethodDefined = { it.value.size() == 1 }
-
         // Ignoring any type where more than one transformation function is defined
         transformationCandidates
                 .findAll { !singleMethodDefined(it) }
@@ -39,6 +41,30 @@ class PropertyTypeTransformer {
         }
 
         this.fromStringTransformations = transformationCandidates
+                .findAll { singleMethodDefined(it) }
+                .collectEntries { [it.key, it.value.first()] }
+    }
+
+    /* Functions for turning an instance of a type into a String */
+    private def loadSerialisationFunctions(Class transformerClass) {
+        Map<Class, List<Method>> serialisationCandidates =
+                transformerClass
+                        .declaredMethods
+                        .grep { Method m -> Modifier.isStatic(m.modifiers)}
+                        .grep { Method m ->
+                    m.parameters.length == 1 &&
+                            m.returnType == String
+                }
+                .groupBy { it.parameters[0].type }
+
+        // Ignoring any type where more than one persistence function is defined
+        serialisationCandidates
+                .findAll { !singleMethodDefined(it) }
+                .forEach { type, methods ->
+            log.warn("Ignoring duplicate custom serialisation functions from ${type}: ${methods.collect { it.toString() }}")
+        }
+
+        this.toStringTransformations = serialisationCandidates
                 .findAll { singleMethodDefined(it) }
                 .collectEntries { [it.key, it.value.first()] }
     }
@@ -56,7 +82,21 @@ class PropertyTypeTransformer {
         }
     }
 
+    def toString(Object x) {
+        def transform = toStringTransformations[x.class]
+        try {
+            transform?.invoke(null, x)
+        } catch (InvocationTargetException e) {
+            // Unwrap to rethrow the actual exception
+            throw e.cause
+        }
+    }
+
     boolean hasTransformationTo(Class destinationType) {
         fromStringTransformations.containsKey(destinationType)
+    }
+
+    boolean hasTransformationFrom(Class sourceType) {
+        toStringTransformations.containsKey(sourceType)
     }
 }

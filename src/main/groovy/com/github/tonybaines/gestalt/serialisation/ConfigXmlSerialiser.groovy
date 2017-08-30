@@ -2,6 +2,7 @@ package com.github.tonybaines.gestalt.serialisation
 
 import com.github.tonybaines.gestalt.Configurations
 import com.github.tonybaines.gestalt.transformers.PropertyNameTransformer
+import com.github.tonybaines.gestalt.transformers.PropertyTypeTransformer
 import groovy.xml.MarkupBuilder
 
 import java.beans.Introspector
@@ -15,11 +16,13 @@ import static com.github.tonybaines.gestalt.Configurations.Utils.returnsAValue
 class ConfigXmlSerialiser<T> {
   T instance
   private final PropertyNameTransformer propertyNameTransformer
+  private final PropertyTypeTransformer propertyTransformer
   private final boolean generatingComments
 
-  ConfigXmlSerialiser(T instance, PropertyNameTransformer propertyNameTransformer, boolean generatingComments) {
+  ConfigXmlSerialiser(T instance, PropertyNameTransformer propertyNameTransformer, PropertyTypeTransformer propertyTransformer, boolean generatingComments) {
     this.generatingComments = generatingComments
     this.propertyNameTransformer = propertyNameTransformer
+    this.propertyTransformer = propertyTransformer
     this.instance = instance
   }
 
@@ -42,8 +45,16 @@ class ConfigXmlSerialiser<T> {
 
         def value = object."$propName"
         // Simple values
-        if (returnsAValue(method) || method.returnType.enum || hasAFromStringMethod(method.returnType)) {
-          "$outputPropName"(value)
+        if (returnsAValue(method)
+                || method.returnType.enum
+                || hasAFromStringMethod(method.returnType)
+                || propertyTransformer.hasTransformationFrom(method.returnType)
+        ) {
+          if (propertyTransformer.hasTransformationFrom(method.returnType)) {
+            "$outputPropName"(propertyTransformer.toString(value))
+          } else {
+            "$outputPropName"(value)
+          }
           comments(outputPropName, method, getMkp())
         }
         // Lists of values

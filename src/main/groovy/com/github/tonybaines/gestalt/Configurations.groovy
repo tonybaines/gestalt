@@ -162,6 +162,7 @@ class Configurations<T> {
     private final T instance
     private final Class configInterface
     private PropertyNameTransformer propertyNameTransformer = new DefaultPropertyNameTransformer()
+    private PropertyTypeTransformer propertyTransformer = PropertyTypeTransformer.NULL
     boolean generatingComments = false
 
     SerialisationBuilder(T instance, Class configInterface) {
@@ -174,17 +175,22 @@ class Configurations<T> {
       this
     }
 
+    public SerialisationBuilder withPropertyTransformer(Class clazz) {
+      this.propertyTransformer = PropertyTypeTransformer.from(clazz)
+      this
+    }
+
     public SerialisationBuilder withComments() {
       this.generatingComments = true
       this
     }
 
     public String toXml() {
-      new ConfigXmlSerialiser(instance, propertyNameTransformer, generatingComments).toXmlString(configInterface)
+      new ConfigXmlSerialiser(instance, propertyNameTransformer, propertyTransformer, generatingComments).toXmlString(configInterface)
     }
 
     public String toProperties() {
-      new ConfigPropertiesSerialiser(instance, propertyNameTransformer, generatingComments).toProperties(configInterface)
+      new ConfigPropertiesSerialiser(instance, propertyNameTransformer, propertyTransformer, generatingComments).toProperties(configInterface)
     }
   }
 

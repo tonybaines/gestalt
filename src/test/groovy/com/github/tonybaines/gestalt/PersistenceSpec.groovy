@@ -242,6 +242,40 @@ class PersistenceSpec extends Specification {
 
   }
 
+  interface CustomSerialisationConfig {
+    @Comment("The address")
+    Inet4Address getAddress()
+  }
+  static class CustomTransformations {
+    static Inet4Address to(String s) {
+      InetAddress.getByName(s)
+    }
+
+    static String from(Inet4Address i) {
+      i.toString().replace('/', '')
+    }
+  }
+  def "Persisting with custom serialisation"() {
+    given:
+    Properties props = ['address': '192.168.0.1']
+    CustomSerialisationConfig config = Configurations.definedBy(CustomSerialisationConfig)
+      .fromProperties(props)
+      .withPropertyTransformer(CustomTransformations.class)
+      .done()
+
+    when:
+    def builder = Configurations
+            .serialise(config, CustomSerialisationConfig)
+            .withPropertyTransformer(CustomTransformations.class)
+            .withComments()
+    Properties roundTripped = propsFromString(builder.toProperties())
+    def xml = new XmlSlurper().parseText(builder.toXml())
+
+    then:
+    roundTripped['address'] == props['address']
+    xml.address == props['address']
+  }
+
 
   private class UpdateableSimpleConfig implements SimpleConfig {
     private String name

@@ -16,18 +16,30 @@ class PropertyTypeTransformerSpecFixture {
             new Foo(x)
         }
 
+        static String fromFoo(Foo x) {
+            new String('I am Foo')
+        }
+
         static Path makePath(String pathString) {
             Paths.get(pathString)
         }
     }
 
     static class Duplicates {
-        static Instant makeInstant1(String timestamp){
-            Instant.parse(timestamp)
+        static Instant makeInstant1(String timestamp) {
+            throw new UnsupportedOperationException("Should not be used")
         }
 
-        static Instant makeInstant2(String timestamp){
-            Instant.parse(timestamp)
+        static Instant makeInstant2(String timestamp) {
+            throw new UnsupportedOperationException("Should not be used")
+        }
+
+        static String fromInstant1(Instant timestamp) {
+            throw new UnsupportedOperationException("Should not be used")
+        }
+
+        static String fromInstant2(Instant timestamp) {
+            throw new UnsupportedOperationException("Should not be used")
         }
     }
 
@@ -35,15 +47,26 @@ class PropertyTypeTransformerSpecFixture {
         static Integer makeInt(String s) {
             throw new NumberFormatException("TEST")
         }
+        static String fromInt(Integer i) {
+            throw new NumberFormatException("TEST")
+        }
     }
 
     static class MultipleParams {
         static Integer makeInt(String s, int radix) {
-            1
+            throw new UnsupportedOperationException("Should not be used")
+        }
+
+        static String fromInt(Integer x, String base) {
+            throw new UnsupportedOperationException("Should not be used")
         }
     }
     static class InstanceMethod {
-        Integer makeIntInstance(String s) {
+        Integer makeInt(String s) {
+            throw new UnsupportedOperationException("Should not be used")
+        }
+
+        String fromInt(Integer x) {
             throw new UnsupportedOperationException("Should not be used")
         }
     }

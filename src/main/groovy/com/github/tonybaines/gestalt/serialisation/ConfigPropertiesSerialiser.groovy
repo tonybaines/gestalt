@@ -2,6 +2,7 @@ package com.github.tonybaines.gestalt.serialisation
 
 import com.github.tonybaines.gestalt.Configurations
 import com.github.tonybaines.gestalt.transformers.PropertyNameTransformer
+import com.github.tonybaines.gestalt.transformers.PropertyTypeTransformer
 
 import static com.github.tonybaines.gestalt.Configurations.Utils.annotationInfo
 import static com.github.tonybaines.gestalt.Configurations.Utils.declaredMethodsOf
@@ -12,11 +13,13 @@ import static com.github.tonybaines.gestalt.Configurations.Utils.returnsAValue
 class ConfigPropertiesSerialiser<T> {
   T instance
   private final PropertyNameTransformer propertyNameTransformer
+  private final PropertyTypeTransformer propertyTransformer
   private final boolean generatingComments
 
-  ConfigPropertiesSerialiser(T instance, PropertyNameTransformer propertyNameTransformer, boolean generatingComments) {
+  ConfigPropertiesSerialiser(T instance, PropertyNameTransformer propertyNameTransformer, PropertyTypeTransformer propertyTransformer, boolean generatingComments) {
     this.generatingComments = generatingComments
     this.propertyNameTransformer = propertyNameTransformer
+    this.propertyTransformer = propertyTransformer
     this.instance = instance
   }
 
@@ -33,10 +36,18 @@ class ConfigPropertiesSerialiser<T> {
 
       if (object != null) {
         def value = object."$propName"
-        if (returnsAValue(method) || method.returnType.enum || hasAFromStringMethod(method.returnType)) {
+        if (returnsAValue(method)
+                || method.returnType.enum
+                || hasAFromStringMethod(method.returnType)
+                || propertyTransformer.hasTransformationFrom(method.returnType)
+        ) {
           if (value != null) {
             comments(fullKey(prefix, propName), method, props)
-            props << "${fullKey(prefix, propName)} = ${value.toString()}"
+            if (propertyTransformer.hasTransformationFrom(method.returnType)) {
+              props << "${fullKey(prefix, propName)} = ${propertyTransformer.toString(value)}"
+            } else {
+              props << "${fullKey(prefix, propName)} = ${value.toString()}"
+            }
           }
         } else if (Configurations.Utils.isAList(method.genericReturnType)) {
           Class listGenericType = method.genericReturnType.actualTypeArguments[0]

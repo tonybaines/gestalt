@@ -32,7 +32,7 @@ class PropertyTypeTransformerSpec extends Specification {
         expect:
         PropertyTypeTransformer
                 .from(Duplicates.class)
-                .fromString("1970-01-01T00:00:00", Instant.class) == null
+                .hasTransformationFrom(Instant.class) == false
     }
 
     def "Rethrows any exception raised during transformation"() {
@@ -49,16 +49,43 @@ class PropertyTypeTransformerSpec extends Specification {
         expect:
         PropertyTypeTransformer
                 .from(InstanceMethod.class)
-                .fromString("foobar", Integer.class) == null
+                .hasTransformationFrom(Integer.class) == false
+
+        PropertyTypeTransformer
+                .from(InstanceMethod.class)
+                .hasTransformationTo(Integer.class) == false
 
     }
 
     def "Ignores static methods which don't accept a single String argument"() {
-        when:
         expect:
         PropertyTypeTransformer
                 .from(MultipleParams.class)
-                .fromString("foobar", Integer.class) == null
+                .hasTransformationFrom(Integer.class) == false
 
+        PropertyTypeTransformer
+                .from(MultipleParams.class)
+                .hasTransformationTo(Integer.class) == false
+
+    }
+
+    def "Can find and use custom methods for serialising to String"() {
+        expect:
+        this.tx.toString(new Foo()) == 'I am Foo'
+    }
+
+    def "A type without a custom serialisation function returns 'null'"() {
+        expect:
+        this.tx.toString(new Bar()) == null
+    }
+
+    def "Rethrows any exception raised during custom serialisation"() {
+        when:
+        PropertyTypeTransformer
+                .from(Broken.class)
+                .toString(new Integer(1))
+
+        then:
+        thrown(NumberFormatException)
     }
 }

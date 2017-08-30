@@ -442,8 +442,8 @@ You may want to return a type in your configuration interface that you don't con
 `java.net.InetAddress`
 
 ```java
-interface InternetAddressConfig {
-    InetAddress getAddress()
+public interface InternetAddressConfig {
+    InetAddress getAddress();
 }
 ```
 
@@ -455,8 +455,8 @@ Register a source of custom transformations using the `withPropertyTransformer(C
                 .done();
 ```
 
-The custom transformations must be statoc methods which take a `String` and return the required type, the name
-of the method is not significant.
+The custom transformations must be `static` methods which take a `String` and return the required type, the name
+of the method isn't significant.
 ```java
 public class CustomTransformations {
     public static InetAddress makeInetAddress(String s) {
@@ -465,10 +465,31 @@ public class CustomTransformations {
 }
 ```
 
-This mechanism works with default values and constants, any exceptions from the transformation are rethrown.
+This mechanism works with default values and constants, any exceptions from the transformation are rethrown.  If
+there is more than one method with the same return type **all** of them will be ignored (with a logged warning).
 
 #### Persisting Values
-This is not supported yet unless the custom transformation function can parse the result of the `toString()`.
+If you need to persist configurations to `Properties` or XML you'll need to write a symmetric serialisation function
+to produce a `String` from that type such that it can be read back in e.g.
+```java
+public class CustomTransformations {
+    ...
+    public static String fromInetAddress(InetAddress i) {
+        return i.toString().replace('/', '');
+    }
+}
+```
+
+**N.B.** Once again, it need to be unique and `static`
+
+Specify the transformations library for serialisation in a similar way to importing
+```java
+String xml = Configurations
+                .serialise(config, CustomSerialisationConfig.class)
+                .withPropertyTransformer(CustomTransformations.class)
+                .withComments()
+                .toXml();
+```
 
 ## Custom `ConfigSource` implementations
 
