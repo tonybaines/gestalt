@@ -8,7 +8,7 @@
 2. Create github release
 3. Publish to Bintray
 ```
-gradle clean bintrayUpload
+./gradlew clean bintrayUpload
 ```
 4. Update to next SNAPSHOT version
 
