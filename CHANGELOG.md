@@ -1,3 +1,6 @@
+# [2.0.8](http://central.maven.org/maven2/com/github/tonybaines/gestalt/2.0.8) (2017-08-31)
+* Issue #27 Configurations.validate(...) fails with custom types
+
 # [2.0.7](http://central.maven.org/maven2/com/github/tonybaines/gestalt/2.0.7) (2017-08-31)
 * Issue #26 UnsupportedOperationException accessing a property inherited from a super interface
 

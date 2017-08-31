@@ -38,8 +38,8 @@ class Configurations<T> {
     new CompositeConfigurationBuilder<T>(configInterface)
   }
 
-  static ValidationResult validate(Object instance, Class configInterface) {
-    new ReflectionValidator(instance, configInterface).validate()
+  static ValidationResult validate(Object instance, Class configInterface, PropertyTypeTransformer propertyTransformer = PropertyTypeTransformer.NULL) {
+    new ReflectionValidator(instance, configInterface, propertyTransformer).validate()
   }
 
   static class Utils {
@@ -72,11 +72,11 @@ class Configurations<T> {
     }
 
     static boolean declaresMethod(Class clazz, String name, Class... params) {
-      declaredMethodsOf(clazz).any {it.name == name && it.parameterTypes == params}
+      clazz.methods.grep { !it.name.startsWith('\$') }.any {it.name == name && it.parameterTypes == params}
     }
 
-    static Iterable declaredMethodsOf(configInterface) {
-      configInterface.methods.grep { !it.name.startsWith('\$') }
+    static Iterable declaredMethodsOf(Class configInterface) {
+      configInterface.interface ? configInterface.methods.grep { !it.name.startsWith('\$') } : []
     }
 
     public static boolean hasAFromStringMethod(Class clazz) {

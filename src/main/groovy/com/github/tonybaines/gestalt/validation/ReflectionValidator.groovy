@@ -2,6 +2,7 @@ package com.github.tonybaines.gestalt.validation
 
 import com.github.tonybaines.gestalt.ConfigurationException
 import com.github.tonybaines.gestalt.Configurations
+import com.github.tonybaines.gestalt.transformers.PropertyTypeTransformer
 import groovy.util.logging.Slf4j
 
 import static com.github.tonybaines.gestalt.Configurations.Utils.declaredMethodsOf
@@ -15,9 +16,11 @@ import static com.github.tonybaines.gestalt.Configurations.Utils.isDefaultReturn
 class ReflectionValidator {
   private final Object instance
   private final Class configInterface
+  private final PropertyTypeTransformer propertyTransformer
   private failures = new ValidationResult()
 
-  public ReflectionValidator(Object instance, Class configInterface) {
+  public ReflectionValidator(Object instance, Class configInterface, PropertyTypeTransformer propertyTransformer) {
+    this.propertyTransformer = propertyTransformer
     this.configInterface = configInterface
     this.instance = instance
   }
@@ -44,13 +47,21 @@ class ReflectionValidator {
           return
         }
 
+        // Can be ignored
         if (isNotAProperty(object, propertyName)) return
 
+        // Throws a validation error if invalid
         def value = object."${propertyName}"
 
         // Simple values, enums and custom types
-        if (returnsAValue(method) || method.returnType.enum || hasAFromStringMethod(method.returnType) ) return
-
+        if (returnsAValue(method)
+                || method.returnType.enum
+                || hasAFromStringMethod(method.returnType)
+                || propertyTransformer.hasTransformationFrom(method.returnType)
+        ) {
+          // Value is checked. No further validation required
+          return
+        }
         // Lists of values
         if (Configurations.Utils.isAList(method.genericReturnType)) {
           Class listGenericType = method.genericReturnType.actualTypeArguments[0]
@@ -60,7 +71,7 @@ class ReflectionValidator {
             value.each { item -> recursiveValidation(item, listGenericType, fullPath(pathSoFar, propertyName)) }
           }
         }
-        // a single sub-type
+        // a sub-interface
         else {
           if (value != null) recursiveValidation(value, method.returnType, fullPath(pathSoFar, propertyName))
         }

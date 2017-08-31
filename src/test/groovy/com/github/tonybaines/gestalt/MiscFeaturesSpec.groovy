@@ -3,6 +3,8 @@ package com.github.tonybaines.gestalt
 import spock.lang.Specification
 import spock.lang.Unroll
 
+import javax.validation.constraints.NotNull
+
 import static com.github.tonybaines.gestalt.Configurations.Behaviour.isOptional
 import static com.github.tonybaines.gestalt.Fixture.newCompositeConfiguration
 
@@ -193,6 +195,7 @@ class MiscFeaturesSpec extends Specification {
   }
 
   interface Super {
+    @NotNull
     @Default.Integer(1)
     Integer getFoo();
   }
@@ -227,39 +230,44 @@ class MiscFeaturesSpec extends Specification {
     @Default.String("192.168.0.2")
     InetAddress getAddress()
 
+    @NotNull
     String getMultiline()
   }
 
   def "Property value transformation with a provided function"() {
-        when:
-        InternetAddressConfig config = Configurations.definedBy(InternetAddressConfig)
-                .withPropertyTransformer(CustomTransformations.class)
-                .fromProperties(['address': '192.168.0.1', 'multiline': 'foo\nbar\n'] as Properties)
-                .done()
-        then:
-        config.getAddress() != null
-        config.getMultiline() == 'foo\nbar'
-    }
+    when:
+    InternetAddressConfig config = Configurations.definedBy(InternetAddressConfig)
+            .withPropertyTransformer(CustomTransformations.class)
+            .fromProperties(['address': '192.168.0.1', 'multiline': 'foo\nbar\n'] as Properties)
+            .done()
+    then:
+    config.getAddress() != null
+    config.getMultiline() == 'foo\nbar'
 
-    def "Property value transformation with a provided function and default value"() {
-        when:
-        InternetAddressConfig config = Configurations.definedBy(InternetAddressConfig)
-                .withPropertyTransformer(CustomTransformations.class)
-                .fromProperties([:] as Properties)
-                .done()
-        then:
-        config.getAddress() != null
-    }
+    Configurations.validate(config, InternetAddressConfig).hasFailures() == false
+  }
 
-    def "Property value transformation with a provided function and constant value"() {
-        when:
-        InternetAddressConfig config = Configurations.definedBy(InternetAddressConfig)
-                .withPropertyTransformer(CustomTransformations.class)
-                .withConstants(['LOCAL_IP': '192.168.0.3'])
-                .fromProperties(['address': '%{LOCAL_IP}'] as Properties)
-                .done()
-        then:
-        config.getAddress() != null
-    }
+  def "Property value transformation with a provided function and default value"() {
+    when:
+    InternetAddressConfig config = Configurations.definedBy(InternetAddressConfig)
+            .withPropertyTransformer(CustomTransformations.class)
+            .fromProperties([:] as Properties)
+            .done()
+    then:
+    config.getAddress() != null
+
+    Configurations.validate(config, InternetAddressConfig).hasFailures() == true
+  }
+
+  def "Property value transformation with a provided function and constant value"() {
+    when:
+    InternetAddressConfig config = Configurations.definedBy(InternetAddressConfig)
+            .withPropertyTransformer(CustomTransformations.class)
+            .withConstants(['LOCAL_IP': '192.168.0.3'])
+            .fromProperties(['address': '%{LOCAL_IP}'] as Properties)
+            .done()
+    then:
+    config.getAddress() != null
+  }
 
 }
