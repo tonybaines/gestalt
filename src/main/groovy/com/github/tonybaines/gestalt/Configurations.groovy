@@ -76,7 +76,7 @@ class Configurations<T> {
     }
 
     static Iterable declaredMethodsOf(configInterface) {
-      configInterface.declaredMethods.grep { !it.name.startsWith('\$') }
+      configInterface.methods.grep { !it.name.startsWith('\$') }
     }
 
     public static boolean hasAFromStringMethod(Class clazz) {

@@ -192,6 +192,28 @@ class MiscFeaturesSpec extends Specification {
     thrown(NullPointerException)
   }
 
+  interface Super {
+    @Default.Integer(1)
+    Integer getFoo();
+  }
+  interface Sub extends Super {}
+
+  def "Issue #26 Working with inherited methods"() {
+    when:
+    def config = Configurations.definedBy(Sub)
+            .fromProperties([:] as Properties)
+            .done()
+
+    def builder = Configurations.serialise(config, Sub)
+    def propsString = builder.toProperties()
+    def xmlString = builder.toXml()
+
+    then:
+    config.getFoo() == 1
+    new XmlSlurper().parseText(xmlString).foo == config.getFoo()
+    Configurations.Utils.propsFromString(propsString).get("foo") == config.getFoo().toString()
+  }
+
   static class CustomTransformations {
     static InetAddress makeInetAddress(String s) {
       InetAddress.getByName(s)
