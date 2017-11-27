@@ -1,8 +1,15 @@
+buildscript {
+  ext.kotlin_version = '1.1.60'
+  dependencies {
+    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+  }
+}
 plugins {
   id "com.jfrog.bintray" version "1.4"
 }
 
 apply plugin: 'groovy'
+apply plugin: 'kotlin'
 apply plugin: 'jacoco'
 apply plugin: 'codenarc'
 apply plugin: 'jdepend'
@@ -16,7 +23,7 @@ apply plugin: 'maven'
 apply plugin: 'maven-publish'
 
 group = 'com.github.tonybaines'
-version = '2.0.8'
+version = '2.0.9-SNAPSHOT'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -26,6 +33,7 @@ repositories {
 }
 dependencies {
   compile([
+    "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version",
     'org.codehaus.groovy:groovy-all:2.4.4',
     'com.google.guava:guava:13.0',
     'org.slf4j:slf4j-api:1.6.1',
@@ -168,6 +176,10 @@ tasks.withType(JDepend) {
   }
 }
 
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+  kotlinOptions.jvmTarget = "1.8"
+}
+
 task wrapper(type: Wrapper) {
-  gradleVersion = '4.1'
+  gradleVersion = '4.3'
 }

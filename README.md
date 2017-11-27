@@ -603,6 +603,35 @@ The property lookup will happen during startup if validation is enabled, remembe
 ensure that any expensive or delayed-availability properties can return safe defaults,
 (or null with a file-based config fallback), until they are ready.
 
+
+
+## Notes on Working With Kotlin
+Using interfaces defined in Java or Groovy should just work, but there may be 
+idiomatic advantages to using native Kotlin interfaces
+
+```kotlin
+interface KotlinConfig {
+    val foo: String
+    val bar: KotlinSubConfig
+}
+
+interface KotlinSubConfig {
+    val baz: Int
+}
+```
+
+Since properties don't have an exact equivalent in Java some odd-looking syntax is 
+requried to use the `@Default` annotations. See [this page](https://kotlinlang.org/docs/reference/annotations.html#annotation-use-site-targets) for more 
+information on annotation use-site targets in Kotlin
+
+```kotlin
+interface KotlinConfig {
+    @get:[Default.String("bar")]
+    val foo: String
+}
+```
+
+
 ## See the specifications for more
 
 The features described above (and more) were developed from the specifications in [src/test/groovy/com/github/tonybaines/gestalt](src/test/groovy/com/github/tonybaines/gestalt/) , using the example config sources in [src/test/resources](src/test/resources).
