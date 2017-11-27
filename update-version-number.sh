@@ -2,7 +2,7 @@
 
 
 function currentVersion() {
-  echo $(grep "version =" build.gradle | cut -d"'" -f2)
+  echo $(grep "^version =" build.gradle | cut -d"'" -f2)
 }
 
 function previousVersion() {
@@ -20,7 +20,7 @@ echo "Currently $CURRENT_V"
 echo "Releasing $RELEASE_V"
 
 # Update files
-sed -i  "s/version = '$CURRENT_V'/version = '$RELEASE_V'/" build.gradle
+sed -i  "s/^version = '$CURRENT_V'/version = '$RELEASE_V'/" build.gradle
 sed -i  "s/$PREV_V/$RELEASE_V/" INSTALLING.md
 
 git commit -a -m "Releasing $RELEASE_V"
