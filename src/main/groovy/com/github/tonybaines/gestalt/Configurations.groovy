@@ -79,19 +79,19 @@ class Configurations<T> {
       configInterface.interface ? configInterface.methods.grep { !it.name.startsWith('\$') } : []
     }
 
-    public static boolean hasAFromStringMethod(Class clazz) {
+    static boolean hasAFromStringMethod(Class clazz) {
       declaresMethod(clazz, 'fromString', String)
     }
 
-    public static boolean isDefaultReturningValidationResults(Method method) {
+    static boolean isDefaultReturningValidationResults(Method method) {
       method.isDefault() && method.returnType.equals(ValidationResult.class) || method.returnType.equals(ValidationResult.Item.class)
     }
 
-    public static boolean optional(Method method) {
+    static boolean optional(Method method) {
       method.declaredAnnotations.any{it instanceof Optional}
     }
 
-    public static Properties propsFromString(String propsString) {
+    static Properties propsFromString(String propsString) {
       Properties props = new Properties()
       propsString.eachLine {
         if (!it.startsWith('#')) {
@@ -135,7 +135,7 @@ class Configurations<T> {
       info
     }
 
-    public static isNotAProperty(Object obj, String propertyName) {
+    static isNotAProperty(Object obj, String propertyName) {
       !obj.hasProperty(propertyName)
     }
   }
@@ -170,26 +170,26 @@ class Configurations<T> {
       this.instance = instance
     }
 
-    public SerialisationBuilder using(PropertyNameTransformer propertyNameTransformer) {
+    SerialisationBuilder using(PropertyNameTransformer propertyNameTransformer) {
       this.propertyNameTransformer = propertyNameTransformer
       this
     }
 
-    public SerialisationBuilder withPropertyTransformer(Class clazz) {
+    SerialisationBuilder withPropertyTransformer(Class clazz) {
       this.propertyTransformer = PropertyTypeTransformer.from(clazz)
       this
     }
 
-    public SerialisationBuilder withComments() {
+    SerialisationBuilder withComments() {
       this.generatingComments = true
       this
     }
 
-    public String toXml() {
+    String toXml() {
       new ConfigXmlSerialiser(instance, propertyNameTransformer, propertyTransformer, generatingComments).toXmlString(configInterface)
     }
 
-    public String toProperties() {
+    String toProperties() {
       new ConfigPropertiesSerialiser(instance, propertyNameTransformer, propertyTransformer, generatingComments).toProperties(configInterface)
     }
   }
@@ -211,7 +211,7 @@ class Configurations<T> {
 
     @TupleConstructor
     private static final class Source {
-      public enum SourceType {
+      enum SourceType {
         XMLStream, GroovyStream, PropertiesStream, Properties, ConfigSource, ConfigInstance
       }
 
@@ -228,43 +228,64 @@ class Configurations<T> {
 
     private def sources = new ArrayList<>()
 
-    public CompositeConfigurationBuilder<T> fromXmlResource(String filePath, Class clazz = null, Behaviour... behaviours) {
+    CompositeConfigurationBuilder<T> fromXmlResource(String filePath, Class clazz = null, Behaviour... behaviours) {
       tryToLoadWith(behaviours, filePath) {
         fromXml(resourceAsStream(filePath, clazz))
       }
       this
     }
 
-    public CompositeConfigurationBuilder<T> fromPropertiesResource(String filePath, Class clazz = null, Behaviour... behaviours) {
+    CompositeConfigurationBuilder<T> fromXmlFile(String filePath, PropertyNameTransformer propertyNameTransformer = new DefaultPropertyNameTransformer(), Behaviour... behaviours) {
+      tryToLoadWith(behaviours, filePath) {
+        fromXml(new File(filePath).newInputStream())
+      }
+      this
+    }
+
+    CompositeConfigurationBuilder<T> fromPropertiesResource(String filePath, Class clazz = null, Behaviour... behaviours) {
       tryToLoadWith(behaviours, filePath) {
         fromProperties(resourceAsStream(filePath, clazz))
       }
       this
     }
 
-    public CompositeConfigurationBuilder<T> fromGroovyConfigResource(String filePath, Class clazz = null, Behaviour... behaviours) {
+    CompositeConfigurationBuilder<T> fromPropertiesFile(String filePath, PropertyNameTransformer propertyNameTransformer = new DefaultPropertyNameTransformer(), Behaviour... behaviours) {
+      tryToLoadWith(behaviours, filePath) {
+        fromProperties(new File(filePath).newInputStream())
+      }
+      this
+    }
+
+    CompositeConfigurationBuilder<T> fromGroovyConfigResource(String filePath, Class clazz = null, Behaviour... behaviours) {
       tryToLoadWith(behaviours, filePath) {
         fromGroovyConfig(resourceAsStream(filePath, clazz))
       }
       this
     }
 
-    public CompositeConfigurationBuilder<T> withConstants(Map<String, String> constants) {
+    CompositeConfigurationBuilder<T> fromGroovyConfigFile(String filePath, Class clazz = null, Behaviour... behaviours) {
+      tryToLoadWith(behaviours, filePath) {
+        fromGroovyConfig(new File(filePath).newInputStream())
+      }
+      this
+    }
+
+    CompositeConfigurationBuilder<T> withConstants(Map<String, String> constants) {
       this.constants = constants
       this
     }
 
-    public CompositeConfigurationBuilder<T> withConstants(Properties props) {
+    CompositeConfigurationBuilder<T> withConstants(Properties props) {
       withConstants(props.asImmutable() as Map<String, String>)
     }
 
-    public CompositeConfigurationBuilder<T> withConstantsFromResource(String filePath, Class clazz = null) {
+    CompositeConfigurationBuilder<T> withConstantsFromResource(String filePath, Class clazz = null) {
       Properties props = new Properties()
       props.load(resourceAsStream(filePath, clazz))
       withConstants(props)
     }
 
-    public CompositeConfigurationBuilder<T> withPropertyTransformer(Class clazz) {
+    CompositeConfigurationBuilder<T> withPropertyTransformer(Class clazz) {
       this.propertyTransformer = PropertyTypeTransformer.from(clazz)
       this
     }
@@ -284,42 +305,42 @@ class Configurations<T> {
       }
     }
 
-    public CompositeConfigurationBuilder<T> from(ConfigSource configSource) {
+    CompositeConfigurationBuilder<T> from(ConfigSource configSource) {
       streams << new Source(Source.SourceType.ConfigSource, configSource, null)
       this
     }
 
-    public CompositeConfigurationBuilder<T> fromXml(InputStream stream, PropertyNameTransformer propertyNameTransformer = new DefaultPropertyNameTransformer()) {
+    CompositeConfigurationBuilder<T> fromXml(InputStream stream, PropertyNameTransformer propertyNameTransformer = new DefaultPropertyNameTransformer()) {
       streams << new Source(Source.SourceType.XMLStream, stream, propertyNameTransformer)
       this
     }
 
-    public CompositeConfigurationBuilder<T> fromProperties(InputStream stream, PropertyNameTransformer propertyNameTransformer = new DefaultPropertyNameTransformer()) {
+    CompositeConfigurationBuilder<T> fromProperties(InputStream stream, PropertyNameTransformer propertyNameTransformer = new DefaultPropertyNameTransformer()) {
       streams << new Source(Source.SourceType.PropertiesStream, stream, propertyNameTransformer)
       this
     }
 
-    public CompositeConfigurationBuilder<T> fromProperties(Properties props, PropertyNameTransformer propertyNameTransformer = new DefaultPropertyNameTransformer()) {
+    CompositeConfigurationBuilder<T> fromProperties(Properties props, PropertyNameTransformer propertyNameTransformer = new DefaultPropertyNameTransformer()) {
       streams << new Source(Source.SourceType.Properties, props, propertyNameTransformer)
       this
     }
 
-    public CompositeConfigurationBuilder<T> fromGroovyConfig(InputStream stream) {
+    CompositeConfigurationBuilder<T> fromGroovyConfig(InputStream stream) {
       streams << new Source(Source.SourceType.GroovyStream, stream, new DefaultPropertyNameTransformer())
       this
     }
 
-    public CompositeConfigurationBuilder<T> fromConfigInstance(T configInstance) {
+    CompositeConfigurationBuilder<T> fromConfigInstance(T configInstance) {
       streams << new Source(Source.SourceType.ConfigInstance, configInstance, null)
       this
     }
 
-    public CompositeConfigurationBuilder<T> without(Feature... feature) {
+    CompositeConfigurationBuilder<T> without(Feature... feature) {
       feature.each { enabledFeatures.remove(it) }
       this
     }
 
-    public T done() {
+    T done() {
       loadAllSources()
 
       if (sources.isEmpty()) tryToLoadDefaultSource(configInterface)

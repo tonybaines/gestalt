@@ -131,6 +131,7 @@ class MiscFeaturesSpec extends Specification {
     TestConfig config = Configurations.definedBy(TestConfig)
       .fromXmlResource('common.xml')
       .fromXmlResource('no-such-resource', isOptional)
+      .fromXmlFile("does-not-exist", isOptional)
       .done()
 
     then:
@@ -142,6 +143,7 @@ class MiscFeaturesSpec extends Specification {
     TestConfig config = Configurations.definedBy(TestConfig)
       .fromPropertiesResource('common.properties')
       .fromPropertiesResource('no-such-resource', isOptional)
+      .fromPropertiesFile("does-not-exist", isOptional)
       .done()
 
     then:
@@ -153,6 +155,7 @@ class MiscFeaturesSpec extends Specification {
     TestConfig config = Configurations.definedBy(TestConfig)
       .fromGroovyConfigResource('common.grc')
       .fromGroovyConfigResource('no-such-resource', isOptional)
+      .fromGroovyConfigFile('does-not-exist', isOptional)
       .done()
 
     then:
@@ -165,6 +168,9 @@ class MiscFeaturesSpec extends Specification {
       .fromXmlResource('no-such-resource', isOptional)
       .fromPropertiesResource('no-such-resource', isOptional)
       .fromGroovyConfigResource('no-such-resource', isOptional)
+      .fromXmlFile("does-not-exist", isOptional)
+      .fromPropertiesFile("does-not-exist", isOptional)
+      .fromGroovyConfigFile('does-not-exist', isOptional)
       .done()
 
     then:
