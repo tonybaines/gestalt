@@ -212,7 +212,7 @@ class Configurations<T> {
     @TupleConstructor
     private static final class Source {
       enum SourceType {
-        XMLStream, GroovyStream, PropertiesStream, Properties, ConfigSource, ConfigInstance
+        XMLStream, GroovyStream, PropertiesStream, Properties, ConfigSource, ConfigInstance, SystemProps
       }
 
       final SourceType type
@@ -231,6 +231,7 @@ class Configurations<T> {
     CompositeConfigurationBuilder<T> fromXmlResource(String filePath, Class clazz = null, Behaviour... behaviours) {
       tryToLoadWith(behaviours, filePath) {
         fromXml(resourceAsStream(filePath, clazz))
+        log.info("Successfully loaded configuration from resource '$filePath'")
       }
       this
     }
@@ -238,6 +239,7 @@ class Configurations<T> {
     CompositeConfigurationBuilder<T> fromXmlFile(String filePath, PropertyNameTransformer propertyNameTransformer = new DefaultPropertyNameTransformer(), Behaviour... behaviours) {
       tryToLoadWith(behaviours, filePath) {
         fromXml(new File(filePath).newInputStream())
+        log.info("Successfully loaded configuration from file '$filePath'")
       }
       this
     }
@@ -245,6 +247,7 @@ class Configurations<T> {
     CompositeConfigurationBuilder<T> fromPropertiesResource(String filePath, Class clazz = null, Behaviour... behaviours) {
       tryToLoadWith(behaviours, filePath) {
         fromProperties(resourceAsStream(filePath, clazz))
+        log.info("Successfully loaded configuration from resource '$filePath'")
       }
       this
     }
@@ -252,6 +255,7 @@ class Configurations<T> {
     CompositeConfigurationBuilder<T> fromPropertiesFile(String filePath, PropertyNameTransformer propertyNameTransformer = new DefaultPropertyNameTransformer(), Behaviour... behaviours) {
       tryToLoadWith(behaviours, filePath) {
         fromProperties(new File(filePath).newInputStream())
+        log.info("Successfully loaded configuration from file '$filePath'")
       }
       this
     }
@@ -259,6 +263,7 @@ class Configurations<T> {
     CompositeConfigurationBuilder<T> fromGroovyConfigResource(String filePath, Class clazz = null, Behaviour... behaviours) {
       tryToLoadWith(behaviours, filePath) {
         fromGroovyConfig(resourceAsStream(filePath, clazz))
+        log.info("Successfully loaded configuration from resource '$filePath'")
       }
       this
     }
@@ -266,6 +271,7 @@ class Configurations<T> {
     CompositeConfigurationBuilder<T> fromGroovyConfigFile(String filePath, Class clazz = null, Behaviour... behaviours) {
       tryToLoadWith(behaviours, filePath) {
         fromGroovyConfig(new File(filePath).newInputStream())
+        log.info("Successfully loaded configuration from file '$filePath'")
       }
       this
     }
@@ -335,6 +341,11 @@ class Configurations<T> {
       this
     }
 
+    CompositeConfigurationBuilder<T> fromSystemProperties(String prefix, PropertyNameTransformer propertyNameTransformer = new DefaultPropertyNameTransformer()) {
+      streams << new Source(Source.SourceType.SystemProps, prefix, propertyNameTransformer)
+      this
+    }
+
     CompositeConfigurationBuilder<T> without(Feature... feature) {
       feature.each { enabledFeatures.remove(it) }
       this
@@ -367,6 +378,7 @@ class Configurations<T> {
     private loadAllSources() {
       streams.each { source ->
         switch (source.type) {
+          case Source.SourceType.SystemProps: sources << new SystemPropertiesConfigSource(source.source, source.propNameTxformer); break
           case Source.SourceType.ConfigInstance: sources << new InstanceConfigSource(source.source); break
           case Source.SourceType.ConfigSource: sources << source.source; break
           case Source.SourceType.XMLStream: sources << new XmlConfigSource(source.source, source.propNameTxformer, propertyTransformer, constants); break

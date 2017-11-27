@@ -226,6 +226,36 @@ Configurations
   .done();
 ```
 
+Each type of configuration format can also be accessed as a full file path e.g.
+```java
+Configurations
+  .definedBy(SimpleConfig.class)
+  .fromXmlFile("/opt/my-app/etc/config/simple-config.xml")
+  .done();
+```
+
+File sources can also be flagged with `isOptional`
+
+#### System Properties
+Values can be set from Java system properties (`-D` options), which may be helpful in more dynamic environments to 
+optionally override certain values.
+
+Properties are expected to be dot-separated with a prefix/namespace, and can make use of a `PropertyNameTransformer`
+e.g.
+
+```java
+Configurations
+  .definedBy(SimpleConfig.class)
+  .fromSystemProperties("my-app")
+  .fromXmlFile("/opt/my-app/etc/config/simple-config.xml")
+  .done();
+```
+
+Which would allow the `name` and `enabled` properties to be configured like this;
+```
+java -jar my-app ... -Dmy-app.name=baz -Dmy-app.enabled=false
+```
+
 #### Fallback Configuration File
 If there are no (valid) configuration sources defined, before failing, *Gestalt* will attempt to load from
 a file `config-class.properties` in the current working directory.  No attempt is made to load other formats

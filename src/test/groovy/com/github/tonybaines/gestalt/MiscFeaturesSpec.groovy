@@ -178,6 +178,19 @@ class MiscFeaturesSpec extends Specification {
     e.message.contains('No valid sources available')
   }
 
+  def "System properties as a configuration source"() {
+    when:
+    System.setProperty("TEST.intValue", "42")
+
+    TestConfig config = Configurations.definedBy(TestConfig)
+        .fromSystemProperties("TEST")
+        .fromPropertiesResource('common.properties')
+        .done()
+
+    then:
+    config.getIntValue() == 42
+  }
+
 
   interface Eventing {
     MetricsConfig getMetrics()

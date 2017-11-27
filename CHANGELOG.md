@@ -1,3 +1,7 @@
+# [2.0.9](http://central.maven.org/maven2/com/github/tonybaines/gestalt/2.0.9) (2017-11-27)
+* Support System properties as a source of config values
+* Support file-path access to config sources (can be optional)
+
 # [2.0.8](http://central.maven.org/maven2/com/github/tonybaines/gestalt/2.0.8) (2017-08-31)
 * Issue #27 Configurations.validate(...) fails with custom types
 
