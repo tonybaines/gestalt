@@ -302,7 +302,7 @@ class Configurations<T> {
         c.call(filePath)
       }
       catch (Throwable e) {
-        if (isOptional(behaviours)) log.warn("Could not load an optional configuration: ${e.message}", e)
+        if (isOptional(behaviours)) log.warn("Could not load an optional configuration: ${e.message}")
         else {
           def ex = new ConfigurationException("Could not load from a required configuration source: ${e.message}")
           ex.printStackTrace()

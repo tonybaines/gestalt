@@ -1,3 +1,6 @@
+# [2.0.10](http://central.maven.org/maven2/com/github/tonybaines/gestalt/2.0.10) (2017-12-09)
+* Make failing to load an optional file a quieter log message
+
 # [2.0.9](http://central.maven.org/maven2/com/github/tonybaines/gestalt/2.0.9) (2017-11-27)
 * Support System properties as a source of config values
 * Support file-path access to config sources (can be optional)
