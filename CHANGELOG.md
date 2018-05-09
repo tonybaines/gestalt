@@ -1,3 +1,6 @@
+# [2.0.11](http://central.maven.org/maven2/com/github/tonybaines/gestalt/2.0.11) (2018-05-08)
+* Dependency updates
+
 # [2.0.10](http://central.maven.org/maven2/com/github/tonybaines/gestalt/2.0.10) (2017-12-09)
 * Make failing to load an optional file a quieter log message
 
