@@ -1,11 +1,13 @@
 buildscript {
-  ext.kotlin_version = '1.1.60'
+  ext.kotlin_version = '1.2.41'
   dependencies {
     classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
   }
 }
 plugins {
-  id "com.jfrog.bintray" version "1.4"
+  id "com.jfrog.bintray" version "1.8.0"
+  id 'org.owasp.dependencycheck' version '3.1.2'
+  id 'com.github.ben-manes.versions' version '0.17.0'
 }
 
 apply plugin: 'groovy'
@@ -33,23 +35,33 @@ repositories {
 }
 dependencies {
   compile([
-    "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version",
-    'org.codehaus.groovy:groovy-all:2.4.4',
-    'com.google.guava:guava:13.0',
+    "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version",
+    'org.codehaus.groovy:groovy-all:2.4.9',
+    'com.google.guava:guava:24.1-jre',
     'org.slf4j:slf4j-api:1.6.1',
-    'org.apache.bval:org.apache.bval.bundle:0.5',
+    'commons-beanutils:commons-beanutils:1.9.3',
     'org.apache.geronimo.specs:geronimo-validation_1.0_spec:1.1',
   ])
+  compile('org.apache.bval:org.apache.bval.bundle:0.5'){
+    // CVE-2014-0114
+    exclude group: 'commons-beanutils', module: 'commons-beanutils-core'
+  }
 
   testCompile([
-    'org.spockframework:spock-core:1.0-groovy-2.4',
+    'org.spockframework:spock-core:1.1-groovy-2.4',
   ])
 
   testRuntime([
-    'org.objenesis:objenesis:1.2',
+    'org.objenesis:objenesis:2.6',
     'org.slf4j:slf4j-simple:1.6.1',
   ])
   runtime([])
+}
+
+dependencyCheck {
+  suppressionFile = 'config/dependency-check-suppressions.xml'
+  format = 'ALL'
+  failBuildOnCVSS = 3
 }
 
 /* The java-library-distribution plugin*/
@@ -181,5 +193,5 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
 }
 
 task wrapper(type: Wrapper) {
-  gradleVersion = '4.3'
+  gradleVersion = '4.6'
 }

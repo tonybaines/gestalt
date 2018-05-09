@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.1.xsd">
+    <!-- XSS vulnerability in Bean module for Drupal -->
+    <suppress>
+        <notes><![CDATA[
+   file name: geronimo-validation_1.0_spec-1.1.jar
+   ]]></notes>
+        <gav regex="true">^org\.apache\.geronimo\.specs:geronimo-validation_1\.0_spec:.*$</gav>
+        <cve>CVE-2013-4499</cve>
+    </suppress>
+</suppressions>
