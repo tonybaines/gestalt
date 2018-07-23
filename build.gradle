@@ -27,7 +27,7 @@ apply plugin: 'maven'
 apply plugin: 'maven-publish'
 
 group = 'com.github.tonybaines'
-version = '2.0.12'
+version = '2.0.13'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -38,7 +38,7 @@ repositories {
 dependencies {
   compile([
     "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version",
-    'org.codehaus.groovy:groovy-all:2.4.9',
+    'org.codehaus.groovy:groovy:2.5.1',
     'com.google.guava:guava:25.1-jre',
     'org.slf4j:slf4j-api:1.7.25',
     'commons-beanutils:commons-beanutils:1.9.3',

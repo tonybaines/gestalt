@@ -1,95 +1,99 @@
-# [2.0.12](http://central.maven.org/maven2/com/github/tonybaines/gestalt/2.0.12) (2018-07-23)
+# [2.0.13](https://jcenter.bintray.com/com/github/tonybaines/gestalt/2.0.13) (2018-07-23)
+* Depend on `groovy` 2.5.1 (not `groovy-all`)
+* Repoint all CHANGELOG URLs to jcenter
+
+# [2.0.12](https://jcenter.bintray.com/com/github/tonybaines/gestalt/2.0.12) (2018-07-23)
 * Add support for simple lists of properties injected through system properties
 * Dependency updates
 
-# [2.0.11](http://central.maven.org/maven2/com/github/tonybaines/gestalt/2.0.11) (2018-05-08)
+# [2.0.11](https://jcenter.bintray.com/com/github/tonybaines/gestalt/2.0.11) (2018-05-08)
 * Dependency updates
 
-# [2.0.10](http://central.maven.org/maven2/com/github/tonybaines/gestalt/2.0.10) (2017-12-09)
+# [2.0.10](https://jcenter.bintray.com/com/github/tonybaines/gestalt/2.0.10) (2017-12-09)
 * Make failing to load an optional file a quieter log message
 
-# [2.0.9](http://central.maven.org/maven2/com/github/tonybaines/gestalt/2.0.9) (2017-11-27)
+# [2.0.9](https://jcenter.bintray.com/com/github/tonybaines/gestalt/2.0.9) (2017-11-27)
 * Support System properties as a source of config values
 * Support file-path access to config sources (can be optional)
 
-# [2.0.8](http://central.maven.org/maven2/com/github/tonybaines/gestalt/2.0.8) (2017-08-31)
+# [2.0.8](https://jcenter.bintray.com/com/github/tonybaines/gestalt/2.0.8) (2017-08-31)
 * Issue #27 Configurations.validate(...) fails with custom types
 
-# [2.0.7](http://central.maven.org/maven2/com/github/tonybaines/gestalt/2.0.7) (2017-08-31)
+# [2.0.7](https://jcenter.bintray.com/com/github/tonybaines/gestalt/2.0.7) (2017-08-31)
 * Issue #26 UnsupportedOperationException accessing a property inherited from a super interface
 
-# [2.0.6](http://central.maven.org/maven2/com/github/tonybaines/gestalt/2.0.6) (2017-08-30)
+# [2.0.6](https://jcenter.bintray.com/com/github/tonybaines/gestalt/2.0.6) (2017-08-30)
 * Issue #25 Custom transformation functions from String values to/from other types
 
-# [2.0.5](http://central.maven.org/maven2/com/github/tonybaines/gestalt/2.0.5) (2017-08-25)
+# [2.0.5](https://jcenter.bintray.com/com/github/tonybaines/gestalt/2.0.5) (2017-08-25)
 * Issue #23 Fallback config source
 
-# [2.0.4](http://central.maven.org/maven2/com/github/tonybaines/gestalt/2.0.4) (2017-08-15)
+# [2.0.4](https://jcenter.bintray.com/com/github/tonybaines/gestalt/2.0.4) (2017-08-15)
 * Issue #22 Provide a config source that accepts an existing config instance
 * Introduced the `@NoCache` anotation to disable caching in a targeted way
 
-# [2.0.3](http://central.maven.org/maven2/com/github/tonybaines/gestalt/2.0.3)
+# [2.0.3](https://jcenter.bintray.com/com/github/tonybaines/gestalt/2.0.3)
 * Pegging dependency versions for slf4j-api and Guava
 
-# [2.0.2](http://central.maven.org/maven2/com/github/tonybaines/gestalt/2.0.2) (2016-04-27)
+# [2.0.2](https://jcenter.bintray.com/com/github/tonybaines/gestalt/2.0.2) (2016-04-27)
 * Fix for XML Serialisation issue
 
-# [2.0.1](http://central.maven.org/maven2/com/github/tonybaines/gestalt/2.0.1) (2016-04-16)
+# [2.0.1](https://jcenter.bintray.com/com/github/tonybaines/gestalt/2.0.1) (2016-04-16)
 * `@Optional` annotation for properties which need not be defined
 * Issue #5: Custom validation (via default methods in config interfaces)
 
-# [2.0.0](http://central.maven.org/maven2/com/github/tonybaines/gestalt/2.0.0) (2016-03-29)
+# [2.0.0](https://jcenter.bintray.com/com/github/tonybaines/gestalt/2.0.0) (2016-03-29)
 * *BREAKING CHANGE*: Recompiled with Java 8
 * Verified to work with default methods defined in interfaces
 * Workaround for JaCoCo '$jacoco' properties appearing in Java 8
 
-# [1.0.5](http://central.maven.org/maven2/com/github/tonybaines/gestalt/1.0.5) (2015-10-05)
+# [1.0.5](https://jcenter.bintray.com/com/github/tonybaines/gestalt/1.0.5) (2015-10-05)
 * Support for List types defaulting to an empty List
 
-# [1.0.4](http://central.maven.org/maven2/com/github/tonybaines/gestalt/1.0.5) (2015-10-01)
+# [1.0.4](https://jcenter.bintray.com/com/github/tonybaines/gestalt/1.0.5) (2015-10-01)
 * Issue #21: Cosmetic fix when serialising list types to XML with property-name transformers
 
-# [1.0.3](http://central.maven.org/maven2/com/github/tonybaines/gestalt/1.0.3) (2015-10-01)
+# [1.0.3](https://jcenter.bintray.com/com/github/tonybaines/gestalt/1.0.3) (2015-10-01)
 * Issue #20: Missing properties for list types in config sources treated as empty lists
 
-# [1.0.2](http://central.maven.org/maven2/com/github/tonybaines/gestalt/1.0.2) (2015-07-22)
+# [1.0.2](https://jcenter.bintray.com/com/github/tonybaines/gestalt/1.0.2) (2015-07-22)
 * Upgrade to depend on [Groovy 2.4.4](http://groovy-lang.org/security.html)
 * Support for custom `ConfigSource` implementations to supply property values
 
-# [1.0.1](http://central.maven.org/maven2/com/github/tonybaines/gestalt/1.0.1) (2015-07-12)
+# [1.0.1](https://jcenter.bintray.com/com/github/tonybaines/gestalt/1.0.1) (2015-07-12)
 * Relax the dependency constraints on Guava and SLF4J, remove unused dependencies
 
-# [1.0.0](http://central.maven.org/maven2/com/github/tonybaines/gestalt/1.0.0) (2015-07-12)
+# [1.0.0](https://jcenter.bintray.com/com/github/tonybaines/gestalt/1.0.0) (2015-07-12)
 * *N.B.* Potentially breaking changes from updated dependencies
 * Switch to Apache bval for JSR-303 validation to reduce the risk of dependency clashes (vs. Hibernate)
 * Reduce the verbosity of error logging and exceptions
 * Switch to Groovy 2.4.3
 
-# [0.8.9](http://central.maven.org/maven2/com/github/tonybaines/gestalt/0.8.9) (2015-03-26)
+# [0.8.9](https://jcenter.bintray.com/com/github/tonybaines/gestalt/0.8.9) (2015-03-26)
 * Fix for the scope of all dependencies being set to 'runtime' in the generated POM
 
-# [0.8.8](http://central.maven.org/maven2/com/github/tonybaines/gestalt/0.8.8) (2015-03-25)
+# [0.8.8](https://jcenter.bintray.com/com/github/tonybaines/gestalt/0.8.8) (2015-03-25)
 * Issue #19: Validation of custom types gives a MissingPropertyException
 * Publishing via bintray
 * Upgrade to Spock 1.0
 
-# [0.8.7](http://central.maven.org/maven2/com/github/tonybaines/gestalt/0.8.7) (2015-03-17)
+# [0.8.7](https://jcenter.bintray.com/com/github/tonybaines/gestalt/0.8.7) (2015-03-17)
 * Issue #18 - default values for concrete types caused a ConfigurationException
 * Logging improvements for error handling and validation messages
 * gradle-nexus-plugin updated to 2.2
 * Gradle wrapper updated to 2.2
 
 
-# [0.8.6](http://central.maven.org/maven2/com/github/tonybaines/gestalt/0.8.6) (2015-01-07)
+# [0.8.6](https://jcenter.bintray.com/com/github/tonybaines/gestalt/0.8.6) (2015-01-07)
 * When falling back to default, and when no value is found for a property (including default), log the full path rather than just the current property getter
 * Issue #17: False boolean value is treated as not found
 
-# [0.8.5](http://central.maven.org/maven2/com/github/tonybaines/gestalt/0.8.5) (2015-01-06)
+# [0.8.5](https://jcenter.bintray.com/com/github/tonybaines/gestalt/0.8.5) (2015-01-06)
 * Issue #16: Java client gets exception when calling toString()
 * Compiled for Java 7 again
 * The published POM no longer depends on 'org.slf4j:slf4j-simple:1.6.1', but on the API JAR.  Clients can/should provide their own implementation
 
-# [0.8.4](http://central.maven.org/maven2/com/github/tonybaines/gestalt/0.8.4) (2014-12-31)
+# [0.8.4](https://jcenter.bintray.com/com/github/tonybaines/gestalt/0.8.4) (2014-12-31)
 **Compiled for Java 8**
 
 * Issue #13: Support for Comments
@@ -100,32 +104,32 @@
 * Issue #10: NPE when serialising a config instance with null/missing values to a Properties instance
 * Issue #9: Converting to a Properties instance more than two levels deep fails
 
-# [0.8.3](http://central.maven.org/maven2/com/github/tonybaines/gestalt/0.8.3) (2014-06-29)
+# [0.8.3](https://jcenter.bintray.com/com/github/tonybaines/gestalt/0.8.3) (2014-06-29)
 * Issue #8: (null values being serialised to a Properties instance)
 
-# [0.8.2](http://central.maven.org/maven2/com/github/tonybaines/gestalt/0.8.2) (2014-06-26)
+# [0.8.2](https://jcenter.bintray.com/com/github/tonybaines/gestalt/0.8.2) (2014-06-26)
 * Issue #2 : Maven dependencies not working
 * Issue : XML parsing for undefined values below the topmost level (e.g. sub-interfaces) returned an empty string instead of null.
 
-# [0.8.1](http://central.maven.org/maven2/com/github/tonybaines/gestalt/0.8.1) (2014-03-17)
+# [0.8.1](https://jcenter.bintray.com/com/github/tonybaines/gestalt/0.8.1) (2014-03-17)
 * Minor bugfix
 
-# [0.8.0](http://central.maven.org/maven2/com/github/tonybaines/gestalt/0.8.0) (2014-03-16)
+# [0.8.0](https://jcenter.bintray.com/com/github/tonybaines/gestalt/0.8.0) (2014-03-16)
 * Whole-instance validation checking/reporting
 
-# [0.7.0](http://central.maven.org/maven2/com/github/tonybaines/gestalt/0.7.0) (2014-03-11)
+# [0.7.0](https://jcenter.bintray.com/com/github/tonybaines/gestalt/0.7.0) (2014-03-11)
 * Serialise to Properties
 
-# [0.6.1](http://central.maven.org/maven2/com/github/tonybaines/gestalt/0.6.1) (2014-03-09)
+# [0.6.1](https://jcenter.bintray.com/com/github/tonybaines/gestalt/0.6.1) (2014-03-09)
 * Bug fixes
 
-# [0.6.0](http://central.maven.org/maven2/com/github/tonybaines/gestalt/0.6.0) (2014-03-08)
+# [0.6.0](https://jcenter.bintray.com/com/github/tonybaines/gestalt/0.6.0) (2014-03-08)
 * Define and reuse constants in config files
 
-# [0.5.0](http://central.maven.org/maven2/com/github/tonybaines/gestalt/0.5.0) (2014-03-07)
+# [0.5.0](https://jcenter.bintray.com/com/github/tonybaines/gestalt/0.5.0) (2014-03-07)
 * Read config values from XML attributes
 * Allow a specific class to be supplied when loading a resource to simplify locating it
 * Bug fixes / improved Java interoperability
 
-# [0.4.0](http://central.maven.org/maven2/com/github/tonybaines/gestalt/0.4.0) (2014-03-04)
+# [0.4.0](https://jcenter.bintray.com/com/github/tonybaines/gestalt/0.4.0) (2014-03-04)
 * First Maven Central release
