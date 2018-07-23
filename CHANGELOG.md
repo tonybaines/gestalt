@@ -1,5 +1,5 @@
-# [2.0.13](https://jcenter.bintray.com/com/github/tonybaines/gestalt/2.0.13) (2018-07-23)
-* Depend on `groovy` 2.5.1 (not `groovy-all`)
+# [2.0.14](https://jcenter.bintray.com/com/github/tonybaines/gestalt/2.0.14) (2018-07-23)
+* Update to groovy 2.4.17 (groovy 2.5 causes test failures)
 * Repoint all CHANGELOG URLs to jcenter
 
 # [2.0.12](https://jcenter.bintray.com/com/github/tonybaines/gestalt/2.0.12) (2018-07-23)

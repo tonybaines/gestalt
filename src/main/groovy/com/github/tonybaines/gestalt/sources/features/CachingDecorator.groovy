@@ -10,7 +10,7 @@ import com.google.common.util.concurrent.UncheckedExecutionException
 import java.lang.reflect.Method
 import java.util.concurrent.Callable
 
-class CachingDecorator implements ConfigSource {
+class CachingDecorator<T> implements ConfigSource {
   private final ConfigSource delegate
   private final Cache<String, Object> cache
 

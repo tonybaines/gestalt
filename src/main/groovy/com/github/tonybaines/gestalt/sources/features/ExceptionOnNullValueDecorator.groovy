@@ -8,7 +8,7 @@ import java.lang.reflect.Method
 
 import static com.github.tonybaines.gestalt.Configurations.Utils.optional
 
-class ExceptionOnNullValueDecorator implements ConfigSource {
+class ExceptionOnNullValueDecorator<T> implements ConfigSource {
   private final ConfigSource delegate
 
   ExceptionOnNullValueDecorator(ConfigSource delegate) {
