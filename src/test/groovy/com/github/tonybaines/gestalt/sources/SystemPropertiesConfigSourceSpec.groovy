@@ -16,6 +16,8 @@ class SystemPropertiesConfigSourceSpec extends Specification {
     System.setProperty("TEST.booleanValue", "false")
     System.setProperty("TEST.handedness", "right")
     System.setProperty("TEST.subConfig.intValue", "43")
+    System.setProperty("TEST.strings.0", "foo")
+    System.setProperty("TEST.strings.1", "bar")
 
     when:
     def config = Configurations.definedBy(TestConfig)
@@ -31,6 +33,7 @@ class SystemPropertiesConfigSourceSpec extends Specification {
     config.booleanValue == false
     config.handedness == Handed.right
     config.subConfig.intValue == 43
+    config.strings.containsAll(['foo', 'bar'])
   }
 
   def  "Accessing properties with a property-name transformer"() {

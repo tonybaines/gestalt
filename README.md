@@ -256,6 +256,10 @@ Which would allow the `name` and `enabled` properties to be configured like this
 java -jar my-app ... -Dmy-app.name=baz -Dmy-app.enabled=false
 ```
 
+##### Limitations
+Lists of values have limited support; a list of simple types (`String`, '`Integer`, `Boolean` etc) will work 
+(e.g. `config.strings.0`), but lists of complex types (e.g. `config.allTheThings.0.myThing.id`) will not 
+
 #### Fallback Configuration File
 If there are no (valid) configuration sources defined, before failing, *Gestalt* will attempt to load from
 a file `config-class.properties` in the current working directory.  No attempt is made to load other formats

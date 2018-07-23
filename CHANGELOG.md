@@ -1,3 +1,7 @@
+# [2.0.12](http://central.maven.org/maven2/com/github/tonybaines/gestalt/2.0.12) (2018-07-23)
+* Add support for simple lists of properties injected through system properties
+* Dependency updates
+
 # [2.0.11](http://central.maven.org/maven2/com/github/tonybaines/gestalt/2.0.11) (2018-05-08)
 * Dependency updates
 

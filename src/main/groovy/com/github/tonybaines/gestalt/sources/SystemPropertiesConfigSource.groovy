@@ -1,6 +1,7 @@
 package com.github.tonybaines.gestalt.sources
 
 import com.github.tonybaines.gestalt.ConfigSource
+import com.github.tonybaines.gestalt.Configurations
 import com.github.tonybaines.gestalt.transformers.PropertyNameTransformer
 import groovy.util.logging.Slf4j
 
@@ -19,6 +20,16 @@ class SystemPropertiesConfigSource extends BaseConfigSource {
   @Override
   def lookup(List<String> path, Method method) {
     def propertyName = "${prefix}.${path.collect { propertyNameTransformer.fromPropertyName(it) }.join('.')}"
+
+    if (Configurations.Utils.isAList(method.genericReturnType)) {
+      def listValues = System.properties.grep{it.key.startsWith(propertyName)}
+      if (listValues.isEmpty()) {
+        return null
+      }
+      else {
+        return handleList(listValues, method).asImmutable()
+      }
+    }
     decode(System.getProperty(propertyName), method.returnType)
   }
 
@@ -56,6 +67,8 @@ class SystemPropertiesConfigSource extends BaseConfigSource {
 
   @Override
   protected handleList(Object node, Object method) {
-    throw new UnsupportedOperationException('Not applicable')
+    node.sort { it.key }.collect { entry ->
+      decode(entry.value, method.genericReturnType.actualTypeArguments[0])
+    }
   }
 }
