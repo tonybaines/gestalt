@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.1.xsd">
-    <!-- XSS vulnerability in Bean module for Drupal -->
+    <!-- Affects Groovy LDAP API -->
     <suppress>
         <notes><![CDATA[
-   file name: geronimo-validation_1.0_spec-1.1.jar
+   file name: groovy-ant-2.5.5.jar
    ]]></notes>
-        <gav regex="true">^org\.apache\.geronimo\.specs:geronimo-validation_1\.0_spec:.*$</gav>
-        <cve>CVE-2013-4499</cve>
+        <gav regex="true">^org\.codehaus\.groovy:groovy.*:.*$</gav>
+        <cve>CVE-2016-6497</cve>
     </suppress>
 </suppressions>

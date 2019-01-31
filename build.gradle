@@ -22,10 +22,10 @@ apply plugin: 'maven'
 apply plugin: 'maven-publish'
 
 group = 'com.github.tonybaines'
-version = '2.0.15'
+version = '2.0.16-SNAPSHOT'
 
-sourceCompatibility = JavaVersion.VERSION_11
-targetCompatibility = JavaVersion.VERSION_11
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
 jacoco {
   toolVersion = "0.8.3"
 }
@@ -36,18 +36,14 @@ repositories {
 dependencies {
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
   compile([
-    'org.codehaus.groovy:groovy-all:2.5.5',
-    'com.google.guava:guava:27.0.1-jre',
-    'org.slf4j:slf4j-api:1.7.25',
-    'commons-beanutils:commons-beanutils:1.9.3',
-    'org.apache.geronimo.specs:geronimo-validation_1.0_spec:1.1',
-    'javax.xml.bind:jaxb-api:2.2.11',
-    'org.apache.commons:commons-lang3:3.8.1',
+          'org.codehaus.groovy:groovy-all:2.5.5',
+          'com.google.guava:guava:27.0.1-jre',
+          'org.slf4j:slf4j-api:1.7.25',
+          'org.apache.bval:org.apache.bval.bundle:2.0.0',
+          'javax.validation:validation-api:2.0.1.Final',
+          'javax.xml.bind:jaxb-api:2.2.11',
+          'org.apache.commons:commons-lang3:3.8.1',
   ])
-  compile('org.apache.bval:org.apache.bval.bundle:0.5'){
-    // CVE-2014-0114
-    exclude group: 'commons-beanutils', module: 'commons-beanutils-core'
-  }
 
   testCompile([
     'org.spockframework:spock-core:1.2-groovy-2.5',
