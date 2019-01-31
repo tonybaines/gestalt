@@ -54,7 +54,7 @@ dependencies {
   ])
 
   testRuntime([
-    'org.objenesis:objenesis:2.6',
+    'org.objenesis:objenesis:3.0.1',
     'org.slf4j:slf4j-simple:1.7.25',
   ])
   runtime([])
