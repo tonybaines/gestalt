@@ -1,6 +1,7 @@
 package com.github.tonybaines.gestalt
 
 import com.github.tonybaines.gestalt.transformers.PropertyTypeTransformer
+import com.github.tonybaines.gestalt.validation.ValidationResult
 
 import static com.github.tonybaines.gestalt.Configurations.Utils.declaredMethodsOf
 import static com.github.tonybaines.gestalt.Configurations.Utils.hasAFromStringMethod
@@ -16,7 +17,9 @@ class DynoClass<T> {
 
   T getMapAsInterface(Class configInterface, prefix = []) {
     def map = [:]
-    declaredMethodsOf(configInterface).each() { method ->
+    declaredMethodsOf(configInterface)
+        .grep{!(it.returnType.equals(ValidationResult.Item) || it.returnType.equals(ValidationResult))}
+        .each() { method ->
       map."$method.name" = { Object[] args ->
         def propName = Configurations.Utils.fromBeanSpec(method.name)
         if (Configurations.Utils.returnsAValue(method)
