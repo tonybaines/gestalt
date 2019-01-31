@@ -227,7 +227,7 @@ class PersistenceSpec extends Specification {
     roundTripped.defaultOnly == null
   }
 
-  def "Issue #10: NPE when serialising a config instance with null or missing values [Properties]"() {
+  def "Issue #10: NPE when serialising a config instance with null or missing values (Properties)"() {
     given:
     A configInstance = new A() {
       B getB() { return new B() {
