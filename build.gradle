@@ -36,7 +36,8 @@ repositories {
 dependencies {
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
   compile([
-          'org.codehaus.groovy:groovy-all:2.5.5',
+          'org.codehaus.groovy:groovy:2.5.5',
+          'org.codehaus.groovy:groovy-xml:2.5.5',
           'com.google.guava:guava:27.0.1-jre',
           'org.slf4j:slf4j-api:1.7.25',
           'org.apache.bval:org.apache.bval.bundle:2.0.0',
